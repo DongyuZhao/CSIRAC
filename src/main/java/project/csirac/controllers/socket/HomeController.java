@@ -1,13 +1,10 @@
-package project.csirac.controller.socket;
+package project.csirac.controllers.socket;
 
-import org.apache.tomcat.jni.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.template.TemplateAvailabilityProvider;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import project.csirac.models.document.entities.Document;
 
 /**
  * Created by Dy.Zhao on 2016/1/3 0003.
@@ -31,10 +28,8 @@ public class HomeController
 
     @MessageMapping("/hello")
     @SendTo("/topic/greetings")
-    public void greeting(String name) throws  Exception {
-        for (int i = 0; i < 100000; i++)
-        {
-            setResults("" + i, "greetings");
-        }
+    public String greeting(String name) throws Exception
+    {
+        return  "Hello " + name + "!";
     }
 }

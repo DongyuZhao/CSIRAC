@@ -1,4 +1,4 @@
-package project.csirac.controller.web;
+package project.csirac.controllers.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +13,7 @@ import project.csirac.models.document.DocumentDao;
 public class HomeController
 {
     @RequestMapping("/")
-    public String welcome(@RequestParam(name = "name",required = false, defaultValue = "there")String name, Model model)
+    public String welcome(@RequestParam(name = "name", required = false, defaultValue = "there") String name, Model model)
     {
         model.addAttribute("name", name);
         return "welcome";
