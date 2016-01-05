@@ -1,5 +1,8 @@
 package project.csirac.models.emulator;
 
+import javax.annotation.Generated;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,7 +31,7 @@ public class Monitor implements IMonitor
     @Override
     public List<String> getOutput(String sessionId)
     {
-        return null;
+        return generateFakeListResult(20);
     }
 
     @Override
@@ -64,7 +67,7 @@ public class Monitor implements IMonitor
     @Override
     public List<String> peekSupportedInstructions()
     {
-        return null;
+        return generateFakeListResult(20);
     }
 
     @Override
@@ -106,18 +109,41 @@ public class Monitor implements IMonitor
     @Override
     public List<String> getMemory(String sessionId)
     {
-        return null;
+        return generateFakeListResult(20);
     }
 
     @Override
     public List<String> getRegister(String sessionId)
     {
-        return null;
+        return generateFakeListResult(20);
     }
 
     @Override
     public String getCurrentInstruction(String sessionId)
     {
-        return null;
+        return generateFakeResult(20);
+    }
+
+    private String generateFakeResult(int length)
+    {
+
+        String result = "";
+        for (int j = 0; j < length; j++)
+        {
+            Date now = new Date();
+            result += now.getTime() % 2;
+        }
+        return result;
+    }
+
+    private List<String> generateFakeListResult(int lengthPerItem)
+    {
+        List<String> result = new ArrayList<>();
+        int length = (int) (Math.random() * 20 + 20);
+        for (int i = 0; i < length; i++)
+        {
+            result.add(generateFakeResult(lengthPerItem));
+        }
+        return result;
     }
 }
