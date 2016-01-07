@@ -7,6 +7,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import project.csirac.helper.StringHelper;
 import project.csirac.models.emulator.*;
+import project.csirac.viewmodels.emulator.ControlOperationViewModel;
+import project.csirac.viewmodels.emulator.HandShakeViewModel;
 import project.csirac.viewmodels.emulator.ProgramViewModel;
 
 import java.util.*;
@@ -15,12 +17,12 @@ import java.util.*;
  * Created by Dy.Zhao on 2016/1/4 0004.
  */
 @Controller
-public class EmulatorController
+public class EmulatorController implements IMonitorObserver
 {
     private SimpMessagingTemplate template;
     IMonitor monitor = new Monitor();
 
-    public Map<String, Date> sessionList = new HashMap<>();
+    public Map<String, Long> sessionList = new HashMap<>();
 
     @Autowired
     public EmulatorController(SimpMessagingTemplate template)
@@ -40,9 +42,18 @@ public class EmulatorController
         setResults(this.monitor.getCurrentInstruction(sessionId), "current_instruction/" + sessionId);
     }
 
-    @MessageMapping("/emulator_in/upload_program")
+    private boolean sessionExists(String sessionId)
+    {
+        if (StringHelper.isNullOrWhiteSpace(sessionId))
+        {
+            return false;
+        }
+        return this.sessionList.keySet().contains(sessionId);
+    }
+
+    @MessageMapping("/emulator_in/io")
     @SendTo("/emulator_response/")
-    public void upload_program(ProgramViewModel model) throws Exception
+    public void uploadProgram(ProgramViewModel model) throws Exception
     {
         if (sessionExists(model.getUserSessionId()))
         {
@@ -52,81 +63,106 @@ public class EmulatorController
         setResults("Session Not Exists", "error" + model.getUserSessionId());
     }
 
-    @MessageMapping("/emulator_in/start")
+    @MessageMapping("/emulator_in/control")
     @SendTo("/emulator_response/")
-    public void start(String sessionId) throws Exception
+    public void control(ControlOperationViewModel model)
     {
+        String sessionId = model.getSessionId();
+        String operation = model.getOperation();
         if (sessionExists(sessionId))
         {
-            this.monitor.startExecuting(sessionId);
-            updateMonitorView(sessionId);
-            setResults("Running", "state/" + sessionId);
-        }
-        setResults("Session Not Exists", "error" + sessionId);
-    }
-
-    @MessageMapping("/emulator_in/pause")
-    @SendTo("/emulator_response/")
-    public void pause(String sessionId) throws Exception
-    {
-        if (sessionExists(sessionId))
-        {
-            this.monitor.pauseExecuting(sessionId);
-            updateMonitorView(sessionId);
-            setResults("Pause", "state/" + sessionId);
-        }
-        setResults("Session Not Exists", "error" + sessionId);
-    }
-
-    @MessageMapping("/emulator_in/stop")
-    @SendTo("/emulator_response/")
-    public void stop(String sessionId) throws Exception
-    {
-        if (sessionExists(sessionId))
-        {
-
-            this.monitor.stopExecuting(sessionId);
-            updateMonitorView(sessionId);
-            setResults("Stopped", "state/" + sessionId);
-        }
-        setResults("Session Not Exists", "error" + sessionId);
-    }
-
-
-    @MessageMapping("/emulator_in/keep_alive")
-    @SendTo("/emulator_response/")
-    public void keepAlive(String sessionId)
-    {
-        this.sessionList.put(sessionId, new Date());
-        while (true)
-        {
-            Date now = new Date();
-            if (now.getTime() - this.sessionList.get(sessionId).getTime() > 20000)
+            switch (operation)
             {
-                this.sessionList.remove(sessionId);
-                break;
+                case "start":
+                    //updateMonitorView(sessionId);
+                    this.monitor.startExecuting(sessionId);
+                    break;
+                case "pause":
+                    //updateMonitorView();
+                    this.monitor.pauseExecuting(sessionId);
+                    break;
+                case "stop":
+                    this.monitor.stopExecuting(sessionId);
+                    break;
             }
-            setResults("alive", "keep_alive/" + sessionId);
+        }
+        else
+        {
+            setResults("Session Not Exists", "error" + sessionId);
         }
     }
 
-    @MessageMapping("/emulator_in/disconnect")
+    @MessageMapping("/emulator_in/hand_shake")
     @SendTo("/emulator_response/")
-    public void disconnect(String sessionId)
+    public void handShake(HandShakeViewModel model)
     {
-        if (this.sessionList.keySet().contains(sessionId))
+        String sessionId = model.getSessionId();
+        String operation = model.getOperation();
+        switch (operation)
         {
-            this.sessionList.remove(sessionId);
+            case  "hello" :
+                boolean newAdd = !sessionExists(sessionId);
+                this.sessionList.put(sessionId, (new Date()).getTime());
+                if (newAdd)
+                {
+                    while(true)
+                    {
+                        if ((new Date()).getTime() - this.sessionList.get(sessionId) > 20000)
+                        {
+                            this.sessionList.remove(sessionId);
+                            break;
+                        }
+                        setResults("alive", "hand_shake/" + sessionId);
+                    }
+                }
+                break;
+            case "bye" :
+                if (this.sessionExists(sessionId))
+                {
+                    this.monitor.stopExecuting(sessionId);
+                    this.sessionList.remove(sessionId);
+                }
+                setResults("bye", "hand_shake/" + sessionId);
+                break;
         }
-        setResults("bye", "disconnect/" + sessionId);
     }
 
-    private boolean sessionExists(String sessionId)
+    @Override
+    public void updateMemoryView(String sessionId, String[] data)
     {
-        if (StringHelper.isNullOrWhiteSpace(sessionId))
+        if (sessionExists(sessionId))
         {
-            return false;
+            setResults(data, "memory/" + sessionId);
         }
-        return this.sessionList.keySet().contains(sessionId);
+        else
+        {
+            this.monitor.stopExecuting(sessionId);
+        }
+    }
+
+    @Override
+    public void updateRegisterView(String sessionId, String data)
+    {
+        if (sessionExists(sessionId))
+        {
+            setResults(data, "register/" + sessionId);
+        }
+        else
+        {
+            this.monitor.stopExecuting(sessionId);
+        }
+    }
+
+    @Override
+    public void updateInstructionView(String sessionId, String instruction)
+    {
+        if (sessionExists(sessionId))
+        {
+            setResults(instruction, "instruction/" + sessionId);
+        }
+        else
+        {
+            this.monitor.stopExecuting(sessionId);
+        }
     }
 }
