@@ -23,6 +23,12 @@ public class Monitor implements IMonitor
     }
 
     @Override
+    public void attachObserver(IMonitorObserver observer)
+    {
+
+    }
+
+    @Override
     public void continueExecuting(String sessionId)
     {
 
