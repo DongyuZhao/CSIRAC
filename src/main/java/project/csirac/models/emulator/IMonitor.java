@@ -9,6 +9,7 @@ public interface IMonitor
 {
     void attachControlUnit(IControlUnit controlUnit);
     void attachDebugger(IDebugger debugger);
+    void attachObserver(IMonitorObserver observer);
     void continueExecuting(String sessionId);
     void Init(IDecoder decoder, IMemory memory, IComputeUnit computeUnit);
     void loadProgramToMemory(String sessionId, String[] program);
