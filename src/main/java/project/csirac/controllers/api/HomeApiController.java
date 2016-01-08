@@ -11,7 +11,7 @@ import project.csirac.models.document.entities.Document;
  * Created by Dy.Zhao on 2016/1/3 0003.
  */
 @RestController
-public class HomeController
+public class HomeApiController
 {
     @RequestMapping(value = "/api/help", method = RequestMethod.GET)
     public Document help(@RequestParam(name = "component_name", required = true) String componentName)

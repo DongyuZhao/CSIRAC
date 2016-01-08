@@ -10,6 +10,13 @@ import java.util.List;
  */
 public class Monitor implements IMonitor
 {
+    private IMonitorObserver _observer;
+
+    public Monitor(IMonitorObserver observer)
+    {
+        this._observer = observer;
+    }
+
     @Override
     public void attachControlUnit(IControlUnit controlUnit)
     {
@@ -35,9 +42,10 @@ public class Monitor implements IMonitor
     }
 
     @Override
-    public List<String> getOutput(String sessionId)
+    public String[] getOutput(String sessionId)
     {
-        return generateFakeListResult(20);
+        String[] result = {};
+        return generateFakeListResult(20).toArray(result);
     }
 
     @Override
@@ -71,9 +79,10 @@ public class Monitor implements IMonitor
     }
 
     @Override
-    public List<String> peekSupportedInstructions()
+    public String[] peekSupportedInstructions()
     {
-        return generateFakeListResult(20);
+        String[] result = {};
+        return generateFakeListResult(20).toArray(result);
     }
 
     @Override
@@ -97,31 +106,38 @@ public class Monitor implements IMonitor
     @Override
     public void updateInstructionView(String sessionId, String instruction)
     {
-
+        //update code
+        this._observer.updateInstructionView(sessionId, this.getCurrentInstruction(sessionId));
     }
 
     @Override
     public void updateMemoryView(String sessionId, int address, String data)
     {
-
+        //update code
+        String[] result = new String[]{};
+        this._observer.updateMemoryView(sessionId, this.getMemory(sessionId));
     }
 
     @Override
-    public void updateRgisterView(String sessionId, int address, String data)
+    public void updateRegisterView(String sessionId, int address, String data)
     {
-
+        //update code
+        String[] result = new String[]{};
+        this._observer.updateRegisterView(sessionId, this.getRegister(sessionId));
     }
 
     @Override
-    public List<String> getMemory(String sessionId)
+    public String[] getMemory(String sessionId)
     {
-        return generateFakeListResult(20);
+        String[] result = {};
+        return generateFakeListResult(20).toArray(result);
     }
 
     @Override
-    public List<String> getRegister(String sessionId)
+    public String[] getRegister(String sessionId)
     {
-        return generateFakeListResult(20);
+        String[] result = {};
+        return generateFakeListResult(20).toArray(result);
     }
 
     @Override

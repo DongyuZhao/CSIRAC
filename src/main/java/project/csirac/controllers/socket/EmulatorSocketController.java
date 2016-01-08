@@ -17,15 +17,16 @@ import java.util.*;
  * Created by Dy.Zhao on 2016/1/4 0004.
  */
 @Controller
-public class EmulatorController implements IMonitorObserver
+public class EmulatorSocketController implements IMonitorObserver
 {
     private SimpMessagingTemplate template;
-    IMonitor monitor = new Monitor();
+
+    IMonitor monitor = new Monitor(this);
 
     public Map<String, Long> sessionList = new HashMap<>();
 
     @Autowired
-    public EmulatorController(SimpMessagingTemplate template)
+    public EmulatorSocketController(SimpMessagingTemplate template)
     {
         this.template = template;
     }
@@ -37,9 +38,9 @@ public class EmulatorController implements IMonitorObserver
 
     private void updateMonitorView(String sessionId)
     {
-        setResults(this.monitor.getMemory(sessionId), "memory/" + sessionId);
-        setResults(this.monitor.getRegister(sessionId), "register/" + sessionId);
-        setResults(this.monitor.getCurrentInstruction(sessionId), "current_instruction/" + sessionId);
+        setResults(this.monitor.getMemory(sessionId), "io/memory/" + sessionId);
+        setResults(this.monitor.getRegister(sessionId), "io/register/" + sessionId);
+        setResults(this.monitor.getCurrentInstruction(sessionId), "io/instruction/" + sessionId);
     }
 
     private boolean sessionExists(String sessionId)
@@ -55,12 +56,12 @@ public class EmulatorController implements IMonitorObserver
     @SendTo("/emulator_response/")
     public void uploadProgram(ProgramViewModel model) throws Exception
     {
-        if (sessionExists(model.getUserSessionId()))
+        if (sessionExists(model.getSessionId()))
         {
-            this.monitor.loadProgramToMemory(model.getUserSessionId(), model.getProgram());
-            updateMonitorView(model.getUserSessionId());
+            this.monitor.loadProgramToMemory(model.getSessionId(), model.getProgram());
+            updateMonitorView(model.getSessionId());
         }
-        setResults("Session Not Exists", "error" + model.getUserSessionId());
+        setResults("Session Not Exists", "io/error" + model.getSessionId());
     }
 
     @MessageMapping("/emulator_in/control")
@@ -88,7 +89,7 @@ public class EmulatorController implements IMonitorObserver
         }
         else
         {
-            setResults("Session Not Exists", "error" + sessionId);
+            setResults("Session Not Exists", "control/error" + sessionId);
         }
     }
 
@@ -141,7 +142,7 @@ public class EmulatorController implements IMonitorObserver
     }
 
     @Override
-    public void updateRegisterView(String sessionId, String data)
+    public void updateRegisterView(String sessionId, String[] data)
     {
         if (sessionExists(sessionId))
         {
