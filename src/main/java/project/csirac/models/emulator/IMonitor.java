@@ -16,15 +16,15 @@ public interface IMonitor
     void nextInstruction(String sessionId);
     void pauseExecuting(String sessionId);
     int peekPcRegister(String sessionId);
-    List<String> peekSupportedInstructions();
+    String[] peekSupportedInstructions();
     void setClockFrequency(String sessionId, float frequency);
     void startExecuting(String sessionId);
     void stopExecuting(String sessionId);
     void updateInstructionView(String sessionId, String instruction);
     void updateMemoryView(String sessionId, int address, String data);
-    void updateRgisterView(String sessionId, int address, String data);
-    List<String> getOutput(String sessionId);
-    List<String> getMemory(String sessionId);
-    List<String> getRegister(String sessionId);
+    void updateRegisterView(String sessionId, int address, String data);
+    String[] getOutput(String sessionId);
+    String[] getMemory(String sessionId);
+    String[] getRegister(String sessionId);
     String getCurrentInstruction(String sessionId);
 }

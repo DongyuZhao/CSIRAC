@@ -6,6 +6,6 @@ package project.csirac.models.emulator;
 public interface IMonitorObserver
 {
     void updateMemoryView(String sessionId, String[] data);
-    void updateRegisterView(String sessionId, String data);
+    void updateRegisterView(String sessionId, String[] data);
     void updateInstructionView(String sessionId, String instruction);
 }

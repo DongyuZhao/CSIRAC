@@ -3,8 +3,42 @@
 <head>
     <title>Welcome - CSIRAC</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script src="node_modules/angular2/bundles/http.dev.js"></script>
+    <script src="https://code.angularjs.org/2.0.0-beta.0/Rx.js"></script>
+    <script src="stompjs/stomp.js"></script>
+    <script>
+        System.config({
+            paths:{
+              "stompjs": "stompjs/stomp.js"
+            },
+            packages: {
+                emulator: {
+                    format: 'register',
+                    defaultExtension: 'js'
+                },
+                utils: {
+                    format: 'register',
+                    defaultExtension: 'js'
+                },
+                stompjs: {
+                    format: 'register',
+                    defaultExtension: 'js'
+                },
+                services: {
+                    format: 'register',
+                    defaultExtension: 'js'
+                }
+            }
+        });
+        System.import('emulator/monitor/boot')
+                .then(null, console.error.bind(console));
+    </script>
 </head>
 <body>
 <p th:text="'Hello, ' + ${name} + '!'" />
+<monitor>loading...</monitor>
 </body>
 </html>

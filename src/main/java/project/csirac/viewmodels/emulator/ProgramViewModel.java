@@ -6,18 +6,18 @@ package project.csirac.viewmodels.emulator;
  */
 public class ProgramViewModel
 {
-    private String userSessionId;
+    private String sessionId;
 
     private String[] program;
 
-    public String getUserSessionId()
+    public String getSessionId()
     {
-        return userSessionId;
+        return sessionId;
     }
 
-    public void setUserSessionId(String userSessionId)
+    public void setSessionId(String sessionId)
     {
-        this.userSessionId = userSessionId;
+        this.sessionId = sessionId;
     }
 
     public String[] getProgram()

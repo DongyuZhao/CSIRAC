@@ -11,12 +11,12 @@ import org.springframework.stereotype.Controller;
  */
 
 @Controller
-public class HomeController
+public class HomeSocketController
 {
     private SimpMessagingTemplate template;
 
     @Autowired
-    public HomeController(SimpMessagingTemplate template)
+    public HomeSocketController(SimpMessagingTemplate template)
     {
         this.template = template;
     }
