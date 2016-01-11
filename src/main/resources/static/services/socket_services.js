@@ -20,8 +20,9 @@ System.register(['angular2/core'], function(exports_1) {
                 function SocketServices() {
                 }
                 SocketServices.clientFactory = function (url) {
-                    var socket = new WebSocket(url);
-                    return Stomp.over(socket);
+                    var webSocket = new WebSocket(url);
+                    return Stomp.over(webSocket);
+                    //return Stomp.client(url);
                 };
                 SocketServices = __decorate([
                     core_1.Injectable(), 
