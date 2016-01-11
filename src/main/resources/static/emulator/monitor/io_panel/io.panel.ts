@@ -2,6 +2,7 @@ import {Component, OnDestroy} from "angular2/core";
 import {Stomp, Client, Message, Frame} from 'stompjs'
 import {SocketServices} from "../../../services/socket_services";
 import {HTTP_PROVIDERS} from "angular2/http";
+import {Guid} from "../../../utils/guid"
 
 @Component({
     selector: "io-panel",
@@ -11,10 +12,11 @@ import {HTTP_PROVIDERS} from "angular2/http";
 
 export class IoPanel implements OnDestroy
 {
+    _host = "localhost:8080/";
 
-    private _ioClient = SocketServices.clientFactory("emulator_in/io");
+    private _ioClient = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/io");
 
-    private _handShakeClient = SocketServices.clientFactory("emulator_in/hand_shake");
+    private _handShakeClient = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/hand_shake");
 
     public program = "";
 
@@ -42,7 +44,7 @@ export class IoPanel implements OnDestroy
         {
             if (this._ioClient != null && this._ioClient.connected)
             {
-                this._ioClient.send("emulator_in/io", {}, JSON.stringify({
+                this._ioClient.send("/emulator_in/io", {}, JSON.stringify({
                     "sessionId": this._sessionId,
                     "program": this.structured_program
                 }));
@@ -87,34 +89,42 @@ export class IoPanel implements OnDestroy
     {
         if (this._ioClient != null && !this._ioClient.connected)
         {
-            this._ioClient.connect({},
-                    (frame:Frame) =>
-                    {
-                        this._ioClient.subscribe("emulator_response/instruction/" + this._sessionId,
-                                (response:Message) =>
-                                {
-                                    console.log("Instruction Response");
-                                    this.onInstructionResponse(response);
-                                });
-                        this._ioClient.subscribe("emulator_response/memory/" + this._sessionId,
-                                (response:Message) =>
-                                {
-                                    console.log("Memory Response");
-                                    this.onMemoryResponse(response);
-                                });
-                        this._ioClient.subscribe("emulator_response/register/" + this._sessionId,
-                                (response:Message) =>
-                                {
-                                    console.log("Register Response");
-                                    this.onRegisterResponse(response);
-                                });
-                        this._ioClient.subscribe("emulator_response/error/" + this._sessionId,
-                                (response:Message) =>
-                                {
-                                    console.log("IO Error Response");
-                                    this.onError(response);
-                                });
-                    });
+            try
+            {
+                this._ioClient.connect({},
+                        (frame:Frame) =>
+                        {
+                            this._ioClient.subscribe("/emulator_response/instruction/" + this._sessionId,
+                                    (response:Message) =>
+                                    {
+                                        console.log("Instruction Response");
+                                        this.onInstructionResponse(response);
+                                    });
+                            this._ioClient.subscribe("/emulator_response/memory/" + this._sessionId,
+                                    (response:Message) =>
+                                    {
+                                        console.log("Memory Response");
+                                        this.onMemoryResponse(response);
+                                    });
+                            this._ioClient.subscribe("/emulator_response/register/" + this._sessionId,
+                                    (response:Message) =>
+                                    {
+                                        console.log("Register Response");
+                                        this.onRegisterResponse(response);
+                                    });
+                            this._ioClient.subscribe("/emulator_response/error/" + this._sessionId,
+                                    (response:Message) =>
+                                    {
+                                        console.log("IO Error Response");
+                                        this.onError(response);
+                                    });
+                        });
+                console.log("IO Client Connected");
+            }
+            catch (e)
+            {
+                console.error(e)
+            }
         }
     };
 
@@ -122,16 +132,24 @@ export class IoPanel implements OnDestroy
     {
         if (this._handShakeClient != null && !this._handShakeClient.connected)
         {
-            this._handShakeClient.connect({},
-                    (frame:Frame) =>
-                    {
-                        this._handShakeClient.subscribe("emulator_response/hand_shake/" + this._sessionId,
-                                (response:Message)=>
-                                {
-                                    console.log("Hand Shake Response");
-                                    this.onHandShakeResponse(response);
-                                });
-                    });
+            try
+            {
+                this._handShakeClient.connect({},
+                        (frame:Frame) =>
+                        {
+                            this._handShakeClient.subscribe("/emulator_response/hand_shake/" + this._sessionId,
+                                    (response:Message)=>
+                                    {
+                                        console.log("Hand Shake Response");
+                                        this.onHandShakeResponse(response);
+                                    });
+                        });
+                console.log("HandShake Connected");
+            }
+            catch (e)
+            {
+                console.error(e);
+            }
         }
     };
 
@@ -139,7 +157,7 @@ export class IoPanel implements OnDestroy
     {
         if (this._handShakeClient != null && this._handShakeClient.connected)
         {
-            this._handShakeClient.send("emulator_in/hand_shake", {}, JSON.stringify({
+            this._handShakeClient.send("/emulator_in/hand_shake", {}, JSON.stringify({
                 "sessionId": this._sessionId,
                 "operation": "bye"
             }));
@@ -157,10 +175,11 @@ export class IoPanel implements OnDestroy
         }
     };
 
-    private keepAlive() {
+    private keepAlive()
+    {
         if (this._handShakeClient != null && this._handShakeClient.connected)
         {
-            this._handShakeClient.send("emulator_in/hand_shake", {}, JSON.stringify({
+            this._handShakeClient.send("/emulator_in/hand_shake", {}, JSON.stringify({
                 "sessionId": this._sessionId,
                 "operation": "hello"
             }));
@@ -170,7 +189,20 @@ export class IoPanel implements OnDestroy
 
     constructor()
     {
-        this._sessionId = document.getElementById("session_id").innerText;
+        var node = document.getElementById("session_id");
+        if (node == null)
+        {
+            this._sessionId = Guid.newGuid();
+        }
+        else
+        {
+            this._sessionId = node.innerText;
+            if (node.innerText == null || node.innerText == "")
+            {
+                this._sessionId = Guid.newGuid();
+                node.innerText = this._sessionId;
+            }
+        }
         this.connectHandShakeSocket();
         this.connectIoSocket();
     };

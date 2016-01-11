@@ -53,7 +53,6 @@ public class EmulatorSocketController implements IMonitorObserver
     }
 
     @MessageMapping("/emulator_in/io")
-    @SendTo("/emulator_response/")
     public void uploadProgram(ProgramViewModel model) throws Exception
     {
         if (sessionExists(model.getSessionId()))
@@ -65,7 +64,6 @@ public class EmulatorSocketController implements IMonitorObserver
     }
 
     @MessageMapping("/emulator_in/control")
-    @SendTo("/emulator_response/")
     public void control(ControlOperationViewModel model)
     {
         String sessionId = model.getSessionId();
@@ -94,7 +92,6 @@ public class EmulatorSocketController implements IMonitorObserver
     }
 
     @MessageMapping("/emulator_in/hand_shake")
-    @SendTo("/emulator_response/")
     public void handShake(HandShakeViewModel model)
     {
         String sessionId = model.getSessionId();

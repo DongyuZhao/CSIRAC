@@ -15,21 +15,18 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer
 {
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic");
+    public void configureMessageBroker(MessageBrokerRegistry config)
+    {
         config.enableSimpleBroker("/emulator_response");
-        config.setApplicationDestinationPrefixes("/socket");
+        config.setApplicationDestinationPrefixes("/emulator_in");
     }
 
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/hello").withSockJS();
-        registry.addEndpoint("/emulator_in/keep_alive").withSockJS();
-        registry.addEndpoint("/emulator_in/disconnect").withSockJS();
-        registry.addEndpoint("/emulator_in/upload_program").withSockJS();
-        registry.addEndpoint("/emulator_in/start").withSockJS();
-        registry.addEndpoint("/emulator_in/pause").withSockJS();
-        registry.addEndpoint("/emulator_in/stop").withSockJS();
+    public void registerStompEndpoints(StompEndpointRegistry registry)
+    {
+        registry.addEndpoint("/emulator_in/hand_shake");
+        registry.addEndpoint("/emulator_in/io");
+        registry.addEndpoint("/emulator_in/control");
     }
 
 }
