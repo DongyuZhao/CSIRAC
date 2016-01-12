@@ -2,9 +2,9 @@ package project.csirac.controllers.socket;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import project.csirac.CsiracApplication;
 import project.csirac.helper.StringHelper;
 import project.csirac.models.emulator.*;
 import project.csirac.viewmodels.emulator.ControlOperationViewModel;
@@ -21,14 +21,16 @@ public class EmulatorSocketController implements IMonitorObserver
 {
     private SimpMessagingTemplate template;
 
-    IMonitor monitor = new Monitor(this);
-
     public Map<String, Long> sessionList = new HashMap<>();
 
     @Autowired
     public EmulatorSocketController(SimpMessagingTemplate template)
     {
         this.template = template;
+        if (!CsiracApplication.monitor.isObserverAttached(this))
+        {
+            CsiracApplication.monitor.attachObserver(this);
+        }
     }
 
     void setResults(Object ret, String destination)
@@ -38,9 +40,9 @@ public class EmulatorSocketController implements IMonitorObserver
 
     private void updateMonitorView(String sessionId)
     {
-        setResults(this.monitor.getMemory(sessionId), "io/memory/" + sessionId);
-        setResults(this.monitor.getRegister(sessionId), "io/register/" + sessionId);
-        setResults(this.monitor.getCurrentInstruction(sessionId), "io/instruction/" + sessionId);
+        setResults(CsiracApplication.monitor.getMemory(sessionId), "io/memory/" + sessionId);
+        setResults(CsiracApplication.monitor.getRegister(sessionId), "io/register/" + sessionId);
+        setResults(CsiracApplication.monitor.getCurrentInstruction(sessionId), "io/instruction/" + sessionId);
     }
 
     private boolean sessionExists(String sessionId)
@@ -52,18 +54,28 @@ public class EmulatorSocketController implements IMonitorObserver
         return this.sessionList.keySet().contains(sessionId);
     }
 
-    @MessageMapping("/emulator_in/io")
+    @MessageMapping("/io")
     public void uploadProgram(ProgramViewModel model) throws Exception
     {
         if (sessionExists(model.getSessionId()))
         {
-            this.monitor.loadProgramToMemory(model.getSessionId(), model.getProgram());
+            CsiracApplication.monitor.loadProgramToMemory(model.getSessionId(), model.getProgram());
             updateMonitorView(model.getSessionId());
         }
         setResults("Session Not Exists", "io/error" + model.getSessionId());
     }
 
-    @MessageMapping("/emulator_in/control")
+    @MessageMapping("/test_sockjs")
+    public void test(String a)
+    {
+        while(true)
+        {
+            for (int i = 0; i < 100000; i++);
+            setResults("Test Response", "test");
+        }
+    }
+
+    @MessageMapping("/control")
     public void control(ControlOperationViewModel model)
     {
         String sessionId = model.getSessionId();
@@ -74,14 +86,14 @@ public class EmulatorSocketController implements IMonitorObserver
             {
                 case "start":
                     //updateMonitorView(sessionId);
-                    this.monitor.startExecuting(sessionId);
+                    CsiracApplication.monitor.startExecuting(sessionId);
                     break;
                 case "pause":
                     //updateMonitorView();
-                    this.monitor.pauseExecuting(sessionId);
+                    CsiracApplication.monitor.pauseExecuting(sessionId);
                     break;
                 case "stop":
-                    this.monitor.stopExecuting(sessionId);
+                    CsiracApplication.monitor.stopExecuting(sessionId);
                     break;
             }
         }
@@ -91,7 +103,7 @@ public class EmulatorSocketController implements IMonitorObserver
         }
     }
 
-    @MessageMapping("/emulator_in/hand_shake")
+    @MessageMapping("/hand_shake")
     public void handShake(HandShakeViewModel model)
     {
         String sessionId = model.getSessionId();
@@ -101,26 +113,27 @@ public class EmulatorSocketController implements IMonitorObserver
             case  "hello" :
                 boolean newAdd = !sessionExists(sessionId);
                 this.sessionList.put(sessionId, (new Date()).getTime());
+                setResults("Session Working", "hand_shake/" + sessionId);
                 if (newAdd)
                 {
                     while(true)
                     {
                         if ((new Date()).getTime() - this.sessionList.get(sessionId) > 20000)
                         {
+                            CsiracApplication.monitor.stopExecuting(sessionId);
                             this.sessionList.remove(sessionId);
                             break;
                         }
-                        setResults("alive", "hand_shake/" + sessionId);
                     }
                 }
                 break;
             case "bye" :
                 if (this.sessionExists(sessionId))
                 {
-                    this.monitor.stopExecuting(sessionId);
+                    CsiracApplication.monitor.stopExecuting(sessionId);
                     this.sessionList.remove(sessionId);
                 }
-                setResults("bye", "hand_shake/" + sessionId);
+                setResults("Bye", "hand_shake/" + sessionId);
                 break;
         }
     }
@@ -134,7 +147,7 @@ public class EmulatorSocketController implements IMonitorObserver
         }
         else
         {
-            this.monitor.stopExecuting(sessionId);
+            CsiracApplication.monitor.stopExecuting(sessionId);
         }
     }
 
@@ -147,7 +160,7 @@ public class EmulatorSocketController implements IMonitorObserver
         }
         else
         {
-            this.monitor.stopExecuting(sessionId);
+            CsiracApplication.monitor.stopExecuting(sessionId);
         }
     }
 
@@ -160,7 +173,7 @@ public class EmulatorSocketController implements IMonitorObserver
         }
         else
         {
-            this.monitor.stopExecuting(sessionId);
+            CsiracApplication.monitor.stopExecuting(sessionId);
         }
     }
 }

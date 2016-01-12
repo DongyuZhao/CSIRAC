@@ -27,4 +27,5 @@ public interface IMonitor
     String[] getMemory(String sessionId);
     String[] getRegister(String sessionId);
     String getCurrentInstruction(String sessionId);
+    boolean isObserverAttached(IMonitorObserver observer);
 }

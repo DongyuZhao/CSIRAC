@@ -27,6 +27,7 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
         execute: function() {
             IoPanel = (function () {
                 function IoPanel() {
+                    var _this = this;
                     this._host = "localhost:8080/";
                     this._ioClient = socket_services_1.SocketServices.clientFactory("ws://" + this._host + "/emulator_in/io");
                     this._handShakeClient = socket_services_1.SocketServices.clientFactory("ws://" + this._host + "/emulator_in/hand_shake");
@@ -35,9 +36,11 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                     this.instructionView = [];
                     this.memoryView = [];
                     this.registerView = [];
-                    this.statue = "";
-                    this.error = "";
+                    this.status = "waiting";
+                    this.error = "none";
                     this._sessionId = "";
+                    this._handShakeTimer = null;
+                    this._handShakeCount = 0;
                     var node = document.getElementById("session_id");
                     if (node == null) {
                         this._sessionId = guid_1.Guid.newGuid();
@@ -51,6 +54,10 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                     }
                     this.connectHandShakeSocket();
                     this.connectIoSocket();
+                    console.log("Connect Complete");
+                    this._handShakeTimer = setInterval(function () {
+                        _this.keepSessionActive();
+                    }, 5000);
                 }
                 IoPanel.prototype.onSubmit = function () {
                     if (this.program != null && this.program != "") {
@@ -85,11 +92,11 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                 };
                 ;
                 IoPanel.prototype.onHandShakeResponse = function (response) {
-                    this.statue = JSON.parse(response.body).content;
+                    this.status = JSON.parse(response.body);
                 };
                 ;
                 IoPanel.prototype.onError = function (response) {
-                    this.error = JSON.parse(response.body).content;
+                    this.error = JSON.parse(response.body);
                 };
                 ;
                 IoPanel.prototype.connectIoSocket = function () {
@@ -141,6 +148,7 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                 };
                 ;
                 IoPanel.prototype.disconnectHandShakeSocket = function () {
+                    clearInterval(this._handShakeTimer);
                     if (this._handShakeClient != null && this._handShakeClient.connected) {
                         this._handShakeClient.send("/emulator_in/hand_shake", {}, JSON.stringify({
                             "sessionId": this._sessionId,
@@ -158,13 +166,26 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                     }
                 };
                 ;
-                IoPanel.prototype.keepAlive = function () {
+                IoPanel.prototype.keepSessionActive = function () {
+                    var _this = this;
+                    console.log("HandShake Start");
                     if (this._handShakeClient != null && this._handShakeClient.connected) {
+                        this._handShakeCount = this._handShakeCount + 1;
                         this._handShakeClient.send("/emulator_in/hand_shake", {}, JSON.stringify({
                             "sessionId": this._sessionId,
                             "operation": "hello"
                         }));
-                        console.log("HandShake Alive");
+                        console.log("HandShake Active:" + this._handShakeCount);
+                    }
+                    else {
+                        console.log(this._handShakeCount);
+                        clearInterval(this._handShakeTimer);
+                        this._handShakeCount = 0;
+                        this._handShakeClient = socket_services_1.SocketServices.clientFactory("ws://" + this._host + "/emulator_in/hand_shake");
+                        this.connectHandShakeSocket();
+                        this._handShakeTimer = setInterval(function () {
+                            _this.keepSessionActive();
+                        }, 5000);
                     }
                 };
                 ;
