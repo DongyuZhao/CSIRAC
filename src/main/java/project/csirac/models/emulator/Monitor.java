@@ -4,17 +4,17 @@ import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by Dy.Zhao on 2016/1/4 0004.
  */
 public class Monitor implements IMonitor
 {
-    private IMonitorObserver _observer;
+    private Vector<IMonitorObserver> _observerList = new Vector<>();
 
-    public Monitor(IMonitorObserver observer)
+    public Monitor()
     {
-        this._observer = observer;
     }
 
     @Override
@@ -32,7 +32,10 @@ public class Monitor implements IMonitor
     @Override
     public void attachObserver(IMonitorObserver observer)
     {
-
+        if (!this.isObserverAttached(observer))
+        {
+            this._observerList.add(observer);
+        }
     }
 
     @Override
@@ -107,23 +110,33 @@ public class Monitor implements IMonitor
     public void updateInstructionView(String sessionId, String instruction)
     {
         //update code
-        this._observer.updateInstructionView(sessionId, this.getCurrentInstruction(sessionId));
+        for (IMonitorObserver observer : this._observerList)
+        {
+            observer.updateInstructionView(sessionId, this.getCurrentInstruction(sessionId));
+        }
     }
 
     @Override
     public void updateMemoryView(String sessionId, int address, String data)
     {
         //update code
-        String[] result = new String[]{};
-        this._observer.updateMemoryView(sessionId, this.getMemory(sessionId));
+
+        for (IMonitorObserver observer : this._observerList)
+        {
+            String[] result = new String[]{};
+            observer.updateMemoryView(sessionId, this.getMemory(sessionId));
+        }
     }
 
     @Override
     public void updateRegisterView(String sessionId, int address, String data)
     {
         //update code
-        String[] result = new String[]{};
-        this._observer.updateRegisterView(sessionId, this.getRegister(sessionId));
+        for (IMonitorObserver observer : this._observerList)
+        {
+            String[] result = new String[]{};
+            observer.updateRegisterView(sessionId, this.getRegister(sessionId));
+        }
     }
 
     @Override
@@ -144,6 +157,12 @@ public class Monitor implements IMonitor
     public String getCurrentInstruction(String sessionId)
     {
         return generateFakeResult(20);
+    }
+
+    @Override
+    public boolean isObserverAttached(IMonitorObserver observer)
+    {
+        return this._observerList.contains(observer);
     }
 
     private String generateFakeResult(int length)

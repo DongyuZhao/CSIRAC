@@ -28,11 +28,15 @@ export class IoPanel implements OnDestroy
 
     public registerView:string[] = [];
 
-    public statue = "";
+    public status = "waiting";
 
-    public error = "";
+    public error = "none";
 
     private _sessionId = "";
+
+    private _handShakeTimer = null;
+
+    private _handShakeCount = 0;
 
     public onSubmit()
     {
@@ -77,12 +81,12 @@ export class IoPanel implements OnDestroy
 
     public onHandShakeResponse(response:Message)
     {
-        this.statue = JSON.parse(response.body).content;
+        this.status = JSON.parse(response.body);
     };
 
     public onError(response:Message)
     {
-        this.error = JSON.parse(response.body).content;
+        this.error = JSON.parse(response.body);
     };
 
     private connectIoSocket()
@@ -155,6 +159,7 @@ export class IoPanel implements OnDestroy
 
     private disconnectHandShakeSocket()
     {
+        clearInterval(this._handShakeTimer);
         if (this._handShakeClient != null && this._handShakeClient.connected)
         {
             this._handShakeClient.send("/emulator_in/hand_shake", {}, JSON.stringify({
@@ -175,15 +180,29 @@ export class IoPanel implements OnDestroy
         }
     };
 
-    private keepAlive()
+    private keepSessionActive()
     {
+        console.log("HandShake Start");
         if (this._handShakeClient != null && this._handShakeClient.connected)
         {
+            this._handShakeCount = this._handShakeCount + 1;
             this._handShakeClient.send("/emulator_in/hand_shake", {}, JSON.stringify({
                 "sessionId": this._sessionId,
                 "operation": "hello"
             }));
-            console.log("HandShake Alive");
+            console.log("HandShake Active:" + this._handShakeCount);
+        }
+        else
+        {
+            console.log(this._handShakeCount);
+            clearInterval(this._handShakeTimer);
+            this._handShakeCount = 0;
+            this._handShakeClient = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/hand_shake");
+            this.connectHandShakeSocket();
+            this._handShakeTimer = setInterval(() =>
+            {
+                this.keepSessionActive()
+            }, 5000);
         }
     }
 
@@ -205,6 +224,11 @@ export class IoPanel implements OnDestroy
         }
         this.connectHandShakeSocket();
         this.connectIoSocket();
+        console.log("Connect Complete");
+        this._handShakeTimer = setInterval(() =>
+        {
+            this.keepSessionActive()
+        }, 5000);
     };
 
     ngOnDestroy()
