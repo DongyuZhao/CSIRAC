@@ -5,6 +5,7 @@ import {Message} from "stompjs";
 import {OnDestroy} from "angular2/core";
 import {Frame} from "stompjs";
 import {Guid} from "../../../utils/guid"
+import {Settings} from "./settings";
 
 @Component({
     selector: 'setting-panel',
@@ -20,11 +21,13 @@ export class SettingPanel implements OnDestroy
 
     private _client = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/settings");
 
-    public frequency = 100;
-
     public statusList:string[] = [];
 
     public errorList:string[] = [];
+
+    private _setting:Settings = null;
+
+    private _retryCount = 0;
 
     public onStatusResponse(response:Message)
     {
@@ -46,8 +49,28 @@ export class SettingPanel implements OnDestroy
 
     public onSettingResponse(response:Message)
     {
-        var result = JSON.parse(response.body);
-        this.frequency = result["frequency"];
+        this._setting = JSON.parse(response.body);
+    }
+
+    public onSubmit()
+    {
+        if (this._client != null && this._client.connected)
+        {
+            this._client.send("/emulator_in/settings", {}, JSON.stringify(this._setting));
+            console.log("Setting Upload Finished");
+        }
+        else
+        {
+            if (this._retryCount < 3)
+            {
+                this.connect();
+                this._client.send("/emulator_in/settings", {}, JSON.stringify(this._setting));
+            }
+            else
+            {
+                this.errorList.push("No Connection");
+            }
+        }
     }
 
     private connect()
@@ -96,6 +119,11 @@ export class SettingPanel implements OnDestroy
         }
     };
 
+    private initSettings()
+    {
+        this._setting = new Settings(this._sessionId, 100);
+    };
+
     constructor()
     {
         var node = document.getElementById("session_id");
@@ -113,6 +141,7 @@ export class SettingPanel implements OnDestroy
             }
         }
         this.connect();
+        this.initSettings();
     };
 
     ngOnDestroy()

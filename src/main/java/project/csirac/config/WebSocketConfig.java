@@ -27,6 +27,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer
         registry.addEndpoint("/emulator_in/hand_shake");
         registry.addEndpoint("/emulator_in/io");
         registry.addEndpoint("/emulator_in/control");
+        registry.addEndpoint("/emulator_in/settings");
     }
 
 }
