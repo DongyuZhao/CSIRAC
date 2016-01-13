@@ -10,20 +10,18 @@ import project.csirac.models.document.DocumentDao;
  * Created by Dy.Zhao on 2016/1/3 0003.
  */
 @Controller
-public class HomeController
-{
-    @RequestMapping("/")
-    public String welcome(@RequestParam(name = "name", required = false, defaultValue = "there") String name, Model model)
-    {
-        model.addAttribute("name", name);
-        return "welcome";
-    }
+public class HomeController {
+	@RequestMapping("/")
+	public String welcome(@RequestParam(name = "name", required = false, defaultValue = "there") String name,
+			Model model) {
+		model.addAttribute("name", name);
+		return "welcome";
+	}
 
-    @RequestMapping("/help")
-    public String help(Model model)
-    {
-        DocumentDao dao = new DocumentDao();
-        model.addAttribute("document", dao.findByName("Help"));
-        return "help";
-    }
+	@RequestMapping("/help")
+	public String help(Model model) {
+		DocumentDao dao = new DocumentDao();
+		model.addAttribute("document", dao.findByName("Help"));
+		return "help";
+	}
 }
