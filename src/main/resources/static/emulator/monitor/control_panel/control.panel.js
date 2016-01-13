@@ -128,7 +128,7 @@ System.register(["angular2/core", "angular2/http", "../../../services/socket_ser
                         if (this._controlClient != null && !this._controlClient.connected) {
                             this._controlClient.connect({}, function (frame) {
                                 _this._controlClient.subscribe("/emulator_response/control/status/" + _this._sessionId, function (response) {
-                                    console.log("Control Response");
+                                    console.log("Control Status");
                                     _this.onResponse(response);
                                 });
                                 _this._controlClient.subscribe("/emulator_response/control/error/" + _this._sessionId, function (response) {

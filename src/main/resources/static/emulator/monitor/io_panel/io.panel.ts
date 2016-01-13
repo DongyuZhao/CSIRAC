@@ -3,7 +3,6 @@ import {Stomp, Client, Message, Frame} from 'stompjs'
 import {SocketServices} from "../../../services/socket_services";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {Guid} from "../../../utils/guid"
-import {MonitorComponent} from "../monitor.component";
 
 @Component({
     selector: "io-panel",
@@ -21,19 +20,25 @@ export class IoPanel implements OnDestroy
 
     public structured_program:string[] = [];
 
-    public instructionView:string[] = [];
+    public frequencyView = "";
+
+    public instructionView = "";
+
+    public pcRegView = "";
 
     public memoryView:string[] = [];
 
     public registerView:string[] = [];
 
-    public errorList = [];
+    public outputView:string[] = [];
+
+    public statusList:string[] = [];
+
+    public errorList:string[] = [];
 
     private _sessionId = "";
 
     private _retryCount = 0;
-
-    public statusList = [];
 
     public onSubmit()
     {
@@ -89,7 +94,17 @@ export class IoPanel implements OnDestroy
         this.registerView = JSON.parse(response.body);
     };
 
-    public onResponse(response:Message)
+    public onPcRegResponse(response:Message)
+    {
+        this.pcRegView = JSON.parse(response.body);
+    }
+
+    public onOutputResponse(response:Message)
+    {
+        this.outputView = JSON.parse(response.body);
+    }
+
+    public onStatusResponse(response:Message)
     {
         if (this.statusList.length > 5)
         {
@@ -112,34 +127,47 @@ export class IoPanel implements OnDestroy
                 this._client.connect({},
                         (frame:Frame) =>
                         {
-                            this._client.subscribe("/emulator_response/instruction/" + this._sessionId,
+                            this._client.subscribe("/emulator_response/io/instruction/" + this._sessionId,
                                     (response:Message) =>
                                     {
                                         console.log("Instruction Response");
                                         this.onInstructionResponse(response);
                                     });
-                            this._client.subscribe("/emulator_response/memory/" + this._sessionId,
+                            this._client.subscribe("/emulator_response/io/memory/" + this._sessionId,
                                     (response:Message) =>
                                     {
                                         console.log("Memory Response");
                                         this.onMemoryResponse(response);
                                     });
-                            this._client.subscribe("/emulator_response/register/" + this._sessionId,
+                            this._client.subscribe("/emulator_response/io/register/" + this._sessionId,
                                     (response:Message) =>
                                     {
                                         console.log("Register Response");
                                         this.onRegisterResponse(response);
                                     });
-                            this._client.subscribe("/emulator_response/io/" + this._sessionId,
+                            this._client.subscribe("/emulator_response/io/status/" + this._sessionId,
                                     (response:Message) =>
                                     {
-                                        console.log("IO Response");
-                                        this.onResponse(response);
+                                        console.log("IO Status");
+                                        this.onStatusResponse(response);
+                                    });
+
+                            this._client.subscribe("/emulator_response/io/pc_reg/" + this._sessionId,
+                                    (response:Message) =>
+                                    {
+                                        console.log("PC Reg Response");
+                                        this.onPcRegResponse(response);
+                                    });
+                            this._client.subscribe("/emulator_response/io/output/" + this._sessionId,
+                                    (response:Message) =>
+                                    {
+                                        console.log("Output Response");
+                                        this.onOutputResponse(response);
                                     });
                             this._client.subscribe("/emulator_response/io/error/" + this._sessionId,
                                     (response:Message) =>
                                     {
-                                        console.log("IO Error Response");
+                                        console.log("IO Error");
                                         this.onError(response);
                                     });
                         });
