@@ -27,20 +27,17 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
         execute: function() {
             IoPanel = (function () {
                 function IoPanel() {
-                    var _this = this;
                     this._host = "localhost:8080/";
-                    this._ioClient = socket_services_1.SocketServices.clientFactory("ws://" + this._host + "/emulator_in/io");
-                    this._handShakeClient = socket_services_1.SocketServices.clientFactory("ws://" + this._host + "/emulator_in/hand_shake");
+                    this._client = socket_services_1.SocketServices.clientFactory("ws://" + this._host + "/emulator_in/io");
                     this.program = "";
                     this.structured_program = [];
                     this.instructionView = [];
                     this.memoryView = [];
                     this.registerView = [];
-                    this.status = "waiting";
-                    this.error = "none";
+                    this.errorList = [];
                     this._sessionId = "";
-                    this._handShakeTimer = null;
-                    this._handShakeCount = 0;
+                    this._retryCount = 0;
+                    this.statusList = [];
                     var node = document.getElementById("session_id");
                     if (node == null) {
                         this._sessionId = guid_1.Guid.newGuid();
@@ -52,26 +49,32 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                             node.innerText = this._sessionId;
                         }
                     }
-                    this.connectHandShakeSocket();
-                    this.connectIoSocket();
-                    console.log("Connect Complete");
-                    this._handShakeTimer = setInterval(function () {
-                        _this.keepSessionActive();
-                    }, 5000);
+                    this.connect();
                 }
                 IoPanel.prototype.onSubmit = function () {
+                    console.log("Upload Program");
                     if (this.program != null && this.program != "") {
                         this.structured_program = this.program.split("\n");
                     }
                     if (this.structured_program != null && this.structured_program.length != 0) {
-                        if (this._ioClient != null && this._ioClient.connected) {
-                            this._ioClient.send("/emulator_in/io", {}, JSON.stringify({
+                        if (this._client != null && this._client.connected) {
+                            this._client.send("/emulator_in/io", {}, JSON.stringify({
                                 "sessionId": this._sessionId,
                                 "program": this.structured_program
                             }));
+                            console.log("Upload Finished");
                         }
                         else {
-                            console.error("IO Client Null or UnConnected");
+                            if (this._retryCount < 3) {
+                                this.connect();
+                                this._client.send("/emulator_in/io", {}, JSON.stringify({
+                                    "sessionId": this._sessionId,
+                                    "program": this.structured_program
+                                }));
+                            }
+                            else {
+                                this.errorList.push("No Connection");
+                            }
                         }
                     }
                     else {
@@ -80,43 +83,49 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                 };
                 ;
                 IoPanel.prototype.onInstructionResponse = function (response) {
-                    this.instructionView = JSON.parse(response.body).content;
+                    this.instructionView = JSON.parse(response.body);
                 };
                 ;
                 IoPanel.prototype.onMemoryResponse = function (response) {
-                    this.memoryView = JSON.parse(response.body).content;
+                    this.memoryView = JSON.parse(response.body);
                 };
                 ;
                 IoPanel.prototype.onRegisterResponse = function (response) {
-                    this.registerView = JSON.parse(response.body).content;
+                    this.registerView = JSON.parse(response.body);
                 };
                 ;
-                IoPanel.prototype.onHandShakeResponse = function (response) {
-                    this.status = JSON.parse(response.body);
+                IoPanel.prototype.onResponse = function (response) {
+                    if (this.statusList.length > 5) {
+                        this.statusList = [];
+                    }
+                    this.statusList.push(JSON.parse(response.body));
                 };
-                ;
                 IoPanel.prototype.onError = function (response) {
-                    this.error = JSON.parse(response.body);
+                    this.errorList.push(JSON.parse(response.body));
                 };
                 ;
-                IoPanel.prototype.connectIoSocket = function () {
+                IoPanel.prototype.connect = function () {
                     var _this = this;
-                    if (this._ioClient != null && !this._ioClient.connected) {
+                    if (this._client != null && !this._client.connected) {
                         try {
-                            this._ioClient.connect({}, function (frame) {
-                                _this._ioClient.subscribe("/emulator_response/instruction/" + _this._sessionId, function (response) {
+                            this._client.connect({}, function (frame) {
+                                _this._client.subscribe("/emulator_response/instruction/" + _this._sessionId, function (response) {
                                     console.log("Instruction Response");
                                     _this.onInstructionResponse(response);
                                 });
-                                _this._ioClient.subscribe("/emulator_response/memory/" + _this._sessionId, function (response) {
+                                _this._client.subscribe("/emulator_response/memory/" + _this._sessionId, function (response) {
                                     console.log("Memory Response");
                                     _this.onMemoryResponse(response);
                                 });
-                                _this._ioClient.subscribe("/emulator_response/register/" + _this._sessionId, function (response) {
+                                _this._client.subscribe("/emulator_response/register/" + _this._sessionId, function (response) {
                                     console.log("Register Response");
                                     _this.onRegisterResponse(response);
                                 });
-                                _this._ioClient.subscribe("/emulator_response/error/" + _this._sessionId, function (response) {
+                                _this._client.subscribe("/emulator_response/io/" + _this._sessionId, function (response) {
+                                    console.log("IO Response");
+                                    _this.onResponse(response);
+                                });
+                                _this._client.subscribe("/emulator_response/io/error/" + _this._sessionId, function (response) {
                                     console.log("IO Error Response");
                                     _this.onError(response);
                                 });
@@ -129,69 +138,16 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                     }
                 };
                 ;
-                IoPanel.prototype.connectHandShakeSocket = function () {
-                    var _this = this;
-                    if (this._handShakeClient != null && !this._handShakeClient.connected) {
-                        try {
-                            this._handShakeClient.connect({}, function (frame) {
-                                _this._handShakeClient.subscribe("/emulator_response/hand_shake/" + _this._sessionId, function (response) {
-                                    console.log("Hand Shake Response");
-                                    _this.onHandShakeResponse(response);
-                                });
-                            });
-                            console.log("HandShake Connected");
-                        }
-                        catch (e) {
-                            console.error(e);
-                        }
-                    }
-                };
-                ;
-                IoPanel.prototype.disconnectHandShakeSocket = function () {
-                    clearInterval(this._handShakeTimer);
-                    if (this._handShakeClient != null && this._handShakeClient.connected) {
-                        this._handShakeClient.send("/emulator_in/hand_shake", {}, JSON.stringify({
-                            "sessionId": this._sessionId,
-                            "operation": "bye"
-                        }));
-                        this._handShakeClient.disconnect();
-                        console.log("HandShake Client Disconnect");
-                    }
-                };
-                ;
-                IoPanel.prototype.disconnectIoSocket = function () {
-                    if (this._ioClient != null && this._ioClient.connected) {
-                        this._ioClient.disconnect();
+                IoPanel.prototype.disconnect = function () {
+                    if (this._client != null && this._client.connected) {
+                        this._client.disconnect();
                         console.log("IO Client Disconnect");
                     }
                 };
                 ;
-                IoPanel.prototype.keepSessionActive = function () {
-                    var _this = this;
-                    console.log("HandShake Start");
-                    if (this._handShakeClient != null && this._handShakeClient.connected) {
-                        this._handShakeCount = this._handShakeCount + 1;
-                        this._handShakeClient.send("/emulator_in/hand_shake", {}, JSON.stringify({
-                            "sessionId": this._sessionId,
-                            "operation": "hello"
-                        }));
-                        console.log("HandShake Active:" + this._handShakeCount);
-                    }
-                    else {
-                        console.log(this._handShakeCount);
-                        clearInterval(this._handShakeTimer);
-                        this._handShakeCount = 0;
-                        this._handShakeClient = socket_services_1.SocketServices.clientFactory("ws://" + this._host + "/emulator_in/hand_shake");
-                        this.connectHandShakeSocket();
-                        this._handShakeTimer = setInterval(function () {
-                            _this.keepSessionActive();
-                        }, 5000);
-                    }
-                };
                 ;
                 IoPanel.prototype.ngOnDestroy = function () {
-                    this.disconnectHandShakeSocket();
-                    this.disconnectIoSocket();
+                    this.disconnect();
                 };
                 ;
                 IoPanel = __decorate([

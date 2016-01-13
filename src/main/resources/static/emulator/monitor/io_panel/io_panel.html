@@ -1,5 +1,16 @@
-<p>{{status}}</p>
-<p>{{error}}</p>
+
+<div>
+    <h3>IO Status</h3>
+    <ol>
+        <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
+    </ol>
+</div>
+<div>
+    <h3>IO Errors</h3>
+    <ol>
+        <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
+    </ol>
+</div>
 <div>
     <form (ngSubmit)="onSubmit()" #testform="ngForm">
         <input type="text" placeholder="Input Your Program Here" [(ngModel)]="program" #program_input>
