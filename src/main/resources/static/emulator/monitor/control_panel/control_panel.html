@@ -1,0 +1,18 @@
+<button (click)="onStart()" [disabled]="!_allowStart">Start</button>
+<button (click)="onPause()" [disabled]="!_allowPause">Pause</button>
+<button (click)="onNext()" [disabled]="!_allowNext">Next</button>
+<button (click)="onContinue()" [disabled]="!_allowContinue">Continue</button>
+<button (click)="onStop()" [disabled]="!_allowStop">Stop</button>
+
+<div>
+    <h3>Control Status</h3>
+    <ol>
+        <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
+    </ol>
+</div>
+<div>
+    <h3>Control Errors</h3>
+    <ol>
+        <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
+    </ol>
+</div>
