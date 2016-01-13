@@ -1,4 +1,4 @@
-System.register(["angular2/core", "angular2/http", "../../../services/socket_services", "../../../utils/guid"], function(exports_1) {
+System.register(["angular2/core", "angular2/http", "../../../services/socket_services", "../../../utils/guid", "./settings"], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(["angular2/core", "angular2/http", "../../../services/socket_ser
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1, socket_services_1, guid_1;
+    var core_1, http_1, socket_services_1, guid_1, settings_1;
     var SettingPanel;
     return {
         setters:[
@@ -23,6 +23,9 @@ System.register(["angular2/core", "angular2/http", "../../../services/socket_ser
             },
             function (guid_1_1) {
                 guid_1 = guid_1_1;
+            },
+            function (settings_1_1) {
+                settings_1 = settings_1_1;
             }],
         execute: function() {
             SettingPanel = (function () {
@@ -30,9 +33,10 @@ System.register(["angular2/core", "angular2/http", "../../../services/socket_ser
                     this._host = "localhost:8080/";
                     this._sessionId = "";
                     this._client = socket_services_1.SocketServices.clientFactory("ws://" + this._host + "/emulator_in/settings");
-                    this.frequency = 100;
                     this.statusList = [];
                     this.errorList = [];
+                    this._setting = null;
+                    this._retryCount = 0;
                     var node = document.getElementById("session_id");
                     if (node == null) {
                         this._sessionId = guid_1.Guid.newGuid();
@@ -45,6 +49,7 @@ System.register(["angular2/core", "angular2/http", "../../../services/socket_ser
                         }
                     }
                     this.connect();
+                    this.initSettings();
                 }
                 SettingPanel.prototype.onStatusResponse = function (response) {
                     if (this.statusList.length >= 5) {
@@ -59,8 +64,22 @@ System.register(["angular2/core", "angular2/http", "../../../services/socket_ser
                     this.errorList.push(JSON.parse(response.body));
                 };
                 SettingPanel.prototype.onSettingResponse = function (response) {
-                    var result = JSON.parse(response.body);
-                    this.frequency = result["frequency"];
+                    this._setting = JSON.parse(response.body);
+                };
+                SettingPanel.prototype.onSubmit = function () {
+                    if (this._client != null && this._client.connected) {
+                        this._client.send("/emulator_in/settings", {}, JSON.stringify(this._setting));
+                        console.log("Setting Upload Finished");
+                    }
+                    else {
+                        if (this._retryCount < 3) {
+                            this.connect();
+                            this._client.send("/emulator_in/settings", {}, JSON.stringify(this._setting));
+                        }
+                        else {
+                            this.errorList.push("No Connection");
+                        }
+                    }
                 };
                 SettingPanel.prototype.connect = function () {
                     var _this = this;
@@ -93,6 +112,10 @@ System.register(["angular2/core", "angular2/http", "../../../services/socket_ser
                         this._client.disconnect();
                         console.log("IO Client Disconnect");
                     }
+                };
+                ;
+                SettingPanel.prototype.initSettings = function () {
+                    this._setting = new settings_1.Settings(this._sessionId, 100);
                 };
                 ;
                 ;

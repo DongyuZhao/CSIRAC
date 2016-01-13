@@ -213,7 +213,10 @@ public class Monitor implements IMonitor
     @Override
     public void setClockFrequency(String sessionId, float frequency)
     {
-
+        Settings settings = new Settings();
+        settings.setSessionId(sessionId);
+        settings.setFrequency(800);
+        this.updateCurrentSettingView(sessionId, settings);
     }
 
     /**
