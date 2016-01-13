@@ -3,6 +3,7 @@ import {Stomp, Client, Message, Frame} from 'stompjs'
 import {SocketServices} from "../../../services/socket_services";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {Guid} from "../../../utils/guid"
+import {MonitorComponent} from "../monitor.component";
 
 @Component({
     selector: "io-panel",
@@ -14,9 +15,7 @@ export class IoPanel implements OnDestroy
 {
     _host = "localhost:8080/";
 
-    private _ioClient = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/io");
-
-    private _handShakeClient = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/hand_shake");
+    private _client = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/io");
 
     public program = "";
 
@@ -28,34 +27,45 @@ export class IoPanel implements OnDestroy
 
     public registerView:string[] = [];
 
-    public status = "waiting";
-
-    public error = "none";
+    public errorList = [];
 
     private _sessionId = "";
 
-    private _handShakeTimer = null;
+    private _retryCount = 0;
 
-    private _handShakeCount = 0;
+    public statusList = [];
 
     public onSubmit()
     {
+        console.log("Upload Program");
         if (this.program != null && this.program != "")
         {
             this.structured_program = this.program.split("\n");
         }
         if (this.structured_program != null && this.structured_program.length != 0)
         {
-            if (this._ioClient != null && this._ioClient.connected)
+            if (this._client != null && this._client.connected)
             {
-                this._ioClient.send("/emulator_in/io", {}, JSON.stringify({
+                this._client.send("/emulator_in/io", {}, JSON.stringify({
                     "sessionId": this._sessionId,
                     "program": this.structured_program
                 }));
+                console.log("Upload Finished");
             }
             else
             {
-                console.error("IO Client Null or UnConnected");
+                if (this._retryCount < 3)
+                {
+                    this.connect();
+                    this._client.send("/emulator_in/io", {}, JSON.stringify({
+                        "sessionId": this._sessionId,
+                        "program": this.structured_program
+                    }));
+                }
+                else
+                {
+                    this.errorList.push("No Connection");
+                }
             }
         }
         else
@@ -66,57 +76,67 @@ export class IoPanel implements OnDestroy
 
     public onInstructionResponse(response:Message)
     {
-        this.instructionView = JSON.parse(response.body).content;
+        this.instructionView = JSON.parse(response.body);
     };
 
     public onMemoryResponse(response:Message)
     {
-        this.memoryView = JSON.parse(response.body).content;
+        this.memoryView = JSON.parse(response.body);
     };
 
     public onRegisterResponse(response:Message)
     {
-        this.registerView = JSON.parse(response.body).content;
+        this.registerView = JSON.parse(response.body);
     };
 
-    public onHandShakeResponse(response:Message)
+    public onResponse(response:Message)
     {
-        this.status = JSON.parse(response.body);
-    };
+        if (this.statusList.length > 5)
+        {
+            this.statusList = [];
+        }
+        this.statusList.push(JSON.parse(response.body));
+    }
 
     public onError(response:Message)
     {
-        this.error = JSON.parse(response.body);
+        this.errorList.push(JSON.parse(response.body));
     };
 
-    private connectIoSocket()
+    private connect()
     {
-        if (this._ioClient != null && !this._ioClient.connected)
+        if (this._client != null && !this._client.connected)
         {
             try
             {
-                this._ioClient.connect({},
+                this._client.connect({},
                         (frame:Frame) =>
                         {
-                            this._ioClient.subscribe("/emulator_response/instruction/" + this._sessionId,
+                            this._client.subscribe("/emulator_response/instruction/" + this._sessionId,
                                     (response:Message) =>
                                     {
                                         console.log("Instruction Response");
                                         this.onInstructionResponse(response);
                                     });
-                            this._ioClient.subscribe("/emulator_response/memory/" + this._sessionId,
+                            this._client.subscribe("/emulator_response/memory/" + this._sessionId,
                                     (response:Message) =>
                                     {
                                         console.log("Memory Response");
                                         this.onMemoryResponse(response);
                                     });
-                            this._ioClient.subscribe("/emulator_response/register/" + this._sessionId,
+                            this._client.subscribe("/emulator_response/register/" + this._sessionId,
                                     (response:Message) =>
                                     {
                                         console.log("Register Response");
                                         this.onRegisterResponse(response);
                                     });
-                            this._ioClient.subscribe("/emulator_response/error/" + this._sessionId,
+                            this._client.subscribe("/emulator_response/io/" + this._sessionId,
+                                    (response:Message) =>
+                                    {
+                                        console.log("IO Response");
+                                        this.onResponse(response);
+                                    });
+                            this._client.subscribe("/emulator_response/io/error/" + this._sessionId,
                                     (response:Message) =>
                                     {
                                         console.log("IO Error Response");
@@ -132,79 +152,14 @@ export class IoPanel implements OnDestroy
         }
     };
 
-    private connectHandShakeSocket()
+    private disconnect()
     {
-        if (this._handShakeClient != null && !this._handShakeClient.connected)
+        if (this._client != null && this._client.connected)
         {
-            try
-            {
-                this._handShakeClient.connect({},
-                        (frame:Frame) =>
-                        {
-                            this._handShakeClient.subscribe("/emulator_response/hand_shake/" + this._sessionId,
-                                    (response:Message)=>
-                                    {
-                                        console.log("Hand Shake Response");
-                                        this.onHandShakeResponse(response);
-                                    });
-                        });
-                console.log("HandShake Connected");
-            }
-            catch (e)
-            {
-                console.error(e);
-            }
-        }
-    };
-
-    private disconnectHandShakeSocket()
-    {
-        clearInterval(this._handShakeTimer);
-        if (this._handShakeClient != null && this._handShakeClient.connected)
-        {
-            this._handShakeClient.send("/emulator_in/hand_shake", {}, JSON.stringify({
-                "sessionId": this._sessionId,
-                "operation": "bye"
-            }));
-            this._handShakeClient.disconnect();
-            console.log("HandShake Client Disconnect");
-        }
-    };
-
-    private disconnectIoSocket()
-    {
-        if (this._ioClient != null && this._ioClient.connected)
-        {
-            this._ioClient.disconnect();
+            this._client.disconnect();
             console.log("IO Client Disconnect");
         }
     };
-
-    private keepSessionActive()
-    {
-        console.log("HandShake Start");
-        if (this._handShakeClient != null && this._handShakeClient.connected)
-        {
-            this._handShakeCount = this._handShakeCount + 1;
-            this._handShakeClient.send("/emulator_in/hand_shake", {}, JSON.stringify({
-                "sessionId": this._sessionId,
-                "operation": "hello"
-            }));
-            console.log("HandShake Active:" + this._handShakeCount);
-        }
-        else
-        {
-            console.log(this._handShakeCount);
-            clearInterval(this._handShakeTimer);
-            this._handShakeCount = 0;
-            this._handShakeClient = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/hand_shake");
-            this.connectHandShakeSocket();
-            this._handShakeTimer = setInterval(() =>
-            {
-                this.keepSessionActive()
-            }, 5000);
-        }
-    }
 
     constructor()
     {
@@ -222,18 +177,11 @@ export class IoPanel implements OnDestroy
                 node.innerText = this._sessionId;
             }
         }
-        this.connectHandShakeSocket();
-        this.connectIoSocket();
-        console.log("Connect Complete");
-        this._handShakeTimer = setInterval(() =>
-        {
-            this.keepSessionActive()
-        }, 5000);
+        this.connect();
     };
 
     ngOnDestroy()
     {
-        this.disconnectHandShakeSocket();
-        this.disconnectIoSocket();
+        this.disconnect();
     };
 }

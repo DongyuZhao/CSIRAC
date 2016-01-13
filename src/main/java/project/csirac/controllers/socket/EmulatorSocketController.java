@@ -1,6 +1,7 @@
 package project.csirac.controllers.socket;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -40,9 +41,9 @@ public class EmulatorSocketController implements IMonitorObserver
 
     private void updateMonitorView(String sessionId)
     {
-        setResults(CsiracApplication.monitor.getMemory(sessionId), "io/memory/" + sessionId);
-        setResults(CsiracApplication.monitor.getRegister(sessionId), "io/register/" + sessionId);
-        setResults(CsiracApplication.monitor.getCurrentInstruction(sessionId), "io/instruction/" + sessionId);
+        setResults(CsiracApplication.monitor.getMemory(sessionId), "memory/" + sessionId);
+        setResults(CsiracApplication.monitor.getRegister(sessionId), "register/" + sessionId);
+        setResults(CsiracApplication.monitor.getCurrentInstruction(sessionId), "instruction/" + sessionId);
     }
 
     private boolean sessionExists(String sessionId)
@@ -61,18 +62,14 @@ public class EmulatorSocketController implements IMonitorObserver
         {
             CsiracApplication.monitor.loadProgramToMemory(model.getSessionId(), model.getProgram());
             updateMonitorView(model.getSessionId());
+            String response = "";
+            for (String line : model.getProgram())
+            {
+                response += "\t" + line + "\r\n";
+            }
+            setResults("Program: \r\n"+ response +"Uploaded Successful", "io/" + model.getSessionId());
         }
         setResults("Session Not Exists", "io/error" + model.getSessionId());
-    }
-
-    @MessageMapping("/test_sockjs")
-    public void test(String a)
-    {
-        while(true)
-        {
-            for (int i = 0; i < 100000; i++);
-            setResults("Test Response", "test");
-        }
     }
 
     @MessageMapping("/control")
@@ -85,21 +82,43 @@ public class EmulatorSocketController implements IMonitorObserver
             switch (operation)
             {
                 case "start":
-                    //updateMonitorView(sessionId);
                     CsiracApplication.monitor.startExecuting(sessionId);
+                    setResults("Running", "control/status/" + sessionId);
                     break;
                 case "pause":
-                    //updateMonitorView();
                     CsiracApplication.monitor.pauseExecuting(sessionId);
+                    setResults("Pause", "control/status/" + sessionId);
+                    break;
+                case "next":
+                    CsiracApplication.monitor.nextInstruction(sessionId);
+                    setResults("Pause", "control/status/" + sessionId);
+                    break;
+                case "continue":
+                    CsiracApplication.monitor.continueExecuting(sessionId);
+                    setResults("Running", "control/status/" + sessionId);
                     break;
                 case "stop":
                     CsiracApplication.monitor.stopExecuting(sessionId);
+                    setResults("Stop", "control/status/" + sessionId);
+                    break;
+                case "check":
+                    setResults("Ready", "control/status/" + sessionId);
+                    break;
+                default:
+                    setResults("Unknown Operation", "control/error/" + sessionId);
                     break;
             }
         }
         else
         {
-            setResults("Session Not Exists", "control/error" + sessionId);
+            if (operation.equals("check"))
+            {
+                setResults("Not Ready", "control/status/" + sessionId);
+            }
+            else
+            {
+                setResults("Session Not Exists", "control/error/" + sessionId);
+            }
         }
     }
 
@@ -110,24 +129,34 @@ public class EmulatorSocketController implements IMonitorObserver
         String operation = model.getOperation();
         switch (operation)
         {
-            case  "hello" :
+            case "hello":
                 boolean newAdd = !sessionExists(sessionId);
                 this.sessionList.put(sessionId, (new Date()).getTime());
-                setResults("Session Working", "hand_shake/" + sessionId);
+                boolean stop = false;
                 if (newAdd)
                 {
-                    while(true)
+                    setResults("Add Session", "hand_shake/" + sessionId);
+                    while (true)
                     {
                         if ((new Date()).getTime() - this.sessionList.get(sessionId) > 20000)
                         {
                             CsiracApplication.monitor.stopExecuting(sessionId);
                             this.sessionList.remove(sessionId);
+                            stop = true;
                             break;
                         }
                     }
                 }
+                if (!stop)
+                {
+                    setResults("Session Working", "hand_shake/" + sessionId);
+                }
+                else
+                {
+                    setResults("Session Timeout", "hand_shake/" + sessionId);
+                }
                 break;
-            case "bye" :
+            case "bye":
                 if (this.sessionExists(sessionId))
                 {
                     CsiracApplication.monitor.stopExecuting(sessionId);

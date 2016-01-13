@@ -1,6 +1,5 @@
 package project.csirac.models.emulator;
 
-import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -123,7 +122,6 @@ public class Monitor implements IMonitor
 
         for (IMonitorObserver observer : this._observerList)
         {
-            String[] result = new String[]{};
             observer.updateMemoryView(sessionId, this.getMemory(sessionId));
         }
     }
@@ -134,7 +132,6 @@ public class Monitor implements IMonitor
         //update code
         for (IMonitorObserver observer : this._observerList)
         {
-            String[] result = new String[]{};
             observer.updateRegisterView(sessionId, this.getRegister(sessionId));
         }
     }
@@ -171,8 +168,8 @@ public class Monitor implements IMonitor
         String result = "";
         for (int j = 0; j < length; j++)
         {
-            Date now = new Date();
-            result += now.getTime() % 2;
+            int rand = (int) (Math.random() * 10);
+            result += rand % 2;
         }
         return result;
     }
