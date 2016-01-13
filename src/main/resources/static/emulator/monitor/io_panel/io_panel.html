@@ -22,6 +22,10 @@
     <p>{{instructionView}}</p>
 </div>
 <div>
+    <h3>Pc Reg Monitor</h3>
+    <p>{{pcRegView}}</p>
+</div>
+<div>
     <h3>Memory Monitor</h3>
     <ol>
         <li *ngFor="#memory_entry of memoryView">{{memory_entry}}</li>
@@ -31,5 +35,11 @@
     <h3>Register Monitor</h3>
     <ol>
         <li *ngFor="#reg_entry of registerView">{{reg_entry}}</li>
+    </ol>
+</div>
+<div>
+    <h3>Output Monitor</h3>
+    <ol>
+        <li *ngFor="#output_entry of outputView">{{output_entry}}</li>
     </ol>
 </div>

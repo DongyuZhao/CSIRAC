@@ -18,9 +18,9 @@ export class StatusPanel implements OnDestroy
 
     private _Client = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/hand_shake");
 
-    public statusList = [];
+    public statusList:string[] = [];
 
-    public errorList = [];
+    public errorList:string[] = [];
 
     private _sessionId = "";
 

@@ -19,9 +19,9 @@ export class ControlPanel implements OnDestroy
 
     private _controlClient = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/control");
 
-    private statusList = [];
+    public statusList:string[] = [];
 
-    public errorList = [];
+    public errorList:string[] = [];
 
     private _sessionId = "";
 
@@ -140,7 +140,7 @@ export class ControlPanel implements OnDestroy
                             this._controlClient.subscribe("/emulator_response/control/status/" + this._sessionId,
                                     (response:Message) =>
                                     {
-                                        console.log("Control Response");
+                                        console.log("Control Status");
                                         this.onResponse(response);
                                     });
                             this._controlClient.subscribe("/emulator_response/control/error/" + this._sessionId,

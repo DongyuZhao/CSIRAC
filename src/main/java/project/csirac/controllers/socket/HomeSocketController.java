@@ -30,6 +30,6 @@ public class HomeSocketController
     @SendTo("/topic/greetings")
     public String greeting(String name) throws Exception
     {
-        return  "Hello " + name + "!";
+        return "Hello " + name + "!";
     }
 }
