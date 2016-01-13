@@ -1,0 +1,18 @@
+<div>
+    <form (ngSubmit)="onSubmit()" #testform="ngForm">
+        <input type="text" placeholder="frequency" [(ngModel)]="_setting.frequency" #frequency_input>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+<div>
+    <h3>Setting Status</h3>
+    <ol>
+        <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
+    </ol>
+</div>
+<div>
+    <h3>Setting Errors</h3>
+    <ol>
+        <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
+    </ol>
+</div>
