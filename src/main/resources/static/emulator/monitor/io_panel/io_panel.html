@@ -1,0 +1,44 @@
+<div>
+    <form (ngSubmit)="onSubmit()" #testform="ngForm">
+        <input type="text" placeholder="Input Your Program Here" [(ngModel)]="program" #program_input>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+<div>
+    <h3>Instruction Monitor</h3>
+    <p>{{instructionView}}</p>
+</div>
+<div>
+    <h3>Pc Reg Monitor</h3>
+    <p>{{pcRegView}}</p>
+</div>
+<div>
+    <h3>Memory Monitor</h3>
+    <ol>
+        <li *ngFor="#memory_entry of memoryView">{{memory_entry}}</li>
+    </ol>
+</div>
+<div>
+    <h3>Register Monitor</h3>
+    <ol>
+        <li *ngFor="#reg_entry of registerView">{{reg_entry}}</li>
+    </ol>
+</div>
+<div>
+    <h3>Output Monitor</h3>
+    <ol>
+        <li *ngFor="#output_entry of outputView">{{output_entry}}</li>
+    </ol>
+</div>
+<div>
+    <h3>IO Status</h3>
+    <ol>
+        <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
+    </ol>
+</div>
+<div>
+    <h3>IO Errors</h3>
+    <ol>
+        <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
+    </ol>
+</div>

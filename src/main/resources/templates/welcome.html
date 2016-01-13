@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome - CSIRAC</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="node_modules/es6-shim/es6-shim.js"></script>
+    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script src="node_modules/angular2/bundles/http.dev.js"></script>
+    <script src="node_modules/stompjs/lib/stomp.js"></script>
+    <script src="node_modules/rxjs/bundles/Rx.js"></script>
+    <script>
+        System.config({
+            packages: {
+                emulator: {
+                    format: 'register',
+                    defaultExtension: 'js'
+                },
+                utils: {
+                    format: 'register',
+                    defaultExtension: 'js'
+                },
+                stompjs: {
+                    format: 'register',
+                    defaultExtension: 'js'
+                },
+                services: {
+                    format: 'register',
+                    defaultExtension: 'js'
+                }
+            }
+        });
+        System.import('emulator/monitor/boot')
+                .then(null, console.error.bind(console));
+    </script>
+</head>
+<body>
+<p th:text="'Hello, ' + ${name} + '!'" />
+<monitor>loading...</monitor>
+</body>
+</html>
