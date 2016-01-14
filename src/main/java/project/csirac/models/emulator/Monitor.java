@@ -215,7 +215,7 @@ public class Monitor implements IMonitor
     {
         Settings settings = new Settings();
         settings.setSessionId(sessionId);
-        settings.setFrequency(800);
+        settings.setFrequency(frequency * 8);
         this.updateCurrentSettingView(sessionId, settings);
     }
 
