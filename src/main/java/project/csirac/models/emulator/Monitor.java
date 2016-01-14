@@ -143,7 +143,7 @@ public class Monitor implements IMonitor
      * @param program
      */
     @Override
-    public void loadProgramToMemory(String sessionId, String[] program)
+    public void loadProgram(String sessionId, String[] program)
     {
         for (IStatusObserver observer : this._statusObserverList)
         {

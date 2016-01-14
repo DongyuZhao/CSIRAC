@@ -56,7 +56,7 @@ public interface IMonitor
      * @param program
      *         the program
      */
-    void loadProgramToMemory(String sessionId, String[] program);
+    void loadProgram(String sessionId, String[] program);
 
     /**
      * Start executing the program assigned to the session

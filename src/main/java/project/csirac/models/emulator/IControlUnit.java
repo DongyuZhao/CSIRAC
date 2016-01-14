@@ -14,6 +14,20 @@ public interface IControlUnit
     void attachComputeUnit(IComputeUnit computeUnit);
 
     /**
+     * Attach the memory to the control unit
+     *
+     * @param memory
+     */
+    void attachMemory(IMemory memory);
+
+    /**
+     * Attach the register to the control unit
+     *
+     * @param register the register
+     */
+    void attachRegister(IMemory register);
+
+    /**
      * Upload program to the emulator
      *
      * @param sessionId

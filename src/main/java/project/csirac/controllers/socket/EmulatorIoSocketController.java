@@ -46,7 +46,7 @@ public class EmulatorIoSocketController implements IViewObserver
     {
         if (CsiracApplication.sessionExists(model.getSessionId()))
         {
-            CsiracApplication.monitor.loadProgramToMemory(model.getSessionId(), model.getProgram());
+            CsiracApplication.monitor.loadProgram(model.getSessionId(), model.getProgram());
             //updateMonitorView(model.getSessionId());
             String response = "";
             for (String line : model.getProgram())
