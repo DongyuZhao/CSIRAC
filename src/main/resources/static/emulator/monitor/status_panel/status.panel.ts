@@ -129,10 +129,14 @@ export class StatusPanel implements OnDestroy
         }
         this.connect();
         console.log("Connect Complete");
-        this._Timer = setInterval(() =>
+        setTimeout(() =>
         {
             this.keepSessionActive()
         }, 1000);
+        this._Timer = setInterval(() =>
+        {
+            this.keepSessionActive()
+        }, 5000);
     };
 
     ngOnDestroy()
