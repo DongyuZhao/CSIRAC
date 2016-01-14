@@ -13,7 +13,7 @@ import java.util.Date;
  * Created by Dy.Zhao on 2016/1/14 0014.
  */
 @Controller
-public class HandShakeSocketController
+public class EmulatorHandShakeSocketController
 {
     private SimpMessagingTemplate template;
 
@@ -23,7 +23,7 @@ public class HandShakeSocketController
     }
 
     @Autowired
-    public HandShakeSocketController(SimpMessagingTemplate template)
+    public EmulatorHandShakeSocketController(SimpMessagingTemplate template)
     {
         this.template = template;
     }
