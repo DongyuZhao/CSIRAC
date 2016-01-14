@@ -48,9 +48,12 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                     }
                     this.connect();
                     console.log("Connect Complete");
-                    this._Timer = setInterval(function () {
+                    setTimeout(function () {
                         _this.keepSessionActive();
                     }, 1000);
+                    this._Timer = setInterval(function () {
+                        _this.keepSessionActive();
+                    }, 5000);
                 }
                 StatusPanel.prototype.onResponse = function (response) {
                     if (this.statusList.length >= 5) {
