@@ -181,17 +181,17 @@ public class Monitor implements IMonitor
         }
     }
 
-    /**
-     * Peek the pc register of the monitor
-     *
-     * @param sessionId
-     *         the session id of the pc register should be peeked
-     */
-    @Override
-    public int peekPcRegister(String sessionId)
-    {
-        return 0;
-    }
+//    /**
+//     * Peek the pc register of the monitor
+//     *
+//     * @param sessionId
+//     *         the session id of the pc register should be peeked
+//     */
+//    @Override
+//    public int peekPcRegister(String sessionId)
+//    {
+//        return 0;
+//    }
 
     /**
      * Peek the instruction this simulator supported
@@ -264,7 +264,7 @@ public class Monitor implements IMonitor
     {
         for (IViewObserver observer : this._viewObserverList)
         {
-            observer.pushUpdatedInstruction(sessionId, this.getCurrentInstruction(sessionId));
+            //observer.pushUpdatedInstruction(sessionId, this.getCurrentInstruction(sessionId));
         }
     }
 
@@ -282,7 +282,7 @@ public class Monitor implements IMonitor
     {
         for (IViewObserver observer : this._viewObserverList)
         {
-            observer.pushUpdatedMemory(sessionId, this.getMemory(sessionId));
+            //observer.pushUpdatedMemory(sessionId, this.getMemory(sessionId));
         }
     }
 
@@ -299,7 +299,7 @@ public class Monitor implements IMonitor
     {
         for (IViewObserver observer : this._viewObserverList)
         {
-            observer.pushUpdatedMemory(sessionId, this.getMemory(sessionId));
+            //observer.pushUpdatedMemory(sessionId, this.getMemory(sessionId));
         }
     }
 
@@ -317,7 +317,7 @@ public class Monitor implements IMonitor
     {
         for (IViewObserver observer : this._viewObserverList)
         {
-            observer.pushUpdatedRegister(sessionId, this.getRegister(sessionId));
+            //observer.pushUpdatedRegister(sessionId, this.getRegister(sessionId));
         }
     }
 
@@ -333,7 +333,7 @@ public class Monitor implements IMonitor
     {
         for (IViewObserver observer : this._viewObserverList)
         {
-            observer.pushUpdatedRegister(sessionId, this.getRegister(sessionId));
+            //observer.pushUpdatedRegister(sessionId, this.getRegister(sessionId));
         }
     }
 
@@ -389,64 +389,64 @@ public class Monitor implements IMonitor
         }
     }
 
-    /**
-     * Get the output of the session
-     *
-     * @param sessionId
-     *         the session id
-     *
-     * @return the output
-     */
-    @Override
-    public String[] getOutput(String sessionId)
-    {
-        String[] result = {};
-        return generateFakeListResult(20).toArray(result);
-    }
-
-    /**
-     * Get the memory of the session
-     *
-     * @param sessionId
-     *         the session id
-     *
-     * @return the memory
-     */
-    @Override
-    public String[] getMemory(String sessionId)
-    {
-        String[] result = {};
-        return generateFakeListResult(20).toArray(result);
-    }
-
-    /**
-     * Get the register of the session
-     *
-     * @param sessionId
-     *         the session id
-     *
-     * @return the register
-     */
-    @Override
-    public String[] getRegister(String sessionId)
-    {
-        String[] result = {};
-        return generateFakeListResult(20).toArray(result);
-    }
-
-    /**
-     * Get current instruction of the session
-     *
-     * @param sessionId
-     *         the session id
-     *
-     * @return current instruction
-     */
-    @Override
-    public String getCurrentInstruction(String sessionId)
-    {
-        return generateFakeResult(20);
-    }
+//    /**
+//     * Get the output of the session
+//     *
+//     * @param sessionId
+//     *         the session id
+//     *
+//     * @return the output
+//     */
+//    @Override
+//    public String[] getOutput(String sessionId)
+//    {
+//        String[] result = {};
+//        return generateFakeListResult(20).toArray(result);
+//    }
+//
+//    /**
+//     * Get the memory of the session
+//     *
+//     * @param sessionId
+//     *         the session id
+//     *
+//     * @return the memory
+//     */
+//    @Override
+//    public String[] getMemory(String sessionId)
+//    {
+//        String[] result = {};
+//        return generateFakeListResult(20).toArray(result);
+//    }
+//
+//    /**
+//     * Get the register of the session
+//     *
+//     * @param sessionId
+//     *         the session id
+//     *
+//     * @return the register
+//     */
+//    @Override
+//    public String[] getRegister(String sessionId)
+//    {
+//        String[] result = {};
+//        return generateFakeListResult(20).toArray(result);
+//    }
+//
+//    /**
+//     * Get current instruction of the session
+//     *
+//     * @param sessionId
+//     *         the session id
+//     *
+//     * @return current instruction
+//     */
+//    @Override
+//    public String getCurrentInstruction(String sessionId)
+//    {
+//        return generateFakeResult(20);
+//    }
 
     /**
      * Check if the observer is attached

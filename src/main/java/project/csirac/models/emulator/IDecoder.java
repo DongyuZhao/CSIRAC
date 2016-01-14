@@ -5,4 +5,9 @@ package project.csirac.models.emulator;
  */
 public interface IDecoder
 {
+    DataType DecodeData(String data);
+
+    Instruction DecodeInstruction(String instruction);
+
+    String[] peekSupportedInstruction();
 }
