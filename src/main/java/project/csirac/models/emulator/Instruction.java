@@ -5,5 +5,5 @@ package project.csirac.models.emulator;
  */
 public class Instruction
 {
-    
+
 }
