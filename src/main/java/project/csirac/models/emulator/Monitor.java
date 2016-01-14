@@ -129,11 +129,11 @@ public class Monitor implements IMonitor
         }
     }
 
-    @Override
-    public void Init(IDecoder decoder, IMemory memory, IComputeUnit computeUnit)
-    {
-
-    }
+//    @Override
+//    public void Init(IDecoder decoder, IMemory memory, IComputeUnit computeUnit)
+//    {
+//
+//    }
 
     /**
      * Upload program to the emulator
