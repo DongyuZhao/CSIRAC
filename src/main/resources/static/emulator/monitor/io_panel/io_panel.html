@@ -1,6 +1,6 @@
 <div>
     <form (ngSubmit)="onSubmit()" #testform="ngForm">
-        <input type="text" placeholder="Input Your Program Here" [(ngModel)]="program" #program_input>
+        <textarea placeholder="Input Your Program Here" [(ngModel)]="program" #program_input></textarea>
         <input type="submit" value="Submit">
     </form>
 </div>
