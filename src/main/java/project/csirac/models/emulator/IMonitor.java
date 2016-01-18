@@ -1,5 +1,7 @@
 package project.csirac.models.emulator;
 
+import project.csirac.models.emulator.controlunit.IControlUnit;
+
 /**
  * Created by Dy.Zhao on 2016/1/4 0004.
  */
@@ -46,7 +48,7 @@ public interface IMonitor
     void attachSettingObserver(ISettingObserver observer);
 
 
-    void Init(IDecoder decoder, IMemory memory, IComputeUnit computeUnit);
+    //void Init(IDecoder decoder, IMemory memory, IComputeUnit computeUnit);
 
     /**
      * Upload program to the emulator
@@ -56,7 +58,7 @@ public interface IMonitor
      * @param program
      *         the program
      */
-    void loadProgramToMemory(String sessionId, String[] program);
+    void loadProgram(String sessionId, String[] program);
 
     /**
      * Start executing the program assigned to the session
@@ -98,13 +100,13 @@ public interface IMonitor
      */
     void stopExecuting(String sessionId);
 
-    /**
-     * Peek the pc register of the monitor
-     *
-     * @param sessionId
-     *         the session id of the pc register should be peeked
-     */
-    int peekPcRegister(String sessionId);
+//    /**
+//     * Peek the pc register of the monitor
+//     *
+//     * @param sessionId
+//     *         the session id of the pc register should be peeked
+//     */
+//    int peekPcRegister(String sessionId);
 
     /**
      * Peek the instruction this simulator supported
@@ -206,45 +208,45 @@ public interface IMonitor
      */
     public void updateCurrentSettingView(String sessionId, Settings settings);
 
-    /**
-     * Get the output of the session
-     *
-     * @param sessionId
-     *         the session id
-     *
-     * @return the output
-     */
-    String[] getOutput(String sessionId);
+//    /**
+//     * Get the output of the session
+//     *
+//     * @param sessionId
+//     *         the session id
+//     *
+//     * @return the output
+//     */
+//    String[] getOutput(String sessionId);
 
-    /**
-     * Get the memory of the session
-     *
-     * @param sessionId
-     *         the session id
-     *
-     * @return the memory
-     */
-    String[] getMemory(String sessionId);
-
-    /**
-     * Get the register of the session
-     *
-     * @param sessionId
-     *         the session id
-     *
-     * @return the register
-     */
-    String[] getRegister(String sessionId);
-
-    /**
-     * Get current instruction of the session
-     *
-     * @param sessionId
-     *         the session id
-     *
-     * @return current instruction
-     */
-    String getCurrentInstruction(String sessionId);
+//    /**
+//     * Get the memory of the session
+//     *
+//     * @param sessionId
+//     *         the session id
+//     *
+//     * @return the memory
+//     */
+//    String[] getMemory(String sessionId);
+//
+//    /**
+//     * Get the register of the session
+//     *
+//     * @param sessionId
+//     *         the session id
+//     *
+//     * @return the register
+//     */
+//    String[] getRegister(String sessionId);
+//
+//    /**
+//     * Get current instruction of the session
+//     *
+//     * @param sessionId
+//     *         the session id
+//     *
+//     * @return current instruction
+//     */
+//    String getCurrentInstruction(String sessionId);
 
     /**
      * Check if the observer is attached

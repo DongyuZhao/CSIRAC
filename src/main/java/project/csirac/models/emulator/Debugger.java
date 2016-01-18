@@ -1,17 +1,21 @@
 package project.csirac.models.emulator;
 
 /**
- * Created by Dy.Zhao on 2016/1/4 0004.
+ * Created by Dy.Zhao on 2016/1/14 0014.
  */
-public interface IDebugger
+public class Debugger implements IDebugger
 {
-
     /**
      * Attach the monitor to the debugger
      *
-     * @param monitor the monitor
+     * @param monitor
+     *         the monitor
      */
-    void attachMonitor(IMonitor monitor);
+    @Override
+    public void attachMonitor(IMonitor monitor)
+    {
+
+    }
 
     /**
      * Start executing the program assigned to the session
@@ -19,7 +23,11 @@ public interface IDebugger
      * @param sessionId
      *         the session id
      */
-    void startExecuting(String sessionId);
+    @Override
+    public void startExecuting(String sessionId)
+    {
+
+    }
 
     /**
      * Pause the executing of the program
@@ -27,7 +35,11 @@ public interface IDebugger
      * @param sessionId
      *         the session id of the program will be pause executing
      */
-    void pauseExecuting(String sessionId);
+    @Override
+    public void pauseExecuting(String sessionId)
+    {
+
+    }
 
     /**
      * Executing the next instruction of the program
@@ -35,7 +47,11 @@ public interface IDebugger
      * @param sessionId
      *         the session id of the program will be continue executing
      */
-    void nextInstruction(String sessionId);
+    @Override
+    public void nextInstruction(String sessionId)
+    {
+
+    }
 
     /**
      * Continue Executing the program
@@ -43,7 +59,11 @@ public interface IDebugger
      * @param sessionId
      *         the session id of the program will be continue executing
      */
-    void continueExecuting(String sessionId);
+    @Override
+    public void continueExecuting(String sessionId)
+    {
+
+    }
 
     /**
      * Stop executing the program assigned to the session
@@ -51,7 +71,11 @@ public interface IDebugger
      * @param sessionId
      *         the session id
      */
-    void stopExecuting(String sessionId);
+    @Override
+    public void stopExecuting(String sessionId)
+    {
+
+    }
 
     /**
      * Update the current instruction of the session
@@ -59,9 +83,12 @@ public interface IDebugger
      * @param sessionId
      *         the session id
      * @param instruction
-     *         current instruction
      */
-    void updateInstructionView(String sessionId, String instruction);
+    @Override
+    public void updateInstructionView(String sessionId, String instruction)
+    {
+
+    }
 
     /**
      * Update the memory at specified address of the session
@@ -71,9 +98,12 @@ public interface IDebugger
      * @param address
      *         the address
      * @param data
-     *         new data
      */
-    void updateMemoryView(String sessionId, int address, String data);
+    @Override
+    public void updateMemoryView(String sessionId, int address, String data)
+    {
+
+    }
 
     /**
      * Update the memory of the session
@@ -82,9 +112,12 @@ public interface IDebugger
      *         the session id
      *         the address
      * @param data
-     *         new data
      */
-    void updateMemoryView(String sessionId, String[] data);
+    @Override
+    public void updateMemoryView(String sessionId, String[] data)
+    {
+
+    }
 
     /**
      * Update the register at specified address of the session
@@ -94,9 +127,12 @@ public interface IDebugger
      * @param address
      *         the address
      * @param data
-     *         new data
      */
-    void updateRegisterView(String sessionId, int address, String data);
+    @Override
+    public void updateRegisterView(String sessionId, int address, String data)
+    {
+
+    }
 
     /**
      * Update the register of the session
@@ -104,9 +140,12 @@ public interface IDebugger
      * @param sessionId
      *         the session id
      * @param data
-     *         new data
      */
-    void updateRegisterView(String sessionId, String[] data);
+    @Override
+    public void updateRegisterView(String sessionId, String[] data)
+    {
+
+    }
 
     /**
      * Update the pc reg of the session
@@ -114,9 +153,12 @@ public interface IDebugger
      * @param sessionId
      *         the session id
      * @param pcReg
-     *         the pc reg
      */
-    void updatePcRegView(String sessionId, int pcReg);
+    @Override
+    public void updatePcRegView(String sessionId, int pcReg)
+    {
+
+    }
 
     /**
      * Update current setting views
@@ -124,16 +166,10 @@ public interface IDebugger
      * @param sessionId
      *         the session id
      * @param settings
-     *         current settings
      */
-    public void updateCurrentSettingView(String sessionId, Settings settings);
+    @Override
+    public void updateCurrentSettingView(String sessionId, Settings settings)
+    {
 
-    /**
-     * Get the output of the session
-     *
-     * @param sessionId
-     *         the session id
-     *
-     * @return the output
-     */
+    }
 }

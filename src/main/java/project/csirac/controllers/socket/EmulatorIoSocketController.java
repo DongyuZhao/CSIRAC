@@ -21,13 +21,13 @@ public class EmulatorIoSocketController implements IViewObserver
         template.convertAndSend("/emulator_response/io/" + destination, ret);
     }
 
-    private void updateMonitorView(String sessionId)
-    {
-        setResults(CsiracApplication.monitor.peekPcRegister(sessionId), "pc_reg/" + sessionId);
-        setResults(CsiracApplication.monitor.getMemory(sessionId), "memory/" + sessionId);
-        setResults(CsiracApplication.monitor.getRegister(sessionId), "register/" + sessionId);
-        setResults(CsiracApplication.monitor.getCurrentInstruction(sessionId), "instruction/" + sessionId);
-    }
+//    private void updateMonitorView(String sessionId)
+//    {
+//        setResults(CsiracApplication.monitor.peekPcRegister(sessionId), "pc_reg/" + sessionId);
+//        setResults(CsiracApplication.monitor.getMemory(sessionId), "memory/" + sessionId);
+//        setResults(CsiracApplication.monitor.getRegister(sessionId), "register/" + sessionId);
+//        setResults(CsiracApplication.monitor.getCurrentInstruction(sessionId), "instruction/" + sessionId);
+//    }
 
     @Autowired
     public EmulatorIoSocketController(SimpMessagingTemplate template)
@@ -46,8 +46,8 @@ public class EmulatorIoSocketController implements IViewObserver
     {
         if (CsiracApplication.sessionExists(model.getSessionId()))
         {
-            CsiracApplication.monitor.loadProgramToMemory(model.getSessionId(), model.getProgram());
-            updateMonitorView(model.getSessionId());
+            CsiracApplication.monitor.loadProgram(model.getSessionId(), model.getProgram());
+            //updateMonitorView(model.getSessionId());
             String response = "";
             for (String line : model.getProgram())
             {
