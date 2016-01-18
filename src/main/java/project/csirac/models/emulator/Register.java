@@ -4,23 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Dy.Zhao on 2016/1/14 0014.
+ * Created by Dy.Zhao on 2016/1/19 0019.
  */
-public class Memory implements IMemory
+public class Register implements IMemory
 {
-    //private Map<String, String[]> _programPool = new HashMap<>();
-
-    private Map<String, String[]> _memoryContainer = new HashMap<>();
+    private Map<String, String[]> _regContainer = new HashMap<>();
 
     private int _memoryUpperBound;
 
-    public Memory(int capacity)
+    public Register(int capacity)
     {
         this._memoryUpperBound = capacity;
     }
 
     private IDebugger _debugger;
-
     /**
      * Attach the debugger to the memory
      *
@@ -42,6 +39,8 @@ public class Memory implements IMemory
      *         the address
      * @param data
      *         the data
+     *
+     * @return if the save is successful
      */
     @Override
     public boolean saveData(String sessionId, int address, String data)
@@ -50,9 +49,16 @@ public class Memory implements IMemory
         {
             if (this._addressValid(address))
             {
-                this._memoryContainer.get(sessionId)[address] = data;
-                this._debugger.updateMemoryView(sessionId, this._memoryContainer.get(sessionId));
-                return true;
+                if (this._isDataCompatible(sessionId, address, data))
+                {
+                    this._regContainer.get(sessionId)[address] = data;
+                    this._debugger.updateRegisterView(sessionId, this._regContainer.get(sessionId));
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             throw new IllegalArgumentException("Address Illegal");
         }
@@ -79,7 +85,7 @@ public class Memory implements IMemory
         {
             if (this._addressValid(address))
             {
-                return this._memoryContainer.get(sessionId)[address];
+                return this._regContainer.get(sessionId)[address];
             }
             throw new IllegalArgumentException("Address Illegal");
         }
@@ -95,13 +101,11 @@ public class Memory implements IMemory
      * @param sessionId
      *         the session id
      * @param program
-     *         the program
      */
     @Override
     public void newSession(String sessionId, String[] program)
     {
-        //this._programPool.put(sessionId, program);
-        this._memoryContainer.put(sessionId, new String[this._memoryUpperBound]);
+        this._regContainer.put(sessionId, new String[this._memoryUpperBound]);
     }
 
     /**
@@ -115,7 +119,7 @@ public class Memory implements IMemory
     {
         if (this._sessionExists(sessionId))
         {
-            this._memoryContainer.remove(sessionId);
+            this._regContainer.remove(sessionId);
             //this._programPool.remove(sessionId);
         }
         else
@@ -126,11 +130,17 @@ public class Memory implements IMemory
 
     private boolean _sessionExists(String sessionId)
     {
-        return this._memoryContainer.containsKey(sessionId);
+        return this._regContainer.containsKey(sessionId);
     }
 
     private boolean _addressValid(int address)
     {
         return address >= 0 && address < this._memoryUpperBound;
+    }
+
+    private boolean _isDataCompatible(String sessionId, int address, String data)
+    {
+        // TODO:: Add the logic to check the compatibility of the data and the register
+        return true;
     }
 }

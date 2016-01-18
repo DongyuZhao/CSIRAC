@@ -23,8 +23,10 @@ public interface IMemory
      *         the address
      * @param data
      *         the data
+     *
+     * @return if the save is successful
      */
-    void saveData(String sessionId, int address, String data);
+    boolean saveData(String sessionId, int address, String data);
 
 
     /**
