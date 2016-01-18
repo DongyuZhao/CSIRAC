@@ -55,7 +55,10 @@ public class EmulatorIoSocketController implements IViewObserver
             }
             this.pushStatus(model.getSessionId(), "Program: \r\n"+ response +"Uploaded Successful");
         }
-        this.pushError(model.getSessionId(), "Session Not Exists");
+        else
+        {
+            this.pushError(model.getSessionId(), "Session Not Exists");
+        }
     }
 
 
