@@ -15,6 +15,7 @@
     <script src="node_modules/rxjs/bundles/Rx.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="node_modules/highcharts/highcharts.js"></script>
     <script>
         System.config({
             packages: {
@@ -44,6 +45,7 @@
                 .then(null, console.error.bind(console));
         System.import('emulator/monitor/status_panel.boot')
                 .then(null, console.error.bind(console));
+        //enableProdMode();
     </script>
 </head>
 <body class="welcome-body">

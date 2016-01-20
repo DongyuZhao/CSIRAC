@@ -8,6 +8,11 @@ import project.csirac.CsiracApplication;
 import project.csirac.models.emulator.IViewObserver;
 import project.csirac.viewmodels.emulator.ProgramViewModel;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 /**
  * Created by Dy.Zhao on 2016/1/14 0014.
  */
@@ -40,20 +45,31 @@ public class EmulatorIoSocketController implements IViewObserver
     }
 
 
-
     @MessageMapping("/io")
     public void uploadProgram(ProgramViewModel model) throws Exception
     {
         if (CsiracApplication.sessionExists(model.getSessionId()))
         {
             CsiracApplication.monitor.loadProgram(model.getSessionId(), model.getProgram());
+            // TODO:: delete test code
+            //this.pushUpdatedRegister(model.getSessionId(), new HashMap<>());
+//            int i = 0;
+//            while (i < 500)
+//            {
+//                if ((new Date()).getTime() - CsiracApplication.sessionList.get(model.getSessionId()) > 1000)
+//                {
+//                    this.pushPcRegister(model.getSessionId(), generateFakeResult(20));
+//                }
+//            }
+            //this.pushPcRegister(model.getSessionId(), "10011110000111010010");
+
             //updateMonitorView(model.getSessionId());
             String response = "";
             for (String line : model.getProgram())
             {
                 response += "\t" + line + "\r\n";
             }
-            this.pushStatus(model.getSessionId(), "Program: \r\n"+ response +"Uploaded Successful");
+            this.pushStatus(model.getSessionId(), "Program: \r\n" + response + "Uploaded Successful");
         }
         else
         {
@@ -92,11 +108,25 @@ public class EmulatorIoSocketController implements IViewObserver
      *         the register data
      */
     @Override
-    public void pushUpdatedRegister(String sessionId, String[] data)
+    public void pushUpdatedRegister(String sessionId, Map<String, String> data)
     {
         if (CsiracApplication.sessionExists(sessionId))
         {
-            setResults(data, "register/" + sessionId);
+            // TODO::Delete test code:
+//            for (int i = 0; i < 20; i++)
+//            {
+//                data.put(i + "", i * i + "");
+//            }
+
+            String[] result = new String[data.size()];
+            int i = 0;
+            for (String key : data.keySet())
+            {
+                result[i] = "" + key + ":" + data.get(key);
+                i++;
+            }
+
+            setResults(result, "register/" + sessionId);
         }
         else
         {
@@ -134,7 +164,7 @@ public class EmulatorIoSocketController implements IViewObserver
      *         current pc reg
      */
     @Override
-    public void pushPcRegister(String sessionId, int pcRegister)
+    public void pushPcRegister(String sessionId, String pcRegister)
     {
         if (CsiracApplication.sessionExists(sessionId))
         {
@@ -149,8 +179,10 @@ public class EmulatorIoSocketController implements IViewObserver
     /**
      * Push output of the session to observer
      *
-     * @param sessionId the session id
-     * @param output output
+     * @param sessionId
+     *         the session id
+     * @param output
+     *         output
      */
     @Override
     public void pushOutput(String sessionId, String[] output)
@@ -187,5 +219,15 @@ public class EmulatorIoSocketController implements IViewObserver
         {
             CsiracApplication.monitor.stopExecuting(sessionId);
         }
+    }
+
+    private String generateFakeResult(int length)
+    {
+        String result = "";
+        for (int j = 0; j < length; j++) {
+            int rand = (int) (Math.random() * 10);
+            result += rand % 2;
+        }
+        return result;
     }
 }

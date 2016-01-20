@@ -21,6 +21,7 @@
             </div>
         </div>
     </div>
+    <!--<div [ng2-highcharts]="_pcRegChartOptions" class="graph"></div>-->
     <div class="row">
         <div class="col-md-4">
             <table class="table">
@@ -40,10 +41,12 @@
                 <thead>
                 <th>#</th>
                 <th>Register</th>
+                <th>Data</th>
                 </thead>
-                <tr *ngFor="#reg_entry of registerView; #i = index">
+                <tr *ngFor="#reg_entry of registerView; #i = index ">
                     <th scope="row">{{i}}</th>
-                    <td>{{reg_entry}}</td>
+                    <td>{{reg_entry.split(":")[0]}}</td>
+                    <td>{{reg_entry.split(":")[1]}}</td>
                 </tr>
             </table>
         </div>

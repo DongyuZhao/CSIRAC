@@ -3,6 +3,7 @@ import {Stomp, Client, Message, Frame} from 'stompjs'
 import {SocketServices} from "../../../services/socket_services";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {Guid} from "../../../utils/guid"
+//import {Ng2Highcharts} from 'ng2-highcharts/ng2-highcharts';
 
 @Component({
     selector: "io-panel",
@@ -16,6 +17,8 @@ export class IoPanel implements OnDestroy
 
     private _client = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/io");
 
+    private _pcRegChartOptions:Object;
+
     public program = "";
 
     public structured_program:string[] = [];
@@ -26,7 +29,11 @@ export class IoPanel implements OnDestroy
 
     public pcRegView = "";
 
-    public memoryView:string[] = [];
+    public memoryView = [];
+
+    public bitLabel = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+
+    private _pcRegChartView = [];
 
     public registerView:string[] = [];
 
@@ -97,6 +104,8 @@ export class IoPanel implements OnDestroy
     public onPcRegResponse(response:Message)
     {
         this.pcRegView = JSON.parse(response.body);
+        var list = this.pcRegView.split("");
+        this._pcRegChartView.push(list);
     }
 
     public onOutputResponse(response:Message)
@@ -206,7 +215,50 @@ export class IoPanel implements OnDestroy
             }
         }
         this.connect();
+        //this.initRegisterChart();
     };
+
+    //initRegisterChart()
+    //{
+    //    this._pcRegChartOptions = {
+    //        title: {
+    //            text: 'Monthly Average Temperature',
+    //            x: -20 //center
+    //        },
+    //        subtitle: {
+    //            text: 'Source: WorldClimate.com',
+    //            x: -20
+    //        },
+    //        xAxis: {
+    //            categories: this.bitLabel,
+    //        },
+    //        yAxis: {
+    //            title: {
+    //                text: 'S Register'
+    //            },
+    //            plotLines: [{
+    //                value: 0,
+    //                width: 1,
+    //                color: '#808080'
+    //            }]
+    //        },
+    //        tooltip: {
+    //            valueSuffix: ''
+    //        },
+    //        legend: {
+    //            layout: 'vertical',
+    //            align: 'right',
+    //            verticalAlign: 'middle',
+    //            borderWidth: 0
+    //        },
+    //        series: [{
+    //            name: 'S',
+    //            data: [{
+    //                name:"S Reg",
+    //                data: this._pcRegChartView}]
+    //        }]
+    //    }
+    //}
 
     ngOnDestroy()
     {

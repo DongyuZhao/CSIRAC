@@ -25,6 +25,7 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                 guid_1 = guid_1_1;
             }],
         execute: function() {
+            //import {Ng2Highcharts} from 'ng2-highcharts/ng2-highcharts';
             IoPanel = (function () {
                 function IoPanel() {
                     this._host = "localhost:8080/";
@@ -35,6 +36,8 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                     this.instructionView = "";
                     this.pcRegView = "";
                     this.memoryView = [];
+                    this.bitLabel = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+                    this._pcRegChartView = [];
                     this.registerView = [];
                     this.outputView = [];
                     this.statusList = [];
@@ -53,6 +56,7 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                         }
                     }
                     this.connect();
+                    //this.initRegisterChart();
                 }
                 IoPanel.prototype.onSubmit = function () {
                     console.log("Upload Program");
@@ -99,6 +103,8 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                 ;
                 IoPanel.prototype.onPcRegResponse = function (response) {
                     this.pcRegView = JSON.parse(response.body);
+                    var list = this.pcRegView.split("");
+                    this._pcRegChartView.push(list);
                 };
                 IoPanel.prototype.onOutputResponse = function (response) {
                     this.outputView = JSON.parse(response.body);
@@ -163,6 +169,47 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                 };
                 ;
                 ;
+                //initRegisterChart()
+                //{
+                //    this._pcRegChartOptions = {
+                //        title: {
+                //            text: 'Monthly Average Temperature',
+                //            x: -20 //center
+                //        },
+                //        subtitle: {
+                //            text: 'Source: WorldClimate.com',
+                //            x: -20
+                //        },
+                //        xAxis: {
+                //            categories: this.bitLabel,
+                //        },
+                //        yAxis: {
+                //            title: {
+                //                text: 'S Register'
+                //            },
+                //            plotLines: [{
+                //                value: 0,
+                //                width: 1,
+                //                color: '#808080'
+                //            }]
+                //        },
+                //        tooltip: {
+                //            valueSuffix: ''
+                //        },
+                //        legend: {
+                //            layout: 'vertical',
+                //            align: 'right',
+                //            verticalAlign: 'middle',
+                //            borderWidth: 0
+                //        },
+                //        series: [{
+                //            name: 'S',
+                //            data: [{
+                //                name:"S Reg",
+                //                data: this._pcRegChartView}]
+                //        }]
+                //    }
+                //}
                 IoPanel.prototype.ngOnDestroy = function () {
                     this.disconnect();
                 };

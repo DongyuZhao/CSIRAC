@@ -1,5 +1,7 @@
 package project.csirac.models.emulator;
 
+import java.util.Map;
+
 /**
  * Created by Dy.Zhao on 2016/1/4 0004.
  */
@@ -96,7 +98,7 @@ public interface IDebugger
      * @param data
      *         new data
      */
-    void updateRegisterView(String sessionId, int address, String data);
+    void updateRegisterView(String sessionId, String address, String data);
 
     /**
      * Update the register of the session
@@ -106,7 +108,7 @@ public interface IDebugger
      * @param data
      *         new data
      */
-    void updateRegisterView(String sessionId, String[] data);
+    void updateRegisterView(String sessionId, Map<String,String> data);
 
     /**
      * Update the pc reg of the session

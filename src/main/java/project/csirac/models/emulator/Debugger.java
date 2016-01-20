@@ -1,5 +1,7 @@
 package project.csirac.models.emulator;
 
+import java.util.Map;
+
 /**
  * Created by Dy.Zhao on 2016/1/14 0014.
  */
@@ -129,7 +131,7 @@ public class Debugger implements IDebugger
      * @param data
      */
     @Override
-    public void updateRegisterView(String sessionId, int address, String data)
+    public void updateRegisterView(String sessionId, String address, String data)
     {
 
     }
@@ -142,7 +144,7 @@ public class Debugger implements IDebugger
      * @param data
      */
     @Override
-    public void updateRegisterView(String sessionId, String[] data)
+    public void updateRegisterView(String sessionId, Map<String, String> data)
     {
 
     }

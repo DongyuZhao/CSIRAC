@@ -312,7 +312,7 @@ public class Monitor implements IMonitor {
 	@Override
 	public void updatePcRegView(String sessionId, int pcReg) {
 		for (IViewObserver observer : this._viewObserverList) {
-			observer.pushPcRegister(sessionId, pcReg);
+			observer.pushPcRegister(sessionId, pcReg + "");
 		}
 	}
 

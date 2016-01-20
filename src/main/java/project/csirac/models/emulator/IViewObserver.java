@@ -1,5 +1,7 @@
 package project.csirac.models.emulator;
 
+import java.util.Map;
+
 /**
  * Created by Dy.Zhao on 2016/1/8 0008.
  */
@@ -20,7 +22,7 @@ public interface IViewObserver
      * @param sessionId the session id
      * @param data the register data
      */
-    void pushUpdatedRegister(String sessionId, String[] data);
+    void pushUpdatedRegister(String sessionId, Map<String, String> data);
 
     /**
      * Push current instruction of the session to observer
@@ -36,7 +38,7 @@ public interface IViewObserver
      * @param sessionId the session id
      * @param pcRegister current pc reg
      */
-    void pushPcRegister(String sessionId, int pcRegister);
+    void pushPcRegister(String sessionId, String pcRegister);
 
     /**
      * Push output of the session to observer
