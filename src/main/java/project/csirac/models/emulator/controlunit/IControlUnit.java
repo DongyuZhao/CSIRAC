@@ -18,7 +18,7 @@ public interface IControlUnit {
 	 *            the compute unit
 	 */
 	void attachComputeUnit(IComputeUnit computeUnit);
-
+	
 	/**
 	 * Attach the memory to the control unit
 	 *

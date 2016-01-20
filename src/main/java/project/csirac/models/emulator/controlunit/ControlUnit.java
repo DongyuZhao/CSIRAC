@@ -1,16 +1,19 @@
 package project.csirac.models.emulator.controlunit;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 import project.csirac.models.emulator.IComputeUnit;
 import project.csirac.models.emulator.IDecoder;
 import project.csirac.models.emulator.IExternalStorage;
 import project.csirac.models.emulator.IMemory;
+import project.csirac.models.emulator.controlunit.operation.CommandOperation;
 import project.csirac.models.emulator.model.Command;
-import project.csirac.models.emulator.model.DataType;
-import project.csirac.models.emulator.model.Instruction;
+import project.csirac.models.emulator.model.TempMemory;
+import project.csirac.models.emulator.model.enums.DestinationGate;
+import project.csirac.models.emulator.model.enums.RegisterCode;
+import project.csirac.models.emulator.model.enums.SourceGate;
 import project.csirac.models.emulator.parser.ICommandParser;
+import project.csirac.models.emulator.register.SRegister;
 
 public class ControlUnit implements IControlUnit {
 
@@ -19,6 +22,20 @@ public class ControlUnit implements IControlUnit {
 	private IDecoder decoder;
 	private IExternalStorage externalStorage;
 	private ICommandParser commandParser;
+	private SRegister sRegister;
+	private Map<SourceGate, CommandOperation> sourceOperationSets;
+	private Map<DestinationGate, CommandOperation> destOperationSets;
+
+	private Map<RegisterCode, IMemory> registers;
+
+	public ControlUnit(Map<SourceGate, CommandOperation> sourceOperationSets,
+			Map<DestinationGate, CommandOperation> destOperationSets, SRegister sRegister,
+			Map<RegisterCode, IMemory> registers) {
+		this.sourceOperationSets = sourceOperationSets;
+		this.destOperationSets = destOperationSets;
+		this.sRegister = sRegister;
+		this.registers = registers;
+	}
 
 	@Override
 	public void attachComputeUnit(IComputeUnit computeUnit) {
@@ -52,25 +69,29 @@ public class ControlUnit implements IControlUnit {
 
 	@Override
 	public void startExecuting(String sessionId) {
-		String[] loadedPrograms = this.externalStorage.loadProgram(sessionId, 0, 15);
-		for (String program : loadedPrograms) {
-			Command parseProgram = this.commandParser.parseProgram(program);
-			List<Integer> allData = new ArrayList<>();
-			for (String data : parseProgram.getData()) {
-				DataType decodeData = this.decoder.DecodeData(data);
-				int valueOrAddress = Integer.parseInt(decodeData.getValue());
-				if (decodeData.isInstantNumber()) {
-					allData.add(valueOrAddress);
-				} else {
-					allData.add(Integer.parseInt(this.memory.loadData(sessionId, valueOrAddress)));
-				}
-			}
-			Instruction decodeInstruction = this.decoder.DecodeInstruction(parseProgram.getInstruction());
-
-			String result = this.computeUnit.computeResult(decodeInstruction, allData);
-			
-			// TODO: put value back to register
-		}
+		// String[] loadedPrograms = this.externalStorage.loadProgram(sessionId,
+		// 0, 15);
+		// for (String program : loadedPrograms) {
+		// Command parseProgram = this.commandParser.parseProgram(program);
+		// List<Integer> allData = new ArrayList<>();
+		// for (String data : parseProgram.getData()) {
+		// DataType decodeData = this.decoder.DecodeData(data);
+		// int valueOrAddress = Integer.parseInt(decodeData.getValue());
+		// if (decodeData.isInstantNumber()) {
+		// allData.add(valueOrAddress);
+		// } else {
+		// allData.add(Integer.parseInt(this.memory.loadData(sessionId,
+		// valueOrAddress)));
+		// }
+		// }
+		// Instruction decodeInstruction =
+		// this.decoder.DecodeInstruction(parseProgram.getInstruction());
+		//
+		// String result = this.computeUnit.computeResult(decodeInstruction,
+		// allData);
+		//
+		// // TODO: put value back to register
+		// }
 	}
 
 	@Override
@@ -81,8 +102,33 @@ public class ControlUnit implements IControlUnit {
 
 	@Override
 	public void nextInstruction(String sessionId) {
-		// TODO Auto-generated method stub
+		// TODO confirm sRegister class cause there should be only 1 cell here,
+		// thus 0 is not needed
+		String instructionNumber = this.sRegister.loadData(sessionId, 0);
+		int address = Integer.parseInt(instructionNumber);
+		String instruction = this.memory.loadData(sessionId, address);
+		Command parseProgram = this.commandParser.parseProgram(instruction);
+		if (parseProgram.isControlDesignation()) {
+			// TODO implement control designation logic
+		} else {
+			TempMemory temp = new TempMemory();
+			CommandOperation srcOperation = this.sourceOperationSets.get(parseProgram.getSrcGate());
+			srcOperation.doOperation(parseProgram, memory, sRegister, registers, computeUnit, temp, sessionId);
 
+			CommandOperation destOperation = this.destOperationSets.get(parseProgram.getDestGate());
+			destOperation.doOperation(parseProgram, memory, sRegister, registers, computeUnit, temp, sessionId);
+
+			updateSRegisterFlag(sessionId);
+		}
+
+	}
+
+	private void updateSRegisterFlag(String sessionId) {
+		if (sRegister.isChanged()) {
+			sRegister.resetChangeFlag();
+		} else {
+			sRegister.autoIncrement(sessionId);
+		}
 	}
 
 	@Override
@@ -108,4 +154,5 @@ public class ControlUnit implements IControlUnit {
 		// TODO Auto-generated method stub
 
 	}
+
 }

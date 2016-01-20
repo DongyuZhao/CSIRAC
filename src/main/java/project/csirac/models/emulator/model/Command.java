@@ -1,23 +1,60 @@
 package project.csirac.models.emulator.model;
 
-import java.util.List;
+import project.csirac.models.emulator.model.enums.DestinationGate;
+import project.csirac.models.emulator.model.enums.SourceGate;
 
 public class Command {
 
-	private List<String> data;
+	private int address;
 
-	private String instruction;
+	private int dAddress;
+
+	private SourceGate srcGate;
+
+	private DestinationGate destGate;
 	
-	public Command(List<String> data, String instruction) {
-		this.data = data;
-		this.instruction = instruction;
+	private boolean isControlDesignation = false;
+	
+	public boolean isControlDesignation() {
+		return isControlDesignation;
 	}
 
-	public List<String> getData() {
-		return data;
+	public void setControlDesignation(boolean isControlDesignation) {
+		this.isControlDesignation = isControlDesignation;
 	}
 
-	public String getInstruction() {
-		return instruction;
+	public int getAddress() {
+		return address;
 	}
+
+	public void setAddress(int address) {
+		this.address = address;
+	}
+
+	public int getdAddress() {
+		return dAddress;
+	}
+
+	public void setdAddress(int dAddress) {
+		this.dAddress = dAddress;
+	}
+
+	public SourceGate getSrcGate() {
+		return srcGate;
+	}
+
+	public void setSrcGate(SourceGate srcGate) {
+		this.srcGate = srcGate;
+	}
+
+	public DestinationGate getDestGate() {
+		return destGate;
+	}
+
+	public void setDestGate(DestinationGate destGate) {
+		this.destGate = destGate;
+	}
+
+	// TODO add control command in the later development
+
 }
