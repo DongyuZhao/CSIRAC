@@ -1,4 +1,4 @@
-System.register(["angular2/core", "../../../services/socket_services", "angular2/http", "../../../utils/guid"], function(exports_1) {
+System.register(["angular2/core", "../../../services/socket.services", "angular2/http", "../../../services/session.services"], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, socket_services_1, http_1, guid_1;
+    var core_1, socket_services_1, http_1, session_services_1;
     var IoPanel;
     return {
         setters:[
@@ -21,14 +21,12 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
             function (http_1_1) {
                 http_1 = http_1_1;
             },
-            function (guid_1_1) {
-                guid_1 = guid_1_1;
+            function (session_services_1_1) {
+                session_services_1 = session_services_1_1;
             }],
         execute: function() {
             IoPanel = (function () {
                 function IoPanel() {
-                    this._host = "localhost:8080/";
-                    this._client = socket_services_1.SocketServices.clientFactory("ws://" + this._host + "/emulator_in/io");
                     this.program = "";
                     this.structured_program = [];
                     this.frequencyView = "";
@@ -40,19 +38,9 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                     this.statusList = [];
                     this.errorList = [];
                     this._sessionId = "";
-                    this._retryCount = 0;
-                    var node = document.getElementById("session_id");
-                    if (node == null) {
-                        this._sessionId = guid_1.Guid.newGuid();
-                    }
-                    else {
-                        this._sessionId = node.innerText;
-                        if (node.innerText == null || node.innerText == "") {
-                            this._sessionId = guid_1.Guid.newGuid();
-                            node.innerText = this._sessionId;
-                        }
-                    }
-                    this.connect();
+                    session_services_1.SessionServices.ensureSessionId(this);
+                    this._socketClient = new socket_services_1.SocketClient(this.configSocket());
+                    this._socketClient.connect();
                 }
                 IoPanel.prototype.onSubmit = function () {
                     console.log("Upload Program");
@@ -60,25 +48,10 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                         this.structured_program = this.program.split("\n");
                     }
                     if (this.structured_program != null && this.structured_program.length != 0) {
-                        if (this._client != null && this._client.connected) {
-                            this._client.send("/emulator_in/io", {}, JSON.stringify({
-                                "sessionId": this._sessionId,
-                                "program": this.structured_program
-                            }));
-                            console.log("Upload Finished");
-                        }
-                        else {
-                            if (this._retryCount < 3) {
-                                this.connect();
-                                this._client.send("/emulator_in/io", {}, JSON.stringify({
-                                    "sessionId": this._sessionId,
-                                    "program": this.structured_program
-                                }));
-                            }
-                            else {
-                                this.errorList.push("No Connection");
-                            }
-                        }
+                        this._socketClient.push("/emulator_in/io", {
+                            "sessionId": this._sessionId,
+                            "program": this.structured_program
+                        });
                     }
                     else {
                         console.error("Program Null");
@@ -113,58 +86,23 @@ System.register(["angular2/core", "../../../services/socket_services", "angular2
                     this.errorList.push(JSON.parse(response.body));
                 };
                 ;
-                IoPanel.prototype.connect = function () {
+                ;
+                IoPanel.prototype.configSocket = function () {
                     var _this = this;
-                    if (this._client != null && !this._client.connected) {
-                        try {
-                            this._client.connect({}, function (frame) {
-                                _this._client.subscribe("/emulator_response/io/instruction/" + _this._sessionId, function (response) {
-                                    console.log("Instruction Response");
-                                    _this.onInstructionResponse(response);
-                                });
-                                _this._client.subscribe("/emulator_response/io/memory/" + _this._sessionId, function (response) {
-                                    console.log("Memory Response");
-                                    _this.onMemoryResponse(response);
-                                });
-                                _this._client.subscribe("/emulator_response/io/register/" + _this._sessionId, function (response) {
-                                    console.log("Register Response");
-                                    _this.onRegisterResponse(response);
-                                });
-                                _this._client.subscribe("/emulator_response/io/status/" + _this._sessionId, function (response) {
-                                    console.log("IO Status");
-                                    _this.onStatusResponse(response);
-                                });
-                                _this._client.subscribe("/emulator_response/io/pc_reg/" + _this._sessionId, function (response) {
-                                    console.log("PC Reg Response");
-                                    _this.onPcRegResponse(response);
-                                });
-                                _this._client.subscribe("/emulator_response/io/output/" + _this._sessionId, function (response) {
-                                    console.log("Output Response");
-                                    _this.onOutputResponse(response);
-                                });
-                                _this._client.subscribe("/emulator_response/io/error/" + _this._sessionId, function (response) {
-                                    console.log("IO Error");
-                                    _this.onError(response);
-                                });
-                            });
-                            console.log("IO Client Connected");
-                        }
-                        catch (e) {
-                            console.error(e);
-                        }
-                    }
+                    var config = new socket_services_1.SocketConfig();
+                    config.clientId = this._sessionId;
+                    config.connectUrl = "/emulator_in/io";
+                    config.subscribe("/emulator_response/io/instruction/{{client_id}}", function (response) { _this.onInstructionResponse(response); });
+                    config.subscribe("/emulator_response/io/memory/{{client_id}}", function (response) { _this.onMemoryResponse(response); });
+                    config.subscribe("/emulator_response/io/register/{{client_id}}", function (response) { _this.onRegisterResponse(response); });
+                    config.subscribe("/emulator_response/io/status/{{client_id}}", function (response) { _this.onStatusResponse(response); });
+                    config.subscribe("/emulator_response/io/pc_reg/{{client_id}}", function (response) { _this.onPcRegResponse(response); });
+                    config.subscribe("/emulator_response/io/output/{{client_id}}", function (response) { _this.onOutputResponse(response); });
+                    config.subscribe("/emulator_response/io/error/{{client_id}}", function (response) { _this.onError(response); });
+                    return config;
                 };
-                ;
-                IoPanel.prototype.disconnect = function () {
-                    if (this._client != null && this._client.connected) {
-                        this._client.disconnect();
-                        console.log("IO Client Disconnect");
-                    }
-                };
-                ;
-                ;
                 IoPanel.prototype.ngOnDestroy = function () {
-                    this.disconnect();
+                    this._socketClient.disconnect();
                 };
                 ;
                 IoPanel = __decorate([

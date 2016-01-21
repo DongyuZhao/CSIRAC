@@ -1,9 +1,12 @@
 import {Component, OnDestroy} from "angular2/core";
 import {Stomp, Client, Message, Frame} from 'stompjs'
-import {SocketServices} from "../../../services/socket_services";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {Guid} from "../../../utils/guid"
 import {MonitorComponent} from "../monitor.component";
+import {SocketClient} from "../../../services/socket.services";
+import {SocketConfig} from "../../../services/socket.services";
+import {SessionEnabledClient} from "../../../services/session.services";
+import {SessionServices} from "../../../services/session.services";
 
 @Component({
     selector: "status-panel",
@@ -11,22 +14,17 @@ import {MonitorComponent} from "../monitor.component";
     viewProviders: [HTTP_PROVIDERS]
 })
 
-export class StatusPanel implements OnDestroy
+export class StatusPanel implements OnDestroy, SessionEnabledClient
 {
-
-    _host = "localhost:8080/";
-
-    private _Client = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/hand_shake");
+    private _socketClient:SocketClient;
 
     public statusList:string[] = [];
 
     public errorList:string[] = [];
 
-    private _sessionId = "";
+    public _sessionId = "";
 
     private _Timer = null;
-
-    private _Count = 0;
 
     public onResponse(response:Message)
     {
@@ -46,64 +44,21 @@ export class StatusPanel implements OnDestroy
         this.errorList.push(JSON.parse(response.body));
     };
 
-    private connect()
-    {
-        if (this._Client != null && !this._Client.connected)
-        {
-            try
-            {
-                this._Client.connect({},
-                        (frame:Frame) =>
-                        {
-                            this._Client.subscribe("/emulator_response/hand_shake/" + this._sessionId,
-                                    (response:Message)=>
-                                    {
-                                        console.log("Hand Shake Response");
-                                        this.onResponse(response);
-                                    });
-                        });
-                console.log("HandShake Connected");
-            }
-            catch (e)
-            {
-                console.error(e);
-            }
-        }
-    };
-
-    private disconnect()
-    {
-        clearInterval(this._Timer);
-        if (this._Client != null && this._Client.connected)
-        {
-            this._Client.send("/emulator_in/hand_shake", {}, JSON.stringify({
-                "sessionId": this._sessionId,
-                "operation": "bye"
-            }));
-            this._Client.disconnect();
-            console.log(" Client Disconnect");
-        }
-    };
-
     private keepSessionActive()
     {
-        console.log("Hand Shake Start");
-        if (this._Client != null && this._Client.connected)
+        try
         {
-            this._Count = this._Count + 1;
-            this._Client.send("/emulator_in/hand_shake", {}, JSON.stringify({
-                "sessionId": this._sessionId,
-                "operation": "hello"
-            }));
-            console.log(" Active:" + this._Count);
+            this._socketClient.push("/emulator_in/hand_shake",
+                    {
+                        "sessionId": this._sessionId,
+                        "operation": "hello"
+                    });
         }
-        else
+        catch (e)
         {
-            console.log(this._Count);
             clearInterval(this._Timer);
-            this._Count = 0;
-            this._Client = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/hand_shake");
-            this.connect();
+            this._socketClient = new SocketClient(this.configSocket());
+            this._socketClient.connect();
             this._Timer = setInterval(() =>
             {
                 this.keepSessionActive()
@@ -113,22 +68,9 @@ export class StatusPanel implements OnDestroy
 
     constructor()
     {
-        var node = document.getElementById("session_id");
-        if (node == null)
-        {
-            this._sessionId = Guid.newGuid();
-        }
-        else
-        {
-            this._sessionId = node.innerText;
-            if (node.innerText == null || node.innerText == "")
-            {
-                this._sessionId = Guid.newGuid();
-                node.innerText = this._sessionId;
-            }
-        }
-        this.connect();
-        console.log("Connect Complete");
+        SessionServices.ensureSessionId(this);
+        this._socketClient = new SocketClient(this.configSocket());
+        this._socketClient.connect();
         setTimeout(() =>
         {
             this.keepSessionActive()
@@ -139,8 +81,21 @@ export class StatusPanel implements OnDestroy
         }, 5000);
     };
 
+    configSocket():SocketConfig
+    {
+        var config = new SocketConfig();
+        config.clientId = this._sessionId;
+        config.connectUrl = "/emulator_in/hand_shake";
+        config.subscribe("/emulator_response/hand_shake/{{client_id}}", (response:Message) =>
+        {
+            this.onResponse(response)
+        });
+        console.log(config.subscribeMap);
+        return config;
+    }
+
     ngOnDestroy()
     {
-        this.disconnect();
+        this._socketClient.disconnect();
     };
 }

@@ -1,11 +1,13 @@
 import {Component} from "angular2/core";
 import {HTTP_PROVIDERS} from "angular2/http";
-import {SocketServices} from "../../../services/socket_services";
 import {Message} from "stompjs";
 import {OnDestroy} from "angular2/core";
 import {Frame} from "stompjs";
 import {Guid} from "../../../utils/guid"
 import {Settings} from "./settings";
+import {SocketConfig, SocketClient} from "../../../services/socket.services";
+import {SessionServices} from "../../../services/session.services";
+import {SessionEnabledClient} from "../../../services/session.services";
 
 @Component({
     selector: 'setting-panel',
@@ -13,13 +15,10 @@ import {Settings} from "./settings";
     viewProviders: [HTTP_PROVIDERS]
 })
 
-export class SettingPanel implements OnDestroy
+export class SettingPanel implements OnDestroy, SessionEnabledClient
 {
-    _host = "localhost:8080/";
 
-    private _sessionId = "";
-
-    private _client = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/settings");
+    public _sessionId = "";
 
     public statusList:string[] = [];
 
@@ -27,7 +26,7 @@ export class SettingPanel implements OnDestroy
 
     private _setting:Settings = null;
 
-    private _retryCount = 0;
+    private _socketClient:SocketClient;
 
     public onStatusResponse(response:Message)
     {
@@ -54,70 +53,8 @@ export class SettingPanel implements OnDestroy
 
     public onSubmit()
     {
-        if (this._client != null && this._client.connected)
-        {
-            this._client.send("/emulator_in/settings", {}, JSON.stringify(this._setting));
-            console.log("Setting Upload Finished");
-        }
-        else
-        {
-            if (this._retryCount < 3)
-            {
-                this.connect();
-                this._client.send("/emulator_in/settings", {}, JSON.stringify(this._setting));
-            }
-            else
-            {
-                this.errorList.push("No Connection");
-            }
-        }
+        this._socketClient.push("/emulator_in/settings", this._setting);
     }
-
-    private connect()
-    {
-        if (this._client != null && !this._client.connected)
-        {
-            try
-            {
-                this._client.connect({},
-                        (frame:Frame) =>
-                        {
-                            this._client.subscribe("/emulator_response/settings/current/" + this._sessionId,
-                                    (response:Message) =>
-                                    {
-                                        console.log("Settings Response");
-                                        this.onSettingResponse(response);
-                                    });
-                            this._client.subscribe("/emulator_response/settings/status/" + this._sessionId,
-                                    (response:Message) =>
-                                    {
-                                        console.log("Settings Status");
-                                        this.onStatusResponse(response);
-                                    });
-                            this._client.subscribe("/emulator_response/settings/error/" + this._sessionId,
-                                    (response:Message) =>
-                                    {
-                                        console.log("Settings Error");
-                                        this.onError(response);
-                                    });
-                        });
-                console.log("IO Client Connected");
-            }
-            catch (e)
-            {
-                console.error(e)
-            }
-        }
-    };
-
-    private disconnect()
-    {
-        if (this._client != null && this._client.connected)
-        {
-            this._client.disconnect();
-            console.log("IO Client Disconnect");
-        }
-    };
 
     private initSettings()
     {
@@ -126,26 +63,34 @@ export class SettingPanel implements OnDestroy
 
     constructor()
     {
-        var node = document.getElementById("session_id");
-        if (node == null)
-        {
-            this._sessionId = Guid.newGuid();
-        }
-        else
-        {
-            this._sessionId = node.innerText;
-            if (node.innerText == null || node.innerText == "")
-            {
-                this._sessionId = Guid.newGuid();
-                node.innerText = this._sessionId;
-            }
-        }
-        this.connect();
+        SessionServices.ensureSessionId(this);
+        this._socketClient = new SocketClient(this.configSocket());
+        this._socketClient.connect();
         this.initSettings();
     };
 
+    configSocket():SocketConfig
+    {
+        var config = new SocketConfig();
+        config.clientId = this._sessionId;
+        config.connectUrl = "/emulator_in/settings";
+        config.subscribe("/emulator_response/settings/current/{{client_id}}", (response:Message) =>
+        {
+            this.onSettingResponse(response)
+        });
+        config.subscribe("/emulator_response/settings/status/{{client_id}}", (response:Message) =>
+        {
+            this.onStatusResponse(response)
+        });
+        config.subscribe("/emulator_response/settings/error/{{client_id}}", (response:Message) =>
+        {
+            this.onError(response)
+        });
+        return config;
+    }
+
     ngOnDestroy()
     {
-        this.disconnect();
+        this._socketClient.disconnect();
     };
 }

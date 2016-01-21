@@ -1,11 +1,14 @@
 import {Component} from "angular2/core";
 import {HTTP_PROVIDERS} from "angular2/http";
-import {SocketServices} from "../../../services/socket_services";
 import {Frame} from "stompjs";
 import {Message} from "stompjs";
 import {OnDestroy} from "angular2/core";
 import {Guid} from "../../../utils/guid"
 import {MonitorComponent} from "../monitor.component";
+import {SocketConfig} from "../../../services/socket.services";
+import {SocketClient} from "../../../services/socket.services";
+import {SessionServices} from "../../../services/session.services";
+import {SessionEnabledClient} from "../../../services/session.services";
 
 @Component({
     selector: 'control-panel',
@@ -13,19 +16,15 @@ import {MonitorComponent} from "../monitor.component";
     viewProviders: [HTTP_PROVIDERS]
 })
 
-export class ControlPanel implements OnDestroy
+export class ControlPanel implements OnDestroy, SessionEnabledClient
 {
-    _host = "localhost:8080/";
-
-    private _controlClient = SocketServices.clientFactory("ws://" + this._host + "/emulator_in/control");
+    private _socketClient:SocketClient;
 
     public statusList:string[] = [];
 
     public errorList:string[] = [];
 
-    private _sessionId = "";
-
-    private _retryCount = 0;
+    public _sessionId = "";
 
     private _allowStart = false;
 
@@ -127,199 +126,59 @@ export class ControlPanel implements OnDestroy
         this.stopExecuting();
     }
 
-
-    private connect()
-    {
-        try
-        {
-            if (this._controlClient != null && !this._controlClient.connected)
-            {
-                this._controlClient.connect({},
-                        (frame:Frame) =>
-                        {
-                            this._controlClient.subscribe("/emulator_response/control/status/" + this._sessionId,
-                                    (response:Message) =>
-                                    {
-                                        console.log("Control Status");
-                                        this.onResponse(response);
-                                    });
-                            this._controlClient.subscribe("/emulator_response/control/error/" + this._sessionId,
-                                    (response:Message) =>
-                                    {
-                                        console.log("Control Error");
-                                        this.onError(response);
-                                    }
-                            );
-                        });
-            }
-            console.log("Control Client Connected");
-        }
-        catch (e)
-        {
-            console.error(e)
-        }
-    };
-
-    private disconnect()
-    {
-        if (this._controlClient != null && this._controlClient.connected)
-        {
-            this._controlClient.disconnect();
-            console.log("Control Client Disconnect");
-        }
-    }
-
     private startExecuting()
     {
         console.log("Control Start: Start");
-        if (this._controlClient != null && this._controlClient.connected)
-        {
-            this._controlClient.send("/emulator_in/control", {}, JSON.stringify({
-                "sessionId": this._sessionId,
-                "operation": "start"
-            }))
-        }
-        else
-        {
-            if (this._retryCount < 3)
-            {
-                this._retryCount = this._retryCount + 1;
-                this.connect();
-                this.startExecuting();
-            }
-            else
-            {
-                this.errorList.push("No Connection");
-            }
-        }
+        this._socketClient.push("/emulator_in/control",{
+                    "sessionId": this._sessionId,
+                    "operation": "start"
+                });
     }
 
     private pauseExecuting()
     {
         console.log("Control Start: Pause");
-        if (this._controlClient != null && this._controlClient.connected)
-        {
-            this._controlClient.send("/emulator_in/control", {}, JSON.stringify({
-                "sessionId": this._sessionId,
-                "operation": "pause"
-            }))
-        }
-        else
-        {
-            if (this._retryCount < 3)
-            {
-                this._retryCount = this._retryCount + 1;
-                this.connect();
-                this.pauseExecuting();
-            }
-            else
-            {
-                this.errorList.push("No Connection");
-            }
-        }
+        this._socketClient.push("/emulator_in/control",{
+            "sessionId": this._sessionId,
+            "operation": "pause"
+        });
     }
 
     private nextInstruction()
     {
         console.log("Control Start: Next");
-        if (this._controlClient != null && this._controlClient.connected)
-        {
-            this._controlClient.send("/emulator_in/control", {}, JSON.stringify({
-                "sessionId": this._sessionId,
-                "operation": "next"
-            }))
-        }
-        else
-        {
-            if (this._retryCount < 3)
-            {
-                this._retryCount = this._retryCount + 1;
-                this.connect();
-                this.nextInstruction();
-            }
-            else
-            {
-                this.errorList.push("No Connection");
-            }
-        }
+        this._socketClient.push("/emulator_in/control",{
+            "sessionId": this._sessionId,
+            "operation": "next"
+        });
     }
 
     private continueExecuting()
     {
         console.log("Control Start: Continue");
-        if (this._controlClient != null && this._controlClient.connected)
-        {
-            this._controlClient.send("/emulator_in/control", {}, JSON.stringify({
-                "sessionId": this._sessionId,
-                "operation": "continue"
-            }))
-        }
-        else
-        {
-            if (this._retryCount < 3)
-            {
-                this._retryCount = this._retryCount + 1;
-                this.connect();
-                this.continueExecuting();
-            }
-            else
-            {
-                this.errorList.push("No Connection");
-            }
-        }
+        this._socketClient.push("/emulator_in/control",{
+            "sessionId": this._sessionId,
+            "operation": "continue"
+        });
     }
 
     private stopExecuting()
     {
         console.log("Control Start: Stop");
-        if (this._controlClient != null && this._controlClient.connected)
-        {
-            this._controlClient.send("/emulator_in/control", {}, JSON.stringify({
-                "sessionId": this._sessionId,
-                "operation": "stop"
-            }))
-        }
-        else
-        {
-            if (this._retryCount < 3)
-            {
-                this._retryCount = this._retryCount + 1;
-                this.connect();
-                this.stopExecuting();
-            }
-            else
-            {
-                this.errorList.push("No Connection");
-            }
-        }
+        this._socketClient.push("/emulator_in/control",{
+            "sessionId": this._sessionId,
+            "operation": "stop"
+        });
     }
 
     private checkReady()
     {
         if (this.getLastStatus() != "Ready")
         {
-            console.log("Control Start: Check");
-            if (this._controlClient != null && this._controlClient.connected)
-            {
-                this._controlClient.send("/emulator_in/control", {}, JSON.stringify({
-                    "sessionId": this._sessionId,
-                    "operation": "check"
-                }))
-                console.log("Sent Check");
-            }
-            else
-            {
-                if (this._retryCount < 3)
-                {
-                    this._retryCount = this._retryCount + 1;
-                    this.connect();
-                    this.checkReady();
-                }
-                else
-                {
-                    this.errorList.push("No Connection");
-                }
-            }
+            this._socketClient.push("/emulator_in/control",{
+                "sessionId": this._sessionId,
+                "operation": "check"
+            });
         }
         else
         {
@@ -329,29 +188,34 @@ export class ControlPanel implements OnDestroy
 
     constructor()
     {
-        var node = document.getElementById("session_id");
-        if (node == null)
-        {
-            this._sessionId = Guid.newGuid();
-        }
-        else
-        {
-            this._sessionId = node.innerText;
-            if (node.innerText == null || node.innerText == "")
-            {
-                this._sessionId = Guid.newGuid();
-                node.innerText = this._sessionId;
-            }
-        }
-        this.connect();
+        SessionServices.ensureSessionId(this);
+        this._socketClient = new SocketClient(this.configSocket());
+        this._socketClient.connect();
         this._checkTimer = setInterval(() =>
         {
             this.checkReady()
         }, 1000);
     }
 
+    configSocket():SocketConfig
+    {
+        var config = new SocketConfig();
+        config.clientId = this._sessionId;
+        config.connectUrl = "/emulator_in/control";
+        config.subscribe("/emulator_response/control/status/{{client_id}}", (response:Message) =>
+        {
+            this.onResponse(response)
+        });
+        config.subscribe("/emulator_response/control/error/{{client_id}}", (response:Message) =>
+        {
+            this.onError(response)
+        });
+        return config;
+    }
+
+
     ngOnDestroy()
     {
-        this.disconnect();
+        this._socketClient.disconnect();
     };
 }
