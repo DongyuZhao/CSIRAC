@@ -1,0 +1,42 @@
+<form (ngSubmit)="onPcRegisterSubmit()" #testform="ngForm">
+    <input placeholder="Input Your PcRegister Here" [(ngModel)]="pcRegister" #program_input>
+    <br/>
+    <input type="submit" value="Submit">
+</form>
+<form (ngSubmit)="onFrequencySubmit()" #testform="ngForm" class="form-group">
+    <input placeholder="Input Your Clock Here" [(ngModel)]="clock" #program_input>
+    <br/>
+    <input type="submit" value="Submit">
+</form>
+
+
+<div>
+    <h3>Program Memory History</h3>
+    <ol>
+        <li *ngFor="#program_entry of ProgramUpdateHistory.reverse()">{{hitory_entry}}</li>
+    </ol>
+</div>
+<div>
+    <h3>Data Memory History</h3>
+    <ol>
+        <li *ngFor="#data_entry of DataUpdateHistory.reverse()">{{error_entry}}</li>
+    </ol>
+</div>
+<div>
+    <h3>Register History</h3>
+    <ol>
+        <li *ngFor="#register_entry of RegisterUpdateHistory.reverse()">{{status_entry}}</li>
+    </ol>
+</div>
+<div>
+    <h3>Monitor Status</h3>
+    <ol>
+        <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
+    </ol>
+</div>
+<div>
+    <h3>Monitor Errors</h3>
+    <ol>
+        <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
+    </ol>
+</div>
