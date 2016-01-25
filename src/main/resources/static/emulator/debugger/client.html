@@ -1,4 +1,5 @@
-<div class="col-md-3">
+<div class = "row margin-row">
+<div>
     <label>Pc Register</label>
     <form (ngSubmit)="onPcRegisterSubmit()" #testform="ngForm" class="input-group">
         <input placeholder="Input Your PcRegister Here" [(ngModel)]="pcRegister" #program_input class="form-control">
@@ -14,35 +15,64 @@
         </span>
     </form>
 </div>
-<div class="col-md-3">
-    <h3>Program Memory History</h3>
-    <ol>
-        <li *ngFor="#program_entry of ProgramUpdateHistory.reverse()">{{program_entry.groupAddress}},&nbsp;{{program_entry.cellAddress}}:&nbsp;{{program_entry.newValue}}</li>
-    </ol>
 </div>
-<div class="col-md-3">
-    <h3>Data Memory History</h3>
-    <ol>
-        <li *ngFor="#data_entry of DataUpdateHistory.reverse()">{{data_entry.groupAddress}},&nbsp;{{data_entry.cellAddress}}:&nbsp;{{data_entry.newValue}}</li>
-    </ol>
-</div>
-<div class="col-md-3">
-    <h3>Register History</h3>
-    <ol>
-        <li *ngFor="#register_entry of RegisterUpdateHistory.reverse()">{{register_entry.address}}:&nbsp;{{register_entry.newValue}}</li>
-    </ol>
-</div>
-<div class="row">
-    <div>
-        <h3>Debugger Status</h3>
+
+
+<div class = "row margin-row">
+<div class="col-md-4">
+    <h4>Program Memory History</h4>
+    <div data-spy="scroll" data-target="P_memory history" data-offset ="50" class = "scroll2">
+        <div id = "P_memory history">
         <ol>
-            <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
+            <li *ngFor="#program_entry of ProgramUpdateHistory.reverse()">{{program_entry.groupAddress}},&nbsp;{{program_entry.cellAddress}}:&nbsp;{{program_entry.newValue}}</li>
         </ol>
+        </div>
     </div>
-    <div>
-        <h3>Debugger Errors</h3>
+</div>
+
+
+<div class="col-md-4">
+    <h4>Data Memory History</h4>
+    <div data-spy="scroll" data-target="D_memory history" data-offset ="50" class = "scroll2">
+        <div id = "D_memory history">
         <ol>
-            <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
+          <li *ngFor="#data_entry of DataUpdateHistory.reverse()">{{data_entry.groupAddress}},&nbsp;{{data_entry.cellAddress}}:&nbsp;{{data_entry.newValue}}</li>
         </ol>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-4">
+    <h4>Register History</h4>
+    <div data-spy="scroll" data-target="R_history" data-offset ="50" class = "scroll2">
+        <div id = "R_history">
+        <ol>
+           <li *ngFor="#register_entry of RegisterUpdateHistory.reverse()">{{register_entry.address}}:&nbsp;{{register_entry.newValue}}</li>
+        </ol>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class ="row margin-row">
+    <div class ="col-md-4">
+        <h3>Debugger Status</h3>
+        <div data-spy="scroll" data-target="D_status" data-offset ="50" class = "scroll1">
+            <div id = "D_status">
+                <ol>
+                <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class ="col-md-4">
+        <h3>Debugger Errors</h3>
+        <div data-spy="scroll" data-target="D_errors" data-offset ="50" class = "scroll1">
+            <div id = "D_errors">
+                <ol>
+                 <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
+                </ol>
+            </div>
+        </div>
     </div>
 </div>
