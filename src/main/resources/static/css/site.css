@@ -1,3 +1,119 @@
 .welcome-body{
-    background-image: url(http://www.bing.com/az/hprichbg/rb/StoatWinter_EN-US8766454928_1920x1080.jpg);
+ background-image: url(/Image/CSIRAC-Pano,-Melb.-Museum,-12.8.2008.jpg);
+}
+
+.margin-row{
+    margin-top: 20px;
+}
+.margin-row2{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.scroll-table {
+    position: relative;
+    height : 300px;
+    //width : 300px;
+    //background opacity: 0.5;
+    overflow : auto;
+    background-color:rgba(0,0,0,0);
+}
+.scroll-list {
+    position: relative;
+    height : 100px;
+    //width : 200px;
+    //opacity: 0.5;
+    overflow : auto;
+    background-color:rgba(0,0,0,0);
+}
+
+.scroll-mid-high-list {
+    position: relative;
+    height : 200px;
+//width : 300px;
+//background opacity: 0.5;
+    overflow : auto;
+    background-color:rgba(0,0,0,0);
+}
+
+.monitor-container {
+    padding: .9375rem;
+    margin: .9375rem;
+    color:#eceeef;
+    background-color:rgba(0,0,0,0.8);
+}
+
+.monitor-container hr {
+    border-top: 1px solid rgba(236, 238, 239, 0.5);
+}
+
+.table-inverse{
+    background-color:rgba(0,0,0,0);
+}
+
+.navbar-dark.bg-inverse {
+    margin-top: .9375rem;
+    background-color:rgba(0,0,0,0.8);
+}
+
+.code-editor {
+    font-family: Consolas, Monaco, 'Andale Mono', monospace;
+}
+
+.btn-danger{
+    background-color: #a51d29;
+    border-color: #a51d29;
+}
+
+.btn-danger-outline {
+    color: #a51d29;
+    background-color: transparent;
+    background-image: none;
+    border-color: #a51d29;
+}
+
+.btn-danger-outline:focus, .btn-danger-outline.focus, .btn-danger-outline:active, .btn-danger-outline.active,
+.open > .btn-danger-outline.dropdown-toggle {
+    color: #fff;
+    background-color: #a51d29;
+    border-color: #a51d29;
+}
+
+.btn-danger-outline:hover {
+    color: #fff;
+    background-color: #a51d29;
+    border-color: #a51d29;
+}
+
+.btn-warning {
+    color: #fff;
+    background-color: #ffB900;
+    border-color: #ffB900;
+}
+
+.btn-warning-outline {
+    color: #ffB900;
+    background-color: transparent;
+    background-image: none;
+    border-color: #ffB900;
+}
+
+.btn-warning-outline:focus, .btn-warning-outline.focus, .btn-warning-outline:active, .btn-warning-outline.active,
+.open > .btn-warning-outline.dropdown-toggle {
+    color: #fff;
+    background-color: #ffB900;
+    border-color: #ffB900;
+}
+
+.btn-warning-outline:hover {
+    color: #fff;
+    background-color: #ffB900;
+    border-color: #ffB900;
+}
+
+.btn-warning-outline.disabled:focus, .btn-warning-outline.disabled.focus, .btn-warning-outline:disabled:focus, .btn-warning-outline:disabled.focus {
+    border-color: #ffB900;
+}
+
+.btn-warning-outline.disabled:hover, .btn-warning-outline:disabled:hover {
+    border-color: #ffB900;
 }

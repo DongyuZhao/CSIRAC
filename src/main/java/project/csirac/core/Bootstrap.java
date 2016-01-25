@@ -2,13 +2,12 @@ package project.csirac.core;
 
 import project.csirac.core.decoder.DCommandDecoder;
 import project.csirac.core.decoder.SCommandDecoder;
-import project.csirac.core.processor.MoveProcess;
+import project.csirac.core.processor.MoveProcessor;
 import project.csirac.core.register.Register;
-import project.emulator.framework.EmulatorInstance;
 import project.emulator.framework.api.debugger.IDebugger;
-import project.emulator.framework.api.decoder.DecodeUnit;
+import project.emulator.framework.api.decoder.IDecodeUnit;
 import project.emulator.framework.api.monitor.IMonitor;
-import project.emulator.framework.api.processor.ProcessUnit;
+import project.emulator.framework.api.processor.IProcessUnit;
 import project.emulator.framework.cpu.register.IRegister;
 
 import java.util.ArrayList;
@@ -43,14 +42,14 @@ public class Bootstrap extends project.emulator.framework.Bootstrap
     {
         IRegister register = Register.create(id, debugger);
 
-        List<ProcessUnit> processUnits = new ArrayList<>();
-        processUnits.add(new MoveProcess());
+        List<IProcessUnit> IProcessUnits = new ArrayList<>();
+        IProcessUnits.add(new MoveProcessor());
 
-        List<DecodeUnit> decodeUnits = new ArrayList<>();
-        decodeUnits.add(new SCommandDecoder());
-        decodeUnits.add(new DCommandDecoder());
+        List<IDecodeUnit> IDecodeUnits = new ArrayList<>();
+        IDecodeUnits.add(new SCommandDecoder());
+        IDecodeUnits.add(new DCommandDecoder());
 
-        createEmulatorInstance(id, decodeUnits, processUnits, register, debugger, monitor);
-        //return createEmulatorInstance(id, decodeUnits, processUnits, register, debugger, monitor);
+        createEmulatorInstance(id, IDecodeUnits, IProcessUnits, register, debugger, monitor);
+        //return createEmulatorInstance(id, IDecodeUnits, IProcessUnits, register, debugger, monitor);
     }
 }
