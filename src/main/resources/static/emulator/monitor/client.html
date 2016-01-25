@@ -1,18 +1,36 @@
-<form (ngSubmit)="onProgramSubmit()" #testform="ngForm">
-    <textarea placeholder="Input Your Program Here" [(ngModel)]="program" #program_input rows="10"></textarea>
-    <br/>
-    <input type="submit" value="Submit">
-</form>
-<form (ngSubmit)="onDataSubmit()" #testform="ngForm" class="form-group">
-    <textarea placeholder="Input Your Data Here" [(ngModel)]="data" #program_input rows="10"></textarea>
-    <br/>
-    <input type="submit" value="Submit">
-</form>
-<button (click)="onStart()" [disabled]="!_allowStart">Start</button>
-<button (click)="onPause()" [disabled]="!_allowPause">Pause</button>
-<button (click)="onNext()" [disabled]="!_allowNext">Next</button>
-<button (click)="onContinue()" [disabled]="!_allowContinue">Continue</button>
-<button (click)="onStop()" [disabled]="!_allowStop">Stop</button>
+<div class="row">
+    <div class="col-md-4">
+        <form (ngSubmit)="onProgramSubmit()" #testform="ngForm">
+            <fieldset class="form-group">
+                <textarea placeholder="Input Your Program Here" [(ngModel)]="program" #program_input rows="8"
+                          class="form-control">
+                </textarea>
+                <br/>
+                <input type="submit" value="Submit Program" class="btn btn-primary btn-block">
+            </fieldset>
+        </form>
+
+    </div>
+    <div class="col-md-4">
+        <form (ngSubmit)="onDataSubmit()" #testform="ngForm">
+            <fieldset class="form-group">
+
+                <textarea placeholder="Input Your Data Here" [(ngModel)]="data" #program_input rows="8"
+                          class="form-control"></textarea>
+                <br/>
+                <input type="submit" value="Submit Data" class="btn btn-primary btn-block">
+
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <button (click)="onStart()" [disabled]="!_allowStart" class="btn btn-block btn-primary">Start</button>
+        <button (click)="onPause()" [disabled]="!_allowPause" class="btn btn-block btn-warning">Pause</button>
+        <button (click)="onNext()" [disabled]="!_allowNext" class="btn btn-block btn-primary-outline">Next</button>
+        <button (click)="onContinue()" [disabled]="!_allowContinue" class="btn btn-block btn-success">Continue</button>
+        <button (click)="onStop()" [disabled]="!_allowStop" class="btn btn-block btn-danger">Stop</button>
+    </div>
+</div>
 <div>
     <h3>Monitor Status</h3>
     <ol>
@@ -25,3 +43,4 @@
         <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
     </ol>
 </div>
+

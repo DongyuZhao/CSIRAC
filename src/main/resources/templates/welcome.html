@@ -40,17 +40,10 @@
         });
         System.import('emulator/boot')
                 .then(null, console.error.bind(console));
-//        System.import('emulator/monitor/io_panel.boot')
-//                .then(null, console.error.bind(console));
-//        System.import('emulator/monitor/setting_panel.boot')
-//                .then(null, console.error.bind(console));
-//        System.import('emulator/monitor/status_panel.boot')
-//                .then(null, console.error.bind(console));
-        //enableProdMode();
     </script>
 </head>
 <body class="welcome-body">
-    <div class="container-fluid">
+    <div class="container">
         <!--<p th:text="'Hello, ' + ${name} + '!'" />-->
         <div id="session_id" hidden="hidden"></div>
         <div class="row">
