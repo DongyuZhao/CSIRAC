@@ -17,7 +17,7 @@ public class Register extends DebuggerMessageSender implements IRegister
 {
     private Map<String, int[]> _regContainer = new HashMap<>();
 
-    private int[][] _dRegister = new int[4][16];
+    private int[][] _dRegister = new int[16][4];
 
     public Register(String _id)
     {
@@ -86,6 +86,11 @@ public class Register extends DebuggerMessageSender implements IRegister
         {
             return this._regContainer.get(regName);
         }
-        return new int[0];
+        int[] newResult = new int[4];
+        for (int i = 0; i < 4; i++)
+        {
+            newResult[i] = Bootstrap.innerConfig.finishSignal();
+        }
+        return newResult;
     }
 }

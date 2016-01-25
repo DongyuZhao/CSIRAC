@@ -54,7 +54,7 @@ public class SymbolTable implements ISymbolTranslator
                     {
                         newResult += rc[i];
                     }
-                    return  newResult;
+                    return newResult;
                 }
             }
             return result;
@@ -107,11 +107,18 @@ public class SymbolTable implements ISymbolTranslator
             {
                 if (Bootstrap.innerConfig.alignLeft())
                 {
-                    result[i] = data[i];
+                    if (i < result.length)
+                    {
+                        result[i] = data[i];
+                    }
                 }
                 else
                 {
-                    result[Bootstrap.innerConfig.mainDataSectionCount() - Bootstrap.innerConfig.simplifiedDataSectionCount() + i] = data[i];
+                    int index = Bootstrap.innerConfig.mainDataSectionCount() - data.length + i;
+                    if (index >= 0)
+                    {
+                        result[index]=data[i];
+                    }
                 }
             }
             return result;
