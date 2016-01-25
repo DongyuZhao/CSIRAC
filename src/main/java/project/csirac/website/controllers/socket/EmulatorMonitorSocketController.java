@@ -83,7 +83,7 @@ public class EmulatorMonitorSocketController implements IMonitorObserver
                     //setResults("Pause", "control/status/" + sessionId);
                     break;
                 case "next":
-                    CsiracApplication.monitor.pause(sessionId);
+                    CsiracApplication.monitor.next(sessionId);
                     //setResults("Pause", "control/status/" + sessionId);
                     break;
                 case "continue":

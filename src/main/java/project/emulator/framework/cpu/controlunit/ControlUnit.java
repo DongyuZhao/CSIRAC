@@ -13,8 +13,6 @@ import project.emulator.framework.cpu.register.IPcRegister;
  */
 public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
 {
-    private Thread _workThread;
-
     private IProcessor _processorSocket;
 
     private IPcRegister _pcRegister;
@@ -37,7 +35,6 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
         this._processorSocket = processorSocket;
         this._pcRegister = pcRegister;
         this._opCodeRegister = opCodeRegister;
-        this._workThread = new Thread(new ControlThread(this));
     }
 
     public static IControlUnit createInstance(String id, IProcessor processor, IPcRegister pcRegister, IOpCodeRegister opCodeRegister, IMonitor monitor, IDebugger debugger)
@@ -45,23 +42,9 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
         ControlUnit controlUnit = new ControlUnit(id, processor, pcRegister, opCodeRegister);
         controlUnit.attachMonitor(monitor);
         controlUnit.attachDebugger(debugger);
-        return  controlUnit;
+        return controlUnit;
     }
 
-    private synchronized void lock() throws InterruptedException
-    {
-        while(_locked)
-        {
-            wait();
-        }
-        this._locked = true;
-    }
-
-    private synchronized void freeLock()
-    {
-        this._locked = false;
-        notifyAll();
-    }
 
     private void reset()
     {
@@ -71,28 +54,54 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
         this._opCodeRegister.put(0);
     }
 
+    public synchronized void run()
+    {
+        if (!this.isRunning())
+        {
+            try
+            {
+                while (this._locked)
+                {
+                    wait();
+
+                }
+                this._locked = true;
+                this._started = true;
+                this._stopSingnal = false;
+                this._paused = false;
+                this._locked = false;
+                notifyAll();
+                this.onStart();
+                while (true)
+                {
+                    if (this._stopSingnal)
+                    {
+                        break;
+                    }
+                    while (this._paused)
+                    {
+                        wait();
+                    }
+                    System.out.println("Run");
+                    System.out.println(this._stopSingnal);
+                    this.next();
+                    Thread.sleep((int) (1000 / this.getClock()));
+                }
+
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void start()
     {
-        try
-        {
-            this.lock();
-            if (!this._started)
-            {
-                this._started = true;
-                this._paused = false;
-                this._stopSingnal = false;
-                this.onStart();
-                freeLock();
-                this._workThread.start();
-                System.out.println("Start");
-            }
-        }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-        //this._workThread.run();
+        System.out.println("Click Run");
+        Thread thread= new Thread(new ControlThread(this));
+        thread.start();
     }
 
     void onStart()
@@ -103,14 +112,12 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
     @Override
     public void pause() throws InterruptedException
     {
-        lock();
+        System.out.println("Press Pause");
         if (this._started && !this._paused)
         {
             this._paused = true;
             this.onPause(this);
-            System.out.println("Pause");
         }
-        freeLock();
     }
 
     @Override
@@ -120,13 +127,13 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
     }
 
     @Override
-    public void next(boolean ignorePause) throws InterruptedException
+    public synchronized void next(boolean ignorePause) throws InterruptedException
     {
         if (this._started && (ignorePause || !this._paused))
         {
             System.out.println("Next");
             int instructionPointer = this._pcRegister.get();
-            if (instructionPointer < Bootstrap.innerConfig.unitCount()*Bootstrap.innerConfig.cellPerUnit() && instructionPointer >= 0)
+            if (instructionPointer < Bootstrap.innerConfig.unitCount() * Bootstrap.innerConfig.cellPerUnit() && instructionPointer >= 0)
             {
                 this._processorSocket.compute();
                 if (this._pcRegister.get() < 0)
@@ -138,31 +145,29 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
     }
 
     @Override
-    public void go() throws InterruptedException
+    public synchronized void go() throws InterruptedException
     {
-        lock();
         if (this._started && this._paused)
         {
             System.out.println("Continue");
             this._paused = false;
+            notifyAll();
             this.onContinue(this);
         }
-        freeLock();
     }
 
     @Override
-    public void stop() throws InterruptedException
+    public synchronized void stop() throws InterruptedException
     {
-        lock();
         if (this._started)
         {
             System.out.println("Stop");
-            this._pcRegister.put(-1);
             this._stopSingnal = true;
+            this._pcRegister.put(-1);
+            notifyAll();
             reset();
             this.onStop(this);
         }
-        freeLock();
     }
 
     @Override
@@ -185,14 +190,13 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
     }
 
     @Override
-    public void setPcRegister(int address) throws InterruptedException
+    public synchronized void setPcRegister(int address) throws InterruptedException
     {
-        lock();
         if (this._paused)
         {
             this._pcRegister.put(address);
+            notifyAll();
         }
-        freeLock();
     }
 
     @Override
@@ -202,14 +206,13 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
     }
 
     @Override
-    public void setOpCode(int code) throws InterruptedException
+    public synchronized void setOpCode(int code) throws InterruptedException
     {
-        lock();
         if (this._paused)
         {
             this._opCodeRegister.put(code);
+            notifyAll();
         }
-        freeLock();
     }
 
     @Override

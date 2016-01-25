@@ -84,6 +84,7 @@ public class EmulatorInstance
 
     public void stop() throws InterruptedException
     {
+        System.out.println("Stop Call");
         this._controlUnit.stop();
     }
 

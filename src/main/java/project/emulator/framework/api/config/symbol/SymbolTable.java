@@ -74,9 +74,9 @@ public class SymbolTable implements ISymbolTranslator
     public String translateOutput(int[] data)
     {
         String result = "";
-        if (data.length == 4)
+        if (data.length == Bootstrap.innerConfig.mainDataSectionCount())
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < data.length; i++)
             {
                 result += data[i];
             }
