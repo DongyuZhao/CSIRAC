@@ -1,7 +1,7 @@
 package project.emulator.framework.cpu.decoder;
 
 import project.emulator.framework.Bootstrap;
-import project.emulator.framework.api.decoder.DecodeUnit;
+import project.emulator.framework.api.decoder.IDecodeUnit;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,19 +12,19 @@ import java.util.Map;
  */
 public class Decoder implements IDecoder
 {
-    private Map<String, DecodeUnit> _decoderList = new HashMap<>();
+    private Map<String, IDecodeUnit> _decoderList = new HashMap<>();
 
     public Decoder()
     {
 
     }
 
-    public static IDecoder createInstance(List<DecodeUnit> decodeUnits)
+    public static IDecoder createInstance(List<IDecodeUnit> IDecodeUnits)
     {
         IDecoder decoder = new Decoder();
-        for (DecodeUnit decodeUnit : decodeUnits)
+        for (IDecodeUnit IDecodeUnit : IDecodeUnits)
         {
-            decoder.registerDecodeUnit(decodeUnit.getType(), decodeUnit);
+            decoder.registerDecodeUnit(IDecodeUnit.getType(), IDecodeUnit);
         }
         return decoder;
     }
@@ -38,8 +38,8 @@ public class Decoder implements IDecoder
         for (int i = 0; i < decodePriority.length; i++)
         {
             String type = decodePriority[i];
-            DecodeUnit decodeUnit = this._decoderList.get(type);
-            Command decoded = decodeUnit.decode(data);
+            IDecodeUnit IDecodeUnit = this._decoderList.get(type);
+            Command decoded = IDecodeUnit.decode(data);
             if (decoded != null)
             {
                 result[i] = decoded;
@@ -49,11 +49,11 @@ public class Decoder implements IDecoder
     }
 
     @Override
-    public void registerDecodeUnit(String type, DecodeUnit decodeUnit)
+    public void registerDecodeUnit(String type, IDecodeUnit IDecodeUnit)
     {
-        if (decodeUnit != null)
+        if (IDecodeUnit != null)
         {
-            this._decoderList.put(type, decodeUnit);
+            this._decoderList.put(type, IDecodeUnit);
         }
     }
 }

@@ -1,13 +1,13 @@
 package project.csirac.core.decoder;
 
 import project.csirac.core.Bootstrap;
-import project.emulator.framework.api.decoder.DecodeUnit;
+import project.emulator.framework.api.decoder.IDecodeUnit;
 import project.emulator.framework.cpu.decoder.Command;
 
 /**
  * Created by Dy.Zhao on 2016/1/23 0023.
  */
-public class DCommandDecoder extends DecodeUnit
+public class DCommandDecoder implements IDecodeUnit
 {
     @Override
     public Command decode(int[] data)

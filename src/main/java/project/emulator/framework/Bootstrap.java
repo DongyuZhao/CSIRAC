@@ -5,9 +5,9 @@ import project.emulator.framework.api.config.IConfig;
 import project.emulator.framework.api.config.symbol.ISymbolTranslator;
 import project.emulator.framework.api.config.symbol.SymbolTable;
 import project.emulator.framework.api.debugger.IDebugger;
-import project.emulator.framework.api.decoder.DecodeUnit;
+import project.emulator.framework.api.decoder.IDecodeUnit;
 import project.emulator.framework.api.monitor.IMonitor;
-import project.emulator.framework.api.processor.ProcessUnit;
+import project.emulator.framework.api.processor.IProcessUnit;
 import project.emulator.framework.cpu.controlunit.ControlUnit;
 import project.emulator.framework.cpu.controlunit.IControlUnit;
 import project.emulator.framework.cpu.register.*;
@@ -34,9 +34,9 @@ public class Bootstrap
         symbolTranslator.registerSymbol(symbol, code);
     }
 
-    public static void createEmulatorInstance(String id, List<DecodeUnit> decodeUnits, List<ProcessUnit> processUnits, IRegister register, IDebugger debugger, IMonitor monitor)
+    public static void createEmulatorInstance(String id, List<IDecodeUnit> IDecodeUnits, List<IProcessUnit> IProcessUnits, IRegister register, IDebugger debugger, IMonitor monitor)
     {
-        IDecoder decoder = Decoder.createInstance(decodeUnits);
+        IDecoder decoder = Decoder.createInstance(IDecodeUnits);
 
         IPcRegister pcRegister = PcRegister.createInstance(id, debugger);
 
@@ -46,7 +46,7 @@ public class Bootstrap
 
         IMemory instructionMemory = Memory.createInstance(id, true, monitor, debugger);
 
-        IProcessor processor = new Processor(decoder, pcRegister, opCodeRegister, register, instructionMemory,dataMemory, processUnits);
+        IProcessor processor = new Processor(decoder, pcRegister, opCodeRegister, register, instructionMemory,dataMemory, IProcessUnits);
 
         IControlUnit controlUnit = ControlUnit.createInstance(id,processor,pcRegister,opCodeRegister,monitor,debugger);
 

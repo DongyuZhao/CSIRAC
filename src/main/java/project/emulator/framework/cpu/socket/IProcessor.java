@@ -1,6 +1,6 @@
 package project.emulator.framework.cpu.socket;
 
-import project.emulator.framework.api.processor.ProcessUnit;
+import project.emulator.framework.api.processor.IProcessUnit;
 import project.emulator.framework.cpu.register.IOpCodeRegister;
 import project.emulator.framework.cpu.register.IPcRegister;
 import project.emulator.framework.cpu.register.IRegister;
@@ -19,7 +19,7 @@ public interface IProcessor
 
     Command[] decode(int[] instruction);
 
-    void registerProcessorUnit(ProcessUnit processUnit);
+    void registerProcessorUnit(IProcessUnit IProcessUnit);
 
     void registerDecoder(IDecoder decoder);
 
@@ -35,5 +35,5 @@ public interface IProcessor
 
     IMemory dataMemory();
 
-    List<ProcessUnit> instructionMulticastList();
+    List<IProcessUnit> instructionMulticastList();
 }
