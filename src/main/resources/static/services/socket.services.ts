@@ -87,13 +87,13 @@ export class SocketClient
         {
             var actualUrl = this.buildActualSocketUrl(url);
             this._client.subscribe(actualUrl,
-                    (response:Message)=>
+                (response:Message)=>
+                {
+                    for (var callback of callbacks)
                     {
-                        for (var callback of callbacks)
-                        {
-                            callback(response);
-                        }
-                    });
+                        callback(response);
+                    }
+                });
         });
     }
 

@@ -1,0 +1,12 @@
+<div>
+<h3>Connection Status</h3>
+<ol>
+    <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
+</ol>
+</div>
+<div>
+    <h3>Connection Errors</h3>
+    <ol>
+        <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
+    </ol>
+</div>
