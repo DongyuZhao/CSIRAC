@@ -1,12 +1,24 @@
-<div>
-<h3>Connection Status</h3>
-<ol>
-    <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
-</ol>
-</div>
-<div>
+<div class ="row margin-row2">
+    <div class = "col-md-4">
+         <h3>Connection Status</h3>
+        <div data-spy="scroll" data-target="C_status" data-offset ="50" class = "scroll1">
+            <div id = "C_status">
+            <ol>
+                <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
+            </ol>
+            </div>
+        </div>
+    </div>
+
+
+<div class = "col-md-4">
     <h3>Connection Errors</h3>
-    <ol>
-        <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
-    </ol>
+    <div data-spy="scroll" data-target="C_status" data-offset ="50" class = "scroll1">
+        <div id = "C_errors">
+        <ol>
+            <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
+        </ol>
+        </div>
+    </div>
+</div>
 </div>

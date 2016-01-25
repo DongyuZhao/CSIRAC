@@ -33,35 +33,26 @@
     </div>
 </div>
 
-<head>
-    body { position: relative; }
-</head>
- <body data-spy="scroll" data-target="#M-Status" data-offset ="50">
- <div>
-     <ul class="nav nav-tabs" role="tablist">
-         <div id="M-Status">
-             <h3>Monitor Status</h3>
+<div class = "row margin-row">
+<div class ="col-md-4">
+    <h3>Monitor Status</h3>
+    <div data-spy="scroll" data-target="M_status" data-offset ="50" class = "scroll1">
+         <div id = "M_status">
              <ol>
                  <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
-             </ol>
+            </ol>
          </div>
-
-     </ul>
- </div>
-
- </body>
-
-
-
-
-
-
-
-
-<div>
+    </div>
+</div>
+<div class ="col-md-4">
     <h3>Monitor Errors</h3>
-    <ol>
-        <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
-    </ol>
+    <div data-spy="scroll" data-target="M_errors" data-offset ="50" class = "scroll1">
+        <div id = "M_errors">
+            <ol>
+                <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
+            </ol>
+        </div>
+    </div>
 </div>
 
+</div>

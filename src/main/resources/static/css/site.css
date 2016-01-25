@@ -3,5 +3,25 @@
 }
 
 .margin-row{
-    margin-top: 20px ;
+    margin-top: 20px;
+}
+.margin-row2{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.scroll1 {
+    position: relative;
+    height : 200px;
+    width : 300px;
+    //background opacity: 0.5;
+    overflow : auto;
+    background-color: #1E88E5;
+}
+.scroll2 {
+    position: relative;
+    height : 200px;
+    width : 200px;
+    //opacity: 0.5;
+    overflow : auto;
+    background-color: #1E88E5;
 }
