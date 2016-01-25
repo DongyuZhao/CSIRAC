@@ -1,46 +1,75 @@
-<div class="row">
+
+ <div class="row monitor-container">
+
     <div class="col-md-4">
-        <form (ngSubmit)="onProgramSubmit()" #testform="ngForm">
+        <form (ngSubmit)="onProgramSubmit()" #programform="ngForm">
             <fieldset class="form-group">
                 <textarea placeholder="Input Your Program Here" [(ngModel)]="program" #program_input rows="8"
-                          class="form-control">
+                          class="form-control code-editor">
                 </textarea>
                 <br/>
-                <input type="submit" value="Submit Program" class="btn btn-primary btn-block">
+                <input type="submit" value="Submit Program" class="btn btn-danger btn-block">
             </fieldset>
         </form>
 
     </div>
     <div class="col-md-4">
-        <form (ngSubmit)="onDataSubmit()" #testform="ngForm">
+        <form (ngSubmit)="onDataSubmit()" #dataform="ngForm">
             <fieldset class="form-group">
 
                 <textarea placeholder="Input Your Data Here" [(ngModel)]="data" #program_input rows="8"
-                          class="form-control"></textarea>
+                          class="form-control code-editor"></textarea>
                 <br/>
-                <input type="submit" value="Submit Data" class="btn btn-primary btn-block">
+                <input type="submit" value="Submit Data" class="btn btn-danger btn-block">
 
             </fieldset>
         </form>
     </div>
-    <div class="col-md-4">
-        <button (click)="onStart()" [disabled]="!_allowStart" class="btn btn-block btn-primary">Start</button>
+    <div class="col-md-4 ">
+        <button (click)="onStart()" [disabled]="!_allowStart" class="btn btn-block btn-danger">Start</button>
         <button (click)="onPause()" [disabled]="!_allowPause" class="btn btn-block btn-warning">Pause</button>
-        <button (click)="onNext()" [disabled]="!_allowNext" class="btn btn-block btn-primary-outline">Next</button>
-        <button (click)="onContinue()" [disabled]="!_allowContinue" class="btn btn-block btn-success">Continue</button>
+        <button (click)="onNext()" [disabled]="!_allowNext" class="btn btn-block btn-danger-outline">Next</button>
+        <button (click)="onContinue()" [disabled]="!_allowContinue" class="btn btn-block btn-danger">Continue</button>
         <button (click)="onStop()" [disabled]="!_allowStop" class="btn btn-block btn-danger">Stop</button>
     </div>
 </div>
-<div>
+
+<div class = "row monitor-container">
+<div class ="col-md-12">
     <h3>Monitor Status</h3>
-    <ol>
-        <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
-    </ol>
+    <div data-spy="scroll" data-target="M_status" data-offset ="50" class = "scroll-mid-high-list">
+         <div id = "M_status">
+             <table class="table table-inverse">
+                 <tbody>
+                 <tr *ngFor="#status_entry of statusList.reverse()">
+                     <!--<th scope="row">{{i}}</th>-->
+                     <td>{{status_entry}}</td>
+                 </tr>
+                 </tbody>
+             </table>
+             <!--<ol>-->
+                 <!--<li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>-->
+            <!--</ol>-->
+         </div>
+    </div>
 </div>
-<div>
+<div class ="col-md-12">
     <h3>Monitor Errors</h3>
-    <ol>
-        <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
-    </ol>
+    <div data-spy="scroll" data-target="M_errors" data-offset ="50" class = "scroll-mid-high-list">
+        <div id = "M_errors">
+            <table class="table table-inverse">
+                <tbody>
+                <tr *ngFor="#error_entry of errorList.reverse()">
+                    <!--<th scope="row">{{i}}</th>-->
+                    <td>{{error_entry}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <!--<ol>-->
+                <!--<li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>-->
+            <!--</ol>-->
+        </div>
+    </div>
 </div>
 
+</div>
