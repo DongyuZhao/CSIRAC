@@ -69,13 +69,15 @@ public class SymbolTable implements ISymbolTranslator
         Matcher m = p.matcher(input);
         if (m.matches())
         {
-            String[] split = input.split("\\s");
+            String[] split = input.split("[\\s]*[,]*\\s|[\\s]*,[\\s]*");
             int[] result = new int[Bootstrap.innerConfig.mainDataSectionCount()];
+            int j = 0;
             for (int i = 0; i < split.length; i++)
             {
                 if (!split[i].equals(""))
                 {
-                    result[i] = this.translateToCode(split[i]);
+                    result[j] = this.translateToCode(split[i]);
+                    j++;
                 }
             }
             return result;

@@ -46,7 +46,7 @@ public class Config implements IConfig
     @Override
     public Pattern inputFilterPattern()
     {
-        return Pattern.compile("[\\s]*\\w[\\s]+\\w[\\s]+\\w[\\s]+\\w[\\s]*");
+        return Pattern.compile("[\\s]*\\w[,|\\s]+\\w[,|\\s]+\\w[,|\\s]+\\w[,|\\s]*");
     }
 
     @Override
