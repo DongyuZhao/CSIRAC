@@ -26,4 +26,12 @@ public class HomeController
         model.addAttribute("document", dao.findByName("Help"));
         return "help";
     }
+
+    @RequestMapping("/about")
+    public String about(Model model)
+    {
+        DocumentDao dao = new DocumentDao();
+        model.addAttribute("document", dao.findByName("About"));
+        return "about";
+    }
 }
