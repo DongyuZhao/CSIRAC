@@ -1,0 +1,48 @@
+<div class="col-md-3">
+    <label>Pc Register</label>
+    <form (ngSubmit)="onPcRegisterSubmit()" #testform="ngForm" class="input-group">
+        <input placeholder="Input Your PcRegister Here" [(ngModel)]="pcRegister" #program_input class="form-control">
+        <span class="input-group-btn">
+            <input type="submit" value="Submit" class="btn btn-primary">
+        </span>
+    </form>
+    <label>Op Code</label>
+    <form (ngSubmit)="onFrequencySubmit()" #testform="ngForm" class="input-group">
+        <input placeholder="Input Your Clock Here" [(ngModel)]="clock" #program_input class="form-control">
+        <span class="input-group-btn">
+            <input type="submit" value="Submit" class="btn btn-primary">
+        </span>
+    </form>
+</div>
+<div class="col-md-3">
+    <h3>Program Memory History</h3>
+    <ol>
+        <li *ngFor="#program_entry of ProgramUpdateHistory.reverse()">{{program_entry.groupAddress}},&nbsp;{{program_entry.cellAddress}}:&nbsp;{{program_entry.newValue}}</li>
+    </ol>
+</div>
+<div class="col-md-3">
+    <h3>Data Memory History</h3>
+    <ol>
+        <li *ngFor="#data_entry of DataUpdateHistory.reverse()">{{data_entry.groupAddress}},&nbsp;{{data_entry.cellAddress}}:&nbsp;{{data_entry.newValue}}</li>
+    </ol>
+</div>
+<div class="col-md-3">
+    <h3>Register History</h3>
+    <ol>
+        <li *ngFor="#register_entry of RegisterUpdateHistory.reverse()">{{register_entry.address}}:&nbsp;{{register_entry.newValue}}</li>
+    </ol>
+</div>
+<div class="row">
+    <div>
+        <h3>Debugger Status</h3>
+        <ol>
+            <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
+        </ol>
+    </div>
+    <div>
+        <h3>Debugger Errors</h3>
+        <ol>
+            <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
+        </ol>
+    </div>
+</div>
