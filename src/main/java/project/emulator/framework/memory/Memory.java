@@ -20,7 +20,7 @@ public class Memory extends MemoryMonitorMessageSender implements IMemory
 
     private boolean _isInstructionMemory = false;
 
-    private int _upperBound;
+    private int _upperBound = this._unitCount * this._cellPerUnit;
 
 
     public Memory(String _id, boolean instruction)
