@@ -16,7 +16,7 @@ public class Memory extends MemoryMonitorMessageSender implements IMemory
 
     private int _cellPerUnit = Bootstrap.innerConfig.cellPerUnit();
 
-    private int[][] _memoryContainer = new int[Bootstrap.innerConfig.mainDataSectionCount()][_unitCount * _cellPerUnit];
+    private int[][] _memoryContainer = new int[_unitCount * _cellPerUnit][Bootstrap.innerConfig.mainDataSectionCount()];
 
     private boolean _isInstructionMemory = false;
 

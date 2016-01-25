@@ -38,12 +38,25 @@ public class SymbolTable implements ISymbolTranslator
             String result = "";
             for (Map.Entry<String, Integer> entry : this._symbolTable.entrySet())
             {
-                if (entry.getValue().equals(code))
+                int value = entry.getValue();
+                if (value == code)
                 {
                     result = result + entry.getKey() + "/";
                 }
             }
-            result = result.replaceFirst(".*/", "");
+            char[] rc = result.toCharArray();
+            if (rc.length > 0)
+            {
+                if (rc[rc.length - 1] == '/')
+                {
+                    String newResult = "";
+                    for (int i = 0; i < rc.length - 1; i++)
+                    {
+                        newResult += rc[i];
+                    }
+                    return  newResult;
+                }
+            }
             return result;
         }
         return null;
