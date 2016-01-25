@@ -17,32 +17,5 @@ public class ControlThread implements Runnable
     public synchronized void run()
     {
         this._controlUnit.run();
-//        while (true)
-//        {
-//            try
-//            {
-//                if (this._controlUnit.isRequireStop())
-//                {
-//                    break;
-//                }
-//                while (!this._controlUnit.isRunning())
-//                {
-//                    System.out.println("Wait Run");
-//                    wait();
-//                }
-//                while (this._controlUnit.isPause())
-//                {
-//                    System.out.println("Pause");
-//                    wait();
-//                }
-//                System.out.println("Thread Run");
-//                this._controlUnit.next();
-//                Thread.sleep((int) (1000 / this._controlUnit.getClock()));
-//            }
-//            catch (InterruptedException e)
-//            {
-//                e.printStackTrace();
-//            }
-//        }
     }
 }

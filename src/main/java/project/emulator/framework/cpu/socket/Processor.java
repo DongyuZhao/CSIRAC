@@ -1,6 +1,6 @@
 package project.emulator.framework.cpu.socket;
 
-import project.emulator.framework.api.processor.ProcessUnit;
+import project.emulator.framework.api.processor.IProcessUnit;
 import project.emulator.framework.cpu.register.IOpCodeRegister;
 import project.emulator.framework.cpu.register.IPcRegister;
 import project.emulator.framework.cpu.register.IRegister;
@@ -8,6 +8,7 @@ import project.emulator.framework.cpu.decoder.Command;
 import project.emulator.framework.cpu.decoder.IDecoder;
 import project.emulator.framework.memory.IMemory;
 
+import javax.management.InstanceNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +30,9 @@ public class Processor implements IProcessor
 
     private IMemory _dataMemory;
 
-    private List<ProcessUnit> _instructionMulticastList = new ArrayList<>();
+    private List<IProcessUnit> _instructionMulticastList = new ArrayList<>();
 
-    public Processor(IDecoder decoder, IPcRegister pcRegister, IOpCodeRegister opCodeRegister, IRegister register, IMemory instructionMemory, IMemory dataMemory, List<ProcessUnit> instructionMulticastList)
+    public Processor(IDecoder decoder, IPcRegister pcRegister, IOpCodeRegister opCodeRegister, IRegister register, IMemory instructionMemory, IMemory dataMemory, List<IProcessUnit> instructionMulticastList)
     {
         this._decoder = decoder;
         this._pcRegister = pcRegister;
@@ -41,9 +42,9 @@ public class Processor implements IProcessor
         this._dataMemory = dataMemory;
         this._instructionMulticastList = instructionMulticastList;
 
-        for (ProcessUnit processUnit: this._instructionMulticastList)
+        for (IProcessUnit IProcessUnit : this._instructionMulticastList)
         {
-            processUnit.attachSocket(this);
+            IProcessUnit.attachSocket(this);
         }
     }
 
@@ -58,9 +59,16 @@ public class Processor implements IProcessor
         boolean changeNextPointer = false;
         for (Command command : decodedCommands)
         {
-            for (ProcessUnit processUnit : this._instructionMulticastList)
+            for (IProcessUnit IProcessUnit : this._instructionMulticastList)
             {
-                changeNextPointer = changeNextPointer || processUnit.process(command);
+                try
+                {
+                    changeNextPointer = changeNextPointer || IProcessUnit.process(command);
+                }
+                catch (InstanceNotFoundException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
         if (!changeNextPointer)
@@ -81,12 +89,12 @@ public class Processor implements IProcessor
     }
 
     @Override
-    public void registerProcessorUnit(ProcessUnit processUnit)
+    public void registerProcessorUnit(IProcessUnit IProcessUnit)
     {
-        if (processUnit != null && !this._instructionMulticastList.contains(processUnit))
+        if (IProcessUnit != null && !this._instructionMulticastList.contains(IProcessUnit))
         {
-            processUnit.attachSocket(this);
-            this._instructionMulticastList.add(processUnit);
+            IProcessUnit.attachSocket(this);
+            this._instructionMulticastList.add(IProcessUnit);
         }
     }
 
@@ -131,7 +139,7 @@ public class Processor implements IProcessor
         return _dataMemory;
     }
 
-    public List<ProcessUnit> instructionMulticastList()
+    public List<IProcessUnit> instructionMulticastList()
     {
         return _instructionMulticastList;
     }
