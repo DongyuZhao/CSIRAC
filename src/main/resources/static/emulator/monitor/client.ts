@@ -25,11 +25,11 @@ export class MonitorClient implements OnDestroy {
 
     public errorList:string[] = [];
 
-    public program = "";
+    public program = "0 0 M A\n0 0 M B\n0 0 M C\n0 1 A M\n0 2 B M\n0 3 C M";
 
     public structured_program:string[] = [];
 
-    public data = "";
+    public data = "1 1 1 1";
 
     public structured_data:String[] = [];
 

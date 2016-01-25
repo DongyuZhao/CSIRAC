@@ -18,6 +18,10 @@ public class RegisterMessage
         for (int i = 0; i < trimmedData.length; i++)
         {
             this._newValue += trimmedData[i];
+            if (i != trimmedData.length - 1)
+            {
+                this._newValue += ",\t";
+            }
         }
     }
 
@@ -28,6 +32,10 @@ public class RegisterMessage
         for (int i = 0; i < trimmedData.length; i++)
         {
             this._newValue += trimmedData[i];
+            if (i != trimmedData.length - 1)
+            {
+                this._newValue += ",\t";
+            }
         }
     }
 

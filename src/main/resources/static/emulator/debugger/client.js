@@ -60,6 +60,7 @@ System.register(["angular2/core", "angular2/http", "../../services/socket.servic
                 };
                 ;
                 DebuggerClient.prototype.onDataMemoryResponse = function (response) {
+                    //var result = JSON.parse(response.body);
                     this.DataUpdateHistory.push(JSON.parse(response.body));
                 };
                 ;

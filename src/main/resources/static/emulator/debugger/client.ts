@@ -51,6 +51,7 @@ export class DebuggerClient implements OnDestroy {
     };
 
     public onDataMemoryResponse(response:Message) {
+        //var result = JSON.parse(response.body);
 
         this.DataUpdateHistory.push(JSON.parse(response.body));
     };

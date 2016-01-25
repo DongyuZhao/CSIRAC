@@ -32,9 +32,9 @@ System.register(["angular2/core", "angular2/http", "../../services/socket.servic
                     this._sessionId = "";
                     this.statusList = [];
                     this.errorList = [];
-                    this.program = "";
+                    this.program = "0 0 M A\n0 0 M B\n0 0 M C\n0 1 A M\n0 2 B M\n0 3 C M";
                     this.structured_program = [];
-                    this.data = "";
+                    this.data = "1 1 1 1";
                     this.structured_data = [];
                     this._allowStart = false;
                     this._allowPause = false;
