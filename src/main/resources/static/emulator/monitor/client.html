@@ -1,0 +1,27 @@
+<form (ngSubmit)="onProgramSubmit()" #testform="ngForm">
+    <textarea placeholder="Input Your Program Here" [(ngModel)]="program" #program_input rows="10"></textarea>
+    <br/>
+    <input type="submit" value="Submit">
+</form>
+<form (ngSubmit)="onDataSubmit()" #testform="ngForm" class="form-group">
+    <textarea placeholder="Input Your Data Here" [(ngModel)]="data" #program_input rows="10"></textarea>
+    <br/>
+    <input type="submit" value="Submit">
+</form>
+<button (click)="onStart()" [disabled]="!_allowStart">Start</button>
+<button (click)="onPause()" [disabled]="!_allowPause">Pause</button>
+<button (click)="onNext()" [disabled]="!_allowNext">Next</button>
+<button (click)="onContinue()" [disabled]="!_allowContinue">Continue</button>
+<button (click)="onStop()" [disabled]="!_allowStop">Stop</button>
+<div>
+    <h3>Monitor Status</h3>
+    <ol>
+        <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
+    </ol>
+</div>
+<div>
+    <h3>Monitor Errors</h3>
+    <ol>
+        <li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>
+    </ol>
+</div>

@@ -14,8 +14,8 @@
     <script src="node_modules/angular2/bundles/http.dev.js"></script>
     <script src="node_modules/stompjs/lib/stomp.js"></script>
     <script src="node_modules/rxjs/bundles/Rx.js"></script>
-    <script src="node_modules/jquery/dist/jquery.js"></script>
     <script src="node_modules/tether/dist/js/tether.js"></script>
+    <script src="node_modules/jquery/dist/jquery.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
     <script>
         System.config({
@@ -38,14 +38,15 @@
                 }
             }
         });
-        System.import('emulator/monitor/control_panel.boot')
+        System.import('emulator/boot')
                 .then(null, console.error.bind(console));
-        System.import('emulator/monitor/io_panel.boot')
-                .then(null, console.error.bind(console));
-        System.import('emulator/monitor/setting_panel.boot')
-                .then(null, console.error.bind(console));
-        System.import('emulator/monitor/status_panel.boot')
-                .then(null, console.error.bind(console));
+//        System.import('emulator/monitor/io_panel.boot')
+//                .then(null, console.error.bind(console));
+//        System.import('emulator/monitor/setting_panel.boot')
+//                .then(null, console.error.bind(console));
+//        System.import('emulator/monitor/status_panel.boot')
+//                .then(null, console.error.bind(console));
+        //enableProdMode();
     </script>
 </head>
 <body class="welcome-body">
@@ -53,10 +54,7 @@
         <!--<p th:text="'Hello, ' + ${name} + '!'" />-->
         <div id="session_id" hidden="hidden"></div>
         <div class="row">
-            <io-panel>loading</io-panel>
-            <control-panel>loading</control-panel>
-            <setting-panel></setting-panel>
-            <status-panel>loading</status-panel>
+            <emulator-client></emulator-client>
         </div>
     </div>
 </body>
