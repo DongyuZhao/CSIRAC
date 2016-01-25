@@ -1,3 +1,7 @@
 .welcome-body{
-    background-image: url(http://www.bing.com/az/hprichbg/rb/StoatWinter_EN-US8766454928_1920x1080.jpg);
+   // background-image: url(/Image/CSIRAC-Pano,-Melb.-Museum,-12.8.2008.jpg);
+}
+
+.margin-row{
+    margin-top: 20px ;
 }

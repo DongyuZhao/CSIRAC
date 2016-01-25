@@ -1,6 +1,7 @@
-<div class="row">
+ <div class="row margin-row">
+
     <div class="col-md-4">
-        <form (ngSubmit)="onProgramSubmit()" #testform="ngForm">
+        <form (ngSubmit)="onProgramSubmit()" #programform="ngForm">
             <fieldset class="form-group">
                 <textarea placeholder="Input Your Program Here" [(ngModel)]="program" #program_input rows="8"
                           class="form-control">
@@ -12,7 +13,7 @@
 
     </div>
     <div class="col-md-4">
-        <form (ngSubmit)="onDataSubmit()" #testform="ngForm">
+        <form (ngSubmit)="onDataSubmit()" #dataform="ngForm">
             <fieldset class="form-group">
 
                 <textarea placeholder="Input Your Data Here" [(ngModel)]="data" #program_input rows="8"
@@ -31,12 +32,32 @@
         <button (click)="onStop()" [disabled]="!_allowStop" class="btn btn-block btn-danger">Stop</button>
     </div>
 </div>
-<div>
-    <h3>Monitor Status</h3>
-    <ol>
-        <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
-    </ol>
-</div>
+
+<head>
+    body { position: relative; }
+</head>
+ <body data-spy="scroll" data-target="#M-Status" data-offset ="50">
+ <div>
+     <ul class="nav nav-tabs" role="tablist">
+         <div id="M-Status">
+             <h3>Monitor Status</h3>
+             <ol>
+                 <li *ngFor="#status_entry of statusList.reverse()">{{status_entry}}</li>
+             </ol>
+         </div>
+
+     </ul>
+ </div>
+
+ </body>
+
+
+
+
+
+
+
+
 <div>
     <h3>Monitor Errors</h3>
     <ol>
