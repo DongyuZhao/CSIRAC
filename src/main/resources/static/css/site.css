@@ -1,3 +1,7 @@
 .welcome-body{
     background-image: url(http://www.bing.com/az/hprichbg/rb/StoatWinter_EN-US8766454928_1920x1080.jpg);
 }
+
+.margin-row {
+    margin-top: 20px;
+}
