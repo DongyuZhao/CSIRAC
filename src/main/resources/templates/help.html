@@ -40,9 +40,36 @@
         <div class="monitor-container">
             <h2 th:text="${document.getTitle()} "/>
             <hr/>
-            <p th:text="${document.getBody()} "/>
-            <hr/>
-            <p th:text="${document.getDate()} "/>
+            <h4 style = "font-family: arial">
+                How to use CSIRAC emulator in this web application:
+            </h4>
+            <p></p>
+            <h5 style = "font-family: arial">
+                <b><i>Step 1:</i></b>
+            </h5>
+            <p style = "font-family: arial">
+                According to the guide from <a href="/Use_Guide/user_guide.pdf"><i><u>User Guide</u></i></a>, write down the instructions in the first blank and <i>submit</i> the program.
+            </p>
+            <h5 style = "font-family: arial">
+                <b><i>Step 2:</i></b>
+            </h5>
+            <p style = "font-family: arial">
+                <i>Input</i> the data and <i>submit</i>.
+            </p>
+            <h5 style = "font-family: arial">
+                <b><i>Step 3:</i></b>
+            </h5>
+            <p style = "font-family: arial">
+                When the <i>Monitor Status</i> shows 'Ready', <i>submit</i> the frequency and <i>start</i> the submitted program. If you want to pause at the process of the running program, press <i>'Pause'</i> and revise the <i>PCRegister</i> if you want.
+            </p>
+            <h5 style = "font-family: arial">
+                <b><i>Step 4:</i></b>
+            </h5>
+            <p style = "font-family: arial">
+                <i>Continue</i> the progress. Read the <i>Program Memory History</i>, <i>Register History</i> and <i>Data Memory History</i> from the web.
+            </p>
+            <p></p>
+            <p style = "font-family: arial; text-align: right" th:text="${document.getDate()} "/>
         </div>
     </div>
 </div>

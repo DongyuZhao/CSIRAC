@@ -1,5 +1,8 @@
 .welcome-body{
  background-image: url(/Image/CSIRAC-Pano,-Melb.-Museum,-12.8.2008.jpg);
+ background-position: center;
+ background-repeat: no-repeat;
+ background-attachment: fixed;
 }
 
 .margin-row{
