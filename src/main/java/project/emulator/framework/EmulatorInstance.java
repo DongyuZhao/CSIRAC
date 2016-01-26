@@ -100,4 +100,14 @@ public class EmulatorInstance
     {
         return this._dataUploaded && this._programUploaded;
     }
+
+    public boolean isRunning()
+    {
+        return this._controlUnit.isRunning();
+    }
+
+    public boolean isPause()
+    {
+        return this._controlUnit.isPause();
+    }
 }
