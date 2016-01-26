@@ -12,12 +12,17 @@ import java.util.regex.Pattern;
  */
 public class SymbolTable implements ISymbolTranslator {
     private Map<String, Integer> _symbolTable = new HashMap<>();
+    /*
+     * register a mapping between a pair of symbol and code.
+     */
 
     @Override
     public void registerSymbol(String symbol, int code) {
         this._symbolTable.put(symbol, code);
     }
-
+    /*
+     * Translate the particular symbol to particular code.
+     */
     @Override
     public int translateToCode(String symbol) {
         if (this._symbolTable.keySet().contains(symbol)) {
@@ -25,7 +30,10 @@ public class SymbolTable implements ISymbolTranslator {
         }
         return Bootstrap.innerConfig.defaultCellContent();
     }
-
+    
+    /*
+     * Translate the particular code to particular symbol.
+     */
     @Override
     public String translateToSymbol(int code) {
         if (this._symbolTable.values().contains(code)) {
@@ -50,7 +58,9 @@ public class SymbolTable implements ISymbolTranslator {
         }
         return null;
     }
-
+    /*
+     * Translate string input to code.
+     */
     @Override
     public int[] translateInput(String input) {
         Pattern p = Bootstrap.innerConfig.inputFilterPattern();
@@ -69,6 +79,9 @@ public class SymbolTable implements ISymbolTranslator {
         }
         return new int[0];
     }
+    /*
+     * Translate output to string output.
+     */
 
     @Override
     public String translateOutput(int[] data) {
@@ -80,7 +93,9 @@ public class SymbolTable implements ISymbolTranslator {
         }
         return result;
     }
-
+    /*
+     * Trim the data according CPU inner length.
+     */
     @Override
     public int[] trimData(int[] data) {
         if (data.length != Bootstrap.innerConfig.mainDataSectionCount()) {

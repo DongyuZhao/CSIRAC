@@ -11,6 +11,9 @@ import javax.management.InstanceNotFoundException;
  * Created by Dy.Zhao on 2016/1/23 0023.
  */
 public class MoveProcessor implements IProcessUnit {
+	/*
+	 * execute the operation of the command object.
+	 */
 
     protected IProcessor _processSocket;
 
@@ -24,7 +27,8 @@ public class MoveProcessor implements IProcessUnit {
         //super(_processSocket);
     }
 
-    // return if the pc register changed by instruction
+    // return if the pc register changed by instruction.
+    // execute the instruction and if the value of pcregister changed, return true.
     @Override
     public boolean process(Command command) throws InstanceNotFoundException {
         if (this._processSocket != null) {

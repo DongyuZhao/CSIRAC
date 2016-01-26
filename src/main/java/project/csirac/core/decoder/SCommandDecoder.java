@@ -8,6 +8,10 @@ import project.emulator.framework.cpu.decoder.Command;
  * Created by Dy.Zhao on 2016/1/23 0023.
  */
 public class SCommandDecoder implements IDecodeUnit {
+	/*
+	 * Parse 'S' instructions.
+	 * generate the command object for the processor.
+	 */
     @Override
     public Command decode(int[] data) {
         int[] trimmedData = CsiracBootstrap.symbolTranslator.trimData(data);
