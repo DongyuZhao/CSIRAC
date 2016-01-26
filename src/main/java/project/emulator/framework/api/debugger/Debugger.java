@@ -71,7 +71,7 @@ public class Debugger implements IDebugger
     }
 
     @Override
-    public void changeFrequency(String id, float frequency)
+    public void setClock(String id, float frequency)
     {
         if (this.sessionExists(id))
         {

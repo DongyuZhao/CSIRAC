@@ -33,9 +33,9 @@ System.register(["angular2/core", "angular2/http", "../../services/socket.servic
                     this.statusList = [];
                     this.errorList = [];
                     this.program = "0 0 M A\n0 0 M B\n0 0 M C\n0 1 A M\n0 2 B M\n0 3 C M";
-                    this.structured_program = [];
+                    //public structured_program:string[] = [];
                     this.data = "1 1 1 1";
-                    this.structured_data = [];
+                    //public structured_data:String[] = [];
                     this._allowStart = false;
                     this._allowPause = false;
                     this._allowContinue = false;
@@ -110,13 +110,14 @@ System.register(["angular2/core", "angular2/http", "../../services/socket.servic
                 };
                 MonitorClient.prototype.onDataSubmit = function () {
                     console.log("Upload Data");
+                    var structuredData = [];
                     if (this.data != null && this.data != "") {
-                        this.structured_data = this.data.split("\n");
+                        structuredData = this.data.split("\n");
                     }
-                    if (this.structured_data != null && this.structured_data.length != 0) {
+                    if (structuredData != null && structuredData.length != 0) {
                         this._socketClient.push("/emulator_in/monitor/input/data", {
                             "sessionId": this._sessionId,
-                            "data": this.structured_data
+                            "data": structuredData
                         });
                     }
                     else {
@@ -125,13 +126,14 @@ System.register(["angular2/core", "angular2/http", "../../services/socket.servic
                 };
                 MonitorClient.prototype.onProgramSubmit = function () {
                     console.log("Upload Program");
+                    var structuredProgram = [];
                     if (this.program != null && this.program != "") {
-                        this.structured_program = this.program.split("\n");
+                        structuredProgram = this.program.split("\n");
                     }
-                    if (this.structured_program != null && this.structured_program.length != 0) {
+                    if (structuredProgram != null && structuredProgram.length != 0) {
                         this._socketClient.push("/emulator_in/monitor/input/program", {
                             "sessionId": this._sessionId,
-                            "program": this.structured_program
+                            "program": structuredProgram
                         });
                     }
                     else {

@@ -59,8 +59,8 @@ public class SymbolTableTest
         symbolTable.registerSymbol("C", 14);
         symbolTable.registerSymbol("D", 17);
         symbolTable.registerSymbol("Temp", -1024);
-        Assert.assertArrayEquals(null, new int[]{0, 0, 0, 4}, symbolTable.translateInput("0 0 M A"));
-        Assert.assertArrayEquals(null, new int[]{0, 0, 11, 4}, symbolTable.translateInput("0 0 B A"));
+        Assert.assertArrayEquals(null, new int[]{0, 0, 0, 4}, symbolTable.translateInput("0,0, M  ,A"));
+        Assert.assertArrayEquals(null, new int[]{0, 0, 11, 4}, symbolTable.translateInput("0 0 , B A"));
     }
 
     @Test
