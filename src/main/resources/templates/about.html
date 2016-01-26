@@ -40,9 +40,50 @@
         <div class="monitor-container">
             <h2 th:text="${document.getTitle()} "/>
             <hr/>
-            <p th:text="${document.getBody()} "/>
-            <hr/>
-            <p th:text="${document.getDate()} "/>
+            <p></p>
+            <h4 style = "font-family: arial; text-align: center">About CSIRAC:</h4>
+            <p style = "font-family: arial; text-align: center">
+                <i>
+                    CSIRAC, Australia's first computer, as well as the fourth computer<br/>
+                    in the world, was designed and built in Australia.It is also the only<br/>
+                    intact first-generation computer surviving anywhere in the world.
+                </i>
+            </p>
+            <p style = "font-family: arial; text-align: center">
+                <i>
+                    As the first computer in Australia, CSIRAC played an important role<br/>
+                    in power supply, atom arrangement, loan payment calculation, etc.<br/>
+                    In 2000, CSIRAC found its permanent home in Melbourne Museum and has<br/>
+                    not been operated since its shutdown. However, many of the programs <br/>
+                    that ran on it have been preserved,an emulator has been written for it.
+                </i>
+            </p>
+            <p style = "font-family: arial; text-align: center">
+                <i>
+                    This webpage aims to enable more people to experience the use of the<br/>
+                    emulator in modern times. By inputting instructions and data, users<br/>
+                    are able to see how the emulator works.
+                </i>
+            </p>
+            <p style = "font-family: arial; text-align: center">
+                <i>
+                    Enjoy your CSIRAC trip!
+                </i>
+            </p>
+            <p></p>
+            <p></p>
+            <h4 style = "font-family: arial; text-align: center">About Us:</h4>
+            <p></p>
+            <p style = "font-family: arial; font-size: 105%; text-align: center">
+                <b>Dongyu Zhao: </b><i>dongyuz@student.unimelb.edu.au</i>
+            </p>
+            <p style = "font-family: arial; font-size: 105%; text-align: center">
+                <b>Yingxuan Liu: </b><i>yingxuanl@student.unimelb.edu.au</i>
+            </p>
+            <p style = "font-family: arial; font-size: 105%; text-align: center">
+                <b>Chunyi Guan: </b><i>chunyig@student.unimelb.edu.au</i>
+            </p>
+            <p style = "font-family: arial; text-align: right" th:text="${document.getDate()} "/>
         </div>
     </div>
 </div>

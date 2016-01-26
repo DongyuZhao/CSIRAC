@@ -5,6 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import project.csirac.website.models.document.DocumentDao;
+import project.csirac.website.models.document.DocumentAbout;
+
 
 /**
  * Created by Dy.Zhao on 2016/1/3 0003.
@@ -26,8 +28,8 @@ public class HomeController {
 
     @RequestMapping("/about")
     public String about(Model model) {
-        DocumentDao dao = new DocumentDao();
-        model.addAttribute("document", dao.findByName("About"));
+        DocumentAbout About = new DocumentAbout();
+        model.addAttribute("document", About.findByName("About"));
         return "about";
     }
 }
