@@ -47,4 +47,8 @@ public interface IMonitor
     void removeSession(String sessionId);
 
     boolean isReady(String sessionId);
+
+    boolean isRunning(String sessionId);
+
+    boolean isPause(String sessionId);
 }

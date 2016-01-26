@@ -39,7 +39,7 @@ public class EmulatorDebuggerController implements IDebuggerObserver
     {
         if (model != null)
         {
-            this._debugger.changeFrequency(model.getSessionId(), model.getFrequency());
+            this._debugger.setClock(model.getSessionId(), model.getFrequency());
         }
     }
 

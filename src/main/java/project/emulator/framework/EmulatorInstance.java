@@ -85,7 +85,7 @@ public class EmulatorInstance
     public void stop() throws InterruptedException
     {
         System.out.println("Stop Call");
-        this._controlUnit.stop();
+        this._controlUnit.forceStop();
     }
 
     public void next() throws InterruptedException
@@ -99,5 +99,15 @@ public class EmulatorInstance
     public boolean isReady()
     {
         return this._dataUploaded && this._programUploaded;
+    }
+
+    public boolean isRunning()
+    {
+        return this._controlUnit.isRunning();
+    }
+
+    public boolean isPause()
+    {
+        return this._controlUnit.isPause();
     }
 }
