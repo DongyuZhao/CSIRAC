@@ -32,8 +32,8 @@ public class Bootstrap {
         symbolTranslator.registerSymbol(symbol, code);
     }
 
-    public static void createEmulator(String id, List<IDecodeUnit> IDecodeUnits, List<IProcessUnit> IProcessUnits, IRegister register, IDebugger debugger, IMonitor monitor) {
-        IDecoder decoder = Decoder.createInstance(IDecodeUnits);
+    public static void createEmulator(String id, List<IDecodeUnit> decodeUnits, List<IProcessUnit> processUnits, IRegister register, IDebugger debugger, IMonitor monitor) {
+        IDecoder decoder = Decoder.createInstance(decodeUnits);
 
         IPcRegister pcRegister = PcRegister.createInstance(id, debugger);
 
@@ -43,7 +43,7 @@ public class Bootstrap {
 
         IMemory instructionMemory = Memory.createInstance(id, true, monitor, debugger);
 
-        IProcessor processor = new Processor(decoder, pcRegister, opCodeRegister, register, instructionMemory, dataMemory, IProcessUnits);
+        IProcessor processor = new Processor(decoder, pcRegister, opCodeRegister, register, instructionMemory, dataMemory, processUnits);
 
         IControlUnit controlUnit = ControlUnit.createInstance(id, processor, pcRegister, opCodeRegister, monitor, debugger);
 

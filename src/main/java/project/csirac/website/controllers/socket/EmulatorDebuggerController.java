@@ -31,7 +31,7 @@ public class EmulatorDebuggerController implements IDebuggerObserver {
     }
 
     @MessageMapping("/debugger/input/clock")
-    public void changClock(ClockViewModel model) {
+    public void changeClock(ClockViewModel model) {
         if (model != null) {
             this._debugger.setClock(model.getSessionId(), model.getFrequency());
         }

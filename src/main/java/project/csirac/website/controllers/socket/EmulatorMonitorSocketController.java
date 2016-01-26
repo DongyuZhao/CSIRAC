@@ -55,7 +55,7 @@ public class EmulatorMonitorSocketController implements IMonitorObserver {
     }
 
     @MessageMapping("/monitor/control")
-    public void start(ControlViewModel model) {
+    public void control(ControlViewModel model) {
         String sessionId = model.getSessionId();
         String operation = model.getOperation();
         if (CsiracApplication.sessionExists(sessionId)) {
