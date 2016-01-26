@@ -83,7 +83,9 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
             }
         }
     }
-
+    /*
+     * start executing.
+     */
     @Override
     public void start() {
         System.out.println("Click Run");
@@ -94,7 +96,9 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
     void onStart() {
         this.onStart(this);
     }
-
+    /*
+     * Pause the process.
+     */
     @Override
     public void pause() throws InterruptedException {
         System.out.println("Press Pause");
@@ -103,7 +107,9 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
             this.onPause(this);
         }
     }
-
+    /*
+     * Continue executing.
+     */
     @Override
     public void next() throws InterruptedException {
         this.next(false);
@@ -122,6 +128,9 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
             }
         }
     }
+    /*
+     * stop the executing.
+     */
 
     @Override
     public synchronized void go() throws InterruptedException {
@@ -154,7 +163,9 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
             this.onStop(this);
         }
     }
-
+    /*
+     * Set up the frequency for executing the program.
+     */
     @Override
     public float getClock() {
         return this._frequency;
@@ -165,7 +176,9 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
         this._frequency = frequency;
         this._debugger.onFrequencyChange(this._frequency, this);
     }
-
+    /*
+     * revise the value of pcRegister and use it to restart the paused program.
+     */
     @Override
     public synchronized int getPcRegister() {
         return this._pcRegister.get();
@@ -178,7 +191,9 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
             notifyAll();
         }
     }
-
+    /*
+     * Get the operation code.
+     */
     @Override
     public synchronized int getOpCode() {
         return this._opCodeRegister.get();

@@ -24,7 +24,10 @@ public class Decoder implements IDecoder {
         }
         return decoder;
     }
-
+    /*
+     *Parse all the instructions by using the former decoder.
+     *Derive all the operation command objects and the series of them.
+     */
 
     @Override
     public Command[] decode(int[] data) {
@@ -40,7 +43,10 @@ public class Decoder implements IDecoder {
         }
         return result;
     }
-
+    /*
+     * register a pair of type and the particular decoder which used this type.
+     * @param type  two types here: source command and destination command.
+     */
     @Override
     public void registerDecodeUnit(String type, IDecodeUnit decodeUnit) {
         if (decodeUnit != null) {

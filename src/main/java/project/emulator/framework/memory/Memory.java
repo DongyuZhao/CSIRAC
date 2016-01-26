@@ -33,7 +33,9 @@ public class Memory extends MemoryMonitorMessageSender implements IMemory {
         memory.attachMonitor(monitor);
         return memory;
     }
-
+    /*
+     * Return true if the memory written succeed.
+     */
     @Override
     public boolean put(int unitAddress, int cellAddress, int[] data) {
         if (addressValid(unitAddress, cellAddress)) {
@@ -47,7 +49,10 @@ public class Memory extends MemoryMonitorMessageSender implements IMemory {
         }
         return false;
     }
-
+    /*
+     * If the address of instructions in present memory over the length, return stop.
+     * if the data in present memory over the length, return an array[]=0.
+     */
     @Override
     public int[] get(int unitAddress, int cellAddress) {
         int internalAddress = this.getInternalAddress(unitAddress, cellAddress);

@@ -22,6 +22,8 @@ public class CsiracBootstrap extends project.emulator.framework.Bootstrap {
 //    {
 //
 //    }
+	// Register supported instructions. For further instruction written, developers can add mapping between 
+	// code and instructions here.
     public static void registerCsiracSymbolTable() {
         for (int i = 0; i < 32; i++) {
             registerSymbol(i + "", i);
