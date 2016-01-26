@@ -156,6 +156,20 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
         }
     }
 
+    public void forceStop()
+    {
+        try
+        {
+            this.pause();
+            this.stop();
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+        //this.stop();
+    }
+
     @Override
     public synchronized void stop() throws InterruptedException
     {

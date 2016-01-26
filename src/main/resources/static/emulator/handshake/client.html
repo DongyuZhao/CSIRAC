@@ -5,8 +5,8 @@
             <div id="C_status">
                 <table class="table table-inverse">
                     <tbody>
-                    <tr *ngFor="#status_entry of statusList.reverse()">
-                        <!--<th scope="row">{{i}}</th>-->
+                    <tr *ngFor="#status_entry of statusList.reverse(); #i=index">
+                        <th scope="row">{{i}}</th>
                         <td>{{status_entry}}</td>
                     </tr>
                     </tbody>
@@ -16,19 +16,19 @@
     </div>
 
 
-    <div class="col-md-12">
-        <h3>Connection Errors</h3>
-        <div data-spy="scroll" data-target="C_status" data-offset="50" class="scroll-mid-high-list">
-            <div id="C_errors">
-                <table class="table table-inverse">
-                    <tbody>
-                    <tr *ngFor="#error_entry of errorList.reverse()">
-                        <!--<th scope="row">{{i}}</th>-->
-                        <td>{{error_entry}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    <!--<div class="col-md-12">-->
+        <!--<h3>Connection Errors</h3>-->
+        <!--<div data-spy="scroll" data-target="C_status" data-offset="50" class="scroll-list">-->
+            <!--<div id="C_errors">-->
+                <!--<table class="table table-inverse">-->
+                    <!--<tbody>-->
+                    <!--<tr *ngFor="#error_entry of errorList.reverse()">-->
+                        <!--&lt;!&ndash;<th scope="row">{{i}}</th>&ndash;&gt;-->
+                        <!--<td>{{error_entry}}</td>-->
+                    <!--</tr>-->
+                    <!--</tbody>-->
+                <!--</table>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 </div>

@@ -27,37 +27,32 @@
 
 
     <div class="row margin-row">
-
         <div class="col-md-12">
-            <h4>Program Memory History</h4>
-            <div data-spy="scroll" data-target="P_memory history" data-offset="50" class="scroll-table">
-                <div id="P_memory history">
+            <h4>Register History</h4>
+            <div data-spy="scroll" data-target="R_history" data-offset="50" class="scroll-table">
+                <div id="R_history">
                     <table class="table table-inverse">
                         <thead>
                         <tr>
-                            <!--<th></th>-->
-                            <th>Unit No</th>
-                            <th>Cell No</th>
+                            <th>#</th>
+                            <th>Address</th>
                             <th>Data</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="#program_entry of ProgramUpdateHistory.reverse()">
-                            <!--<th scope="row">{{i}}</th>-->
-                            <td>{{program_entry.groupAddress}}</td>
-                            <td>{{program_entry.cellAddress}}</td>
-                            <td>{{program_entry.newValue}}</td>
+                        <tr *ngFor="#register_entry of registerUpdateHistory.reverse(); #i=index">
+                            <th scope="row">{{i}}</th>
+                            <td>{{register_entry.address}}</td>
+                            <td>{{register_entry.newValue}}</td>
                         </tr>
                         </tbody>
                     </table>
                     <!--<ol>-->
-                    <!--<li *ngFor="#program_entry of ProgramUpdateHistory.reverse()">{{program_entry.groupAddress}},&nbsp;{{program_entry.cellAddress}}:&nbsp;{{program_entry.newValue}}</li>-->
+                    <!--<li *ngFor="#register_entry of RegisterUpdateHistory.reverse()">{{register_entry.address}}:&nbsp;{{register_entry.newValue}}</li>-->
                     <!--</ol>-->
                 </div>
             </div>
         </div>
-
-
         <div class="col-md-12">
             <h4>Data Memory History</h4>
             <div data-spy="scroll" data-target="D_memory history" data-offset="50" class="scroll-table">
@@ -65,15 +60,15 @@
                     <table class="table table-inverse">
                         <thead>
                         <tr>
-                            <!--<th></th>-->
-                            <th>Unit No</th>
-                            <th>Cell No</th>
+                            <th>#</th>
+                            <th>Unit No.</th>
+                            <th>Cell No.</th>
                             <th>Data</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="#data_entry of DataUpdateHistory.reverse()">
-                            <!--<th scope="row">{{i}}</th>-->
+                        <tr *ngFor="#data_entry of dataUpdateHistory.reverse(); #i=index">
+                            <th scope="row">{{i}}</th>
                             <td>{{data_entry.groupAddress}}</td>
                             <td>{{data_entry.cellAddress}}</td>
                             <td>{{data_entry.newValue}}</td>
@@ -86,29 +81,30 @@
                 </div>
             </div>
         </div>
-
         <div class="col-md-12">
-            <h4>Register History</h4>
-            <div data-spy="scroll" data-target="R_history" data-offset="50" class="scroll-table">
-                <div id="R_history">
+            <h4>Program Memory History</h4>
+            <div data-spy="scroll" data-target="P_memory history" data-offset="50" class="scroll-table">
+                <div id="P_memory history">
                     <table class="table table-inverse">
                         <thead>
                         <tr>
-                            <!--<th></th>-->
-                            <th>Address</th>
+                            <th>#</th>
+                            <th>Unit No.</th>
+                            <th>Cell No.</th>
                             <th>Data</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="#register_entry of RegisterUpdateHistory.reverse()">
-                            <!--<th scope="row">{{i}}</th>-->
-                            <td>{{register_entry.address}}</td>
-                            <td>{{register_entry.newValue}}</td>
+                        <tr *ngFor="#program_entry of programUpdateHistory.reverse(); #i=index">
+                            <th scope="row">{{i}}</th>
+                            <td>{{program_entry.groupAddress}}</td>
+                            <td>{{program_entry.cellAddress}}</td>
+                            <td>{{program_entry.newValue}}</td>
                         </tr>
                         </tbody>
                     </table>
                     <!--<ol>-->
-                        <!--<li *ngFor="#register_entry of RegisterUpdateHistory.reverse()">{{register_entry.address}}:&nbsp;{{register_entry.newValue}}</li>-->
+                    <!--<li *ngFor="#program_entry of ProgramUpdateHistory.reverse()">{{program_entry.groupAddress}},&nbsp;{{program_entry.cellAddress}}:&nbsp;{{program_entry.newValue}}</li>-->
                     <!--</ol>-->
                 </div>
             </div>
@@ -116,35 +112,35 @@
     </div>
 </div>
 
-<div class="row monitor-container">
-    <div class="col-md-12">
-        <h3>Debugger Status</h3>
-        <div data-spy="scroll" data-target="D_status" data-offset="50" class="scroll-list">
-            <div id="D_status">
-                <table class="table table-inverse">
-                    <tbody>
-                    <tr *ngFor="#status_entry of statusList.reverse()">
-                        <!--<th scope="row">{{i}}</th>-->
-                        <td>{{status_entry}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <h3>Debugger Errors</h3>
-        <div data-spy="scroll" data-target="D_errors" data-offset="50" class="scroll-list">
-            <div id="D_errors">
-                <table class="table table-inverse">
-                    <tbody>
-                    <tr *ngFor="#error_entry of errorList.reverse()">
-                        <!--<th scope="row">{{i}}</th>-->
-                        <td>{{error_entry}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+<!--<div class="row monitor-container">-->
+    <!--<div class="col-md-12">-->
+        <!--<h3>Debugger Status</h3>-->
+        <!--<div data-spy="scroll" data-target="D_status" data-offset="50" class="scroll-list">-->
+            <!--<div id="D_status">-->
+                <!--<table class="table table-inverse">-->
+                    <!--<tbody>-->
+                    <!--<tr *ngFor="#status_entry of statusList.reverse()">-->
+                        <!--&lt;!&ndash;<th scope="row">{{i}}</th>&ndash;&gt;-->
+                        <!--<td>{{status_entry}}</td>-->
+                    <!--</tr>-->
+                    <!--</tbody>-->
+                <!--</table>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="col-md-12">-->
+        <!--<h3>Debugger Errors</h3>-->
+        <!--<div data-spy="scroll" data-target="D_errors" data-offset="50" class="scroll-list">-->
+            <!--<div id="D_errors">-->
+                <!--<table class="table table-inverse">-->
+                    <!--<tbody>-->
+                    <!--<tr *ngFor="#error_entry of errorList.reverse()">-->
+                        <!--&lt;!&ndash;<th scope="row">{{i}}</th>&ndash;&gt;-->
+                        <!--<td>{{error_entry}}</td>-->
+                    <!--</tr>-->
+                    <!--</tbody>-->
+                <!--</table>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->

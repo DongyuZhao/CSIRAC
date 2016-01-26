@@ -15,6 +15,8 @@ public interface IControlUnit
 
     void go() throws InterruptedException;
 
+    void forceStop();
+
     void stop() throws InterruptedException;
 
     float getClock();

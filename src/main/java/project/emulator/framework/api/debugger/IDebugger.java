@@ -26,7 +26,7 @@ public interface IDebugger
     void onFrequencyChange(float message, DebuggerMessageSender messageSender);
 
 
-    void changeFrequency(String id, float frequency);
+    void setClock(String id, float frequency);
 
 
     void attachObserver(IDebuggerObserver observer);
