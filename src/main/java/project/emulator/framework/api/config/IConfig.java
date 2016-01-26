@@ -5,8 +5,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Dy.Zhao on 2016/1/23 0023.
  */
-public interface IConfig
-{
+public interface IConfig {
     int defaultCellContent();
 
     int trimCellContent();

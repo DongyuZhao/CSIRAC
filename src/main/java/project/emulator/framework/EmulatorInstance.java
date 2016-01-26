@@ -6,8 +6,7 @@ import project.emulator.framework.memory.IMemory;
 /**
  * Created by Dy.Zhao on 2016/1/23 0023.
  */
-public class EmulatorInstance
-{
+public class EmulatorInstance {
     private IControlUnit _controlUnit;
 
     private IMemory _instructionMemory;
@@ -17,97 +16,75 @@ public class EmulatorInstance
     private boolean _dataUploaded;
     private boolean _programUploaded;
 
-    public EmulatorInstance(IControlUnit controlUnit, IMemory _instructionMemory, IMemory _dataMemory)
-    {
+    public EmulatorInstance(IControlUnit controlUnit, IMemory _instructionMemory, IMemory _dataMemory) {
         this._controlUnit = controlUnit;
         this._instructionMemory = _instructionMemory;
         this._dataMemory = _dataMemory;
     }
 
 
-    public void setClock(float frequency)
-    {
+    public void setClock(float frequency) {
         this._controlUnit.setClock(frequency);
     }
 
-    public void setPcRegister(int address)
-    {
-        try
-        {
+    public void setPcRegister(int address) {
+        try {
             this._controlUnit.setPcRegister(address);
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public void start()
-    {
-        if (!this._controlUnit.isRunning())
-        {
+    public void start() {
+        if (!this._controlUnit.isRunning()) {
             this._controlUnit.start();
         }
     }
 
-    public void loadData(String[] data)
-    {
-        if (!this._controlUnit.isRunning())
-        {
+    public void loadData(String[] data) {
+        if (!this._controlUnit.isRunning()) {
             this._dataUploaded = this._dataMemory.load(data);
         }
     }
 
-    public void loadProgram(String[] data)
-    {
-        if (!this._controlUnit.isRunning())
-        {
+    public void loadProgram(String[] data) {
+        if (!this._controlUnit.isRunning()) {
             this._programUploaded = this._instructionMemory.load(data);
         }
     }
 
-    public void pause() throws InterruptedException
-    {
-        if (this._controlUnit.isRunning())
-        {
+    public void pause() throws InterruptedException {
+        if (this._controlUnit.isRunning()) {
             this._controlUnit.pause();
         }
     }
 
-    public void go() throws InterruptedException
-    {
-        if (this._controlUnit.isPause())
-        {
+    public void go() throws InterruptedException {
+        if (this._controlUnit.isPause()) {
             this._controlUnit.go();
         }
     }
 
-    public void stop() throws InterruptedException
-    {
+    public void stop() throws InterruptedException {
         System.out.println("Stop Call");
         this._controlUnit.forceStop();
     }
 
-    public void next() throws InterruptedException
-    {
-        if (this._controlUnit.isPause())
-        {
+    public void next() throws InterruptedException {
+        if (this._controlUnit.isPause()) {
             this._controlUnit.next(true);
         }
     }
 
-    public boolean isReady()
-    {
+    public boolean isReady() {
         return this._dataUploaded && this._programUploaded;
     }
 
-    public boolean isRunning()
-    {
+    public boolean isRunning() {
         return this._controlUnit.isRunning();
     }
 
-    public boolean isPause()
-    {
+    public boolean isPause() {
         return this._controlUnit.isPause();
     }
 }

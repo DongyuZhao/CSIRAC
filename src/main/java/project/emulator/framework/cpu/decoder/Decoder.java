@@ -10,20 +10,16 @@ import java.util.Map;
 /**
  * Created by Dy.Zhao on 2016/1/23 0023.
  */
-public class Decoder implements IDecoder
-{
+public class Decoder implements IDecoder {
     private Map<String, IDecodeUnit> _decoderList = new HashMap<>();
 
-    public Decoder()
-    {
+    public Decoder() {
 
     }
 
-    public static IDecoder createInstance(List<IDecodeUnit> IDecodeUnits)
-    {
+    public static IDecoder createInstance(List<IDecodeUnit> decodeUnites) {
         IDecoder decoder = new Decoder();
-        for (IDecodeUnit IDecodeUnit : IDecodeUnits)
-        {
+        for (IDecodeUnit IDecodeUnit : decodeUnites) {
             decoder.registerDecodeUnit(IDecodeUnit.getType(), IDecodeUnit);
         }
         return decoder;
@@ -31,17 +27,14 @@ public class Decoder implements IDecoder
 
 
     @Override
-    public Command[] decode(int[] data)
-    {
+    public Command[] decode(int[] data) {
         Command[] result = new Command[Bootstrap.innerConfig.commandType().length];
         String[] decodePriority = Bootstrap.innerConfig.decodePriority();
-        for (int i = 0; i < decodePriority.length; i++)
-        {
+        for (int i = 0; i < decodePriority.length; i++) {
             String type = decodePriority[i];
             IDecodeUnit IDecodeUnit = this._decoderList.get(type);
             Command decoded = IDecodeUnit.decode(data);
-            if (decoded != null)
-            {
+            if (decoded != null) {
                 result[i] = decoded;
             }
         }
@@ -49,11 +42,9 @@ public class Decoder implements IDecoder
     }
 
     @Override
-    public void registerDecodeUnit(String type, IDecodeUnit IDecodeUnit)
-    {
-        if (IDecodeUnit != null)
-        {
-            this._decoderList.put(type, IDecodeUnit);
+    public void registerDecodeUnit(String type, IDecodeUnit decodeUnit) {
+        if (decodeUnit != null) {
+            this._decoderList.put(type, decodeUnit);
         }
     }
 }

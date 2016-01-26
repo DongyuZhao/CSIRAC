@@ -11,19 +11,16 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
  */
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer
-{
+public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry config)
-    {
+    public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/emulator_response");
         config.setApplicationDestinationPrefixes("/emulator_in");
     }
 
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry)
-    {
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/emulator_in/handshake");
         registry.addEndpoint("/emulator_in/io");
         registry.addEndpoint("/emulator_in/control");

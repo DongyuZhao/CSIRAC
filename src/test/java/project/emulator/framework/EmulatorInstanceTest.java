@@ -2,7 +2,7 @@ package project.emulator.framework;
 
 import org.junit.Assert;
 import org.junit.Test;
-import project.csirac.core.Bootstrap;
+import project.csirac.core.CsiracBootstrap;
 import project.emulator.framework.api.debugger.*;
 import project.emulator.framework.api.monitor.*;
 
@@ -117,7 +117,7 @@ public class EmulatorInstanceTest
         monitor.attachObserver(this.monitorObserver);
         Debugger debugger = new Debugger();
         debugger.attachObserver(this.debuggerObserver);
-        Bootstrap.createEmulator("test", monitor, debugger);
+        CsiracBootstrap.createEmulator("test", monitor, debugger);
         debugger.setClock("test", 0.5f);
     }
 
@@ -128,7 +128,7 @@ public class EmulatorInstanceTest
         monitor.attachObserver(this.monitorObserver);
         Debugger debugger = new Debugger();
         debugger.attachObserver(this.debuggerObserver);
-        Bootstrap.createEmulator("test", monitor, debugger);
+        CsiracBootstrap.createEmulator("test", monitor, debugger);
         debugger.setPcRegister("test", 5);
     }
 
@@ -139,7 +139,7 @@ public class EmulatorInstanceTest
         monitor.attachObserver(this.monitorObserver);
         Debugger debugger = new Debugger();
         debugger.attachObserver(this.debuggerObserver);
-        Bootstrap.createEmulator("test", monitor, debugger);
+        CsiracBootstrap.createEmulator("test", monitor, debugger);
         monitor.start("test");
     }
 
@@ -150,7 +150,7 @@ public class EmulatorInstanceTest
         monitor.attachObserver(this.monitorObserver);
         Debugger debugger = new Debugger();
         debugger.attachObserver(this.debuggerObserver);
-        Bootstrap.createEmulator("test", monitor, debugger);
+        CsiracBootstrap.createEmulator("test", monitor, debugger);
         monitor.loadData("test", new String[] {"0 0 0 0"});
     }
 
@@ -161,7 +161,7 @@ public class EmulatorInstanceTest
         monitor.attachObserver(this.monitorObserver);
         Debugger debugger = new Debugger();
         debugger.attachObserver(this.debuggerObserver);
-        Bootstrap.createEmulator("test", monitor, debugger);
+        CsiracBootstrap.createEmulator("test", monitor, debugger);
         monitor.loadProgram("test", new String[] {"0 0 0 0"});
     }
 
@@ -172,7 +172,7 @@ public class EmulatorInstanceTest
         monitor.attachObserver(this.monitorObserver);
         Debugger debugger = new Debugger();
         debugger.attachObserver(this.debuggerObserver);
-        Bootstrap.createEmulator("test", monitor, debugger);
+        CsiracBootstrap.createEmulator("test", monitor, debugger);
         monitor.loadProgram("test", new String[] {"0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A"});
         monitor.loadData("test", new String[] {"0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0"});
         monitor.start("test");
@@ -188,7 +188,7 @@ public class EmulatorInstanceTest
         monitor.attachObserver(this.monitorObserver);
         Debugger debugger = new Debugger();
         debugger.attachObserver(this.debuggerObserver);
-        Bootstrap.createEmulator("test", monitor, debugger);
+        CsiracBootstrap.createEmulator("test", monitor, debugger);
         monitor.loadProgram("test", new String[] {"0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A"});
         monitor.loadData("test", new String[] {"0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0"});
         monitor.start("test");
@@ -202,12 +202,12 @@ public class EmulatorInstanceTest
     @Test
     public void testStop() throws Exception
     {
-        Bootstrap.registerCsiracSymbolTable();
+        CsiracBootstrap.registerCsiracSymbolTable();
         Monitor monitor = new Monitor();
         monitor.attachObserver(this.monitorObserver);
         Debugger debugger = new Debugger();
         debugger.attachObserver(this.debuggerObserver);
-        Bootstrap.createEmulator("test", monitor, debugger);
+        CsiracBootstrap.createEmulator("test", monitor, debugger);
         monitor.loadProgram("test", new String[] {"0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A"});
         monitor.loadData("test", new String[] {"0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0"});
         monitor.start("test");
@@ -222,7 +222,7 @@ public class EmulatorInstanceTest
         monitor.attachObserver(this.monitorObserver);
         Debugger debugger = new Debugger();
         debugger.attachObserver(this.debuggerObserver);
-        Bootstrap.createEmulator("test", monitor, debugger);
+        CsiracBootstrap.createEmulator("test", monitor, debugger);
         monitor.loadProgram("test", new String[] {"0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A"});
         monitor.loadData("test", new String[] {"0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0","0 0 0 0"});
         monitor.start("test");

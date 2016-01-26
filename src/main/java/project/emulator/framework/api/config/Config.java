@@ -5,95 +5,79 @@ import java.util.regex.Pattern;
 /**
  * Created by Dy.Zhao on 2016/1/23 0023.
  */
-public class Config implements IConfig
-{
+public class Config implements IConfig {
     @Override
-    public int defaultCellContent()
-    {
+    public int defaultCellContent() {
         return -1;
     }
 
     @Override
-    public int trimCellContent()
-    {
+    public int trimCellContent() {
         return 0;
     }
 
     @Override
-    public int opCodeMismatchReturnValue()
-    {
+    public int opCodeMismatchReturnValue() {
         return -64;
     }
 
     @Override
-    public int finishSignal()
-    {
+    public int finishSignal() {
         return -32;
     }
 
     @Override
-    public int mainDataSectionCount()
-    {
+    public int mainDataSectionCount() {
         return 4;
     }
 
     @Override
-    public int simplifiedDataSectionCount()
-    {
+    public int simplifiedDataSectionCount() {
         return 2;
     }
 
     @Override
-    public Pattern inputFilterPattern()
-    {
+    public Pattern inputFilterPattern() {
         return Pattern.compile("[\\s]*\\w[,|\\s]+\\w[,|\\s]+\\w[,|\\s]+\\w[,|\\s]*");
     }
 
     @Override
-    public Pattern simplifiedFilterPattern()
-    {
+    public Pattern simplifiedFilterPattern() {
         return Pattern.compile("[\\s]*\\w[\\s]+\\w[\\s]*");
     }
 
     @Override
-    public boolean alignLeft()
-    {
+    public boolean alignLeft() {
         return false;
     }
 
     @Override
-    public String[] commandType()
-    {
-        return new String[]{"S","D"};
+    public String[] commandType() {
+        return new String[]{"S", "D"};
     }
 
     @Override
-    public String[] decodePriority()
-    {
-        return new String[]{"S","D"};
+    public String[] decodePriority() {
+        return new String[]{"S", "D"};
     }
 
     @Override
-    public int unitCount()
-    {
+    public int unitCount() {
         return 32;
     }
 
     @Override
-    public int cellPerUnit()
-    {
+    public int cellPerUnit() {
         return 32;
     }
 
     @Override
-    public int defaultPcRegGrowth()
-    {
+    public int defaultPcRegGrowth() {
         return -1;
     }
 
     @Override
-    public int opCodeUpperbound()
-    {
+    public int opCodeUpperbound() {
         return 32;
     }
 }

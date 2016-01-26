@@ -6,12 +6,11 @@ import project.emulator.framework.cpu.controlunit.IControlUnit;
 /**
  * Created by Dy.Zhao on 2016/1/21 0021.
  */
-public interface IDebugger
-{
+public interface IDebugger {
     void onPcRegisterUpdate(int message, DebuggerMessageSender messageSender);
 
 
-    void onOpCodeUpdate(int message,DebuggerMessageSender messageSender);
+    void onOpCodeUpdate(int message, DebuggerMessageSender messageSender);
 
 
     void onRegisterUpdate(RegisterMessage message, DebuggerMessageSender messageSender);

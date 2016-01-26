@@ -2,7 +2,7 @@ package project.emulator.framework.api.debugger;
 
 import org.junit.Assert;
 import org.junit.Test;
-import project.csirac.core.Bootstrap;
+import project.csirac.core.CsiracBootstrap;
 import project.emulator.framework.api.monitor.Monitor;
 
 
@@ -169,7 +169,7 @@ public class DebuggerTest
     public void testAddNewSession() throws Exception
     {
         Debugger debugger = new Debugger();
-        Bootstrap.createEmulator("test", new Monitor(), debugger);
+        CsiracBootstrap.createEmulator("test", new Monitor(), debugger);
         Assert.assertTrue(debugger.sessionExists("test"));
     }
 
@@ -177,7 +177,7 @@ public class DebuggerTest
     public void testSessionExists() throws Exception
     {
         Debugger debugger = new Debugger();
-        Bootstrap.createEmulator("test", new Monitor(), debugger);
+        CsiracBootstrap.createEmulator("test", new Monitor(), debugger);
         Assert.assertTrue(debugger.sessionExists("test"));
     }
 
@@ -185,7 +185,7 @@ public class DebuggerTest
     public void testRemoveSession() throws Exception
     {
         Debugger debugger = new Debugger();
-        Bootstrap.createEmulator("test", new Monitor(), debugger);
+        CsiracBootstrap.createEmulator("test", new Monitor(), debugger);
         debugger.removeSession("test");
         Assert.assertFalse(debugger.sessionExists("test"));
     }
@@ -194,7 +194,7 @@ public class DebuggerTest
     public void testSetPcRegister() throws Exception
     {
         Debugger debugger = new Debugger();
-        Bootstrap.createEmulator("test", new Monitor(), debugger);
+        CsiracBootstrap.createEmulator("test", new Monitor(), debugger);
         debugger.setPcRegister("test", 100);
     }
 }

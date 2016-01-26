@@ -23,19 +23,16 @@ import java.util.List;
 /**
  * Created by Dy.Zhao on 2016/1/23 0023.
  */
-public class Bootstrap
-{
-    public static ISymbolTranslator symbolTranslator = new SymbolTable();
+public class Bootstrap {
+    public final static ISymbolTranslator symbolTranslator = new SymbolTable();
 
-    public static IConfig innerConfig = new Config();
+    public final static IConfig innerConfig = new Config();
 
-    public static void registerSymbol(String symbol, int code)
-    {
+    public static void registerSymbol(String symbol, int code) {
         symbolTranslator.registerSymbol(symbol, code);
     }
 
-    public static void createEmulator(String id, List<IDecodeUnit> IDecodeUnits, List<IProcessUnit> IProcessUnits, IRegister register, IDebugger debugger, IMonitor monitor)
-    {
+    public static void createEmulator(String id, List<IDecodeUnit> IDecodeUnits, List<IProcessUnit> IProcessUnits, IRegister register, IDebugger debugger, IMonitor monitor) {
         IDecoder decoder = Decoder.createInstance(IDecodeUnits);
 
         IPcRegister pcRegister = PcRegister.createInstance(id, debugger);
@@ -46,9 +43,9 @@ public class Bootstrap
 
         IMemory instructionMemory = Memory.createInstance(id, true, monitor, debugger);
 
-        IProcessor processor = new Processor(decoder, pcRegister, opCodeRegister, register, instructionMemory,dataMemory, IProcessUnits);
+        IProcessor processor = new Processor(decoder, pcRegister, opCodeRegister, register, instructionMemory, dataMemory, IProcessUnits);
 
-        IControlUnit controlUnit = ControlUnit.createInstance(id,processor,pcRegister,opCodeRegister,monitor,debugger);
+        IControlUnit controlUnit = ControlUnit.createInstance(id, processor, pcRegister, opCodeRegister, monitor, debugger);
 
         EmulatorInstance emulatorInstance = new EmulatorInstance(controlUnit, instructionMemory, dataMemory);
 

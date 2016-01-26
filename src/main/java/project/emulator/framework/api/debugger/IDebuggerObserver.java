@@ -1,14 +1,9 @@
 package project.emulator.framework.api.debugger;
 
-import project.emulator.framework.api.debugger.DebuggerMessageSender;
-import project.emulator.framework.api.debugger.MemoryMessage;
-import project.emulator.framework.api.debugger.RegisterMessage;
-
 /**
  * Created by Dy.Zhao on 2016/1/24 0024.
  */
-public interface IDebuggerObserver
-{
+public interface IDebuggerObserver {
     void onPcRegisterUpdate(int message, DebuggerMessageSender messageSender);
 
 

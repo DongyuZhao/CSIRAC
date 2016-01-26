@@ -2,7 +2,7 @@ package project.csirac.core.decoder;
 
 import org.junit.Assert;
 import org.junit.Test;
-import project.csirac.core.Bootstrap;
+import project.csirac.core.CsiracBootstrap;
 
 import static org.junit.Assert.*;
 
@@ -15,8 +15,8 @@ public class AddressDecoderTest
     @Test
     public void testDetermineAddress() throws Exception
     {
-        Bootstrap.registerCsiracSymbolTable();
-        Assert.assertEquals(null,AddressDecoder.determineAddress(Bootstrap.symbolTranslator.translateToCode("M"), 1, 1),33);
-        Assert.assertEquals(null,AddressDecoder.determineAddress(Bootstrap.symbolTranslator.translateToCode("A"), 255,255), Bootstrap.symbolTranslator.translateToCode("A"));
+        CsiracBootstrap.registerCsiracSymbolTable();
+        Assert.assertEquals(null,AddressDecoder.determineAddress(CsiracBootstrap.symbolTranslator.translateToCode("M"), 1, 1),33);
+        Assert.assertEquals(null,AddressDecoder.determineAddress(CsiracBootstrap.symbolTranslator.translateToCode("A"), 255,255), CsiracBootstrap.symbolTranslator.translateToCode("A"));
     }
 }

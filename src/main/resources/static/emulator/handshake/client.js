@@ -83,6 +83,9 @@ System.register(["angular2/core", "angular2/http", "../../services/socket.servic
                     config.subscribe("/emulator_response/handshake/{{client_id}}", function (response) {
                         _this.onResponse(response);
                     });
+                    config.subscribe("/emulator_response/handshake/error/{{client_id}}", function (response) {
+                        _this.onError(response);
+                    });
                     console.log(config.subscribeMap);
                     return config;
                 };

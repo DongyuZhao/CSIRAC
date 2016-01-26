@@ -15,8 +15,7 @@ import java.util.List;
 /**
  * Created by Dy.Zhao on 2016/1/23 0023.
  */
-public class Processor implements IProcessor
-{
+public class Processor implements IProcessor {
 
     private IDecoder _decoder;
 
@@ -32,8 +31,9 @@ public class Processor implements IProcessor
 
     private List<IProcessUnit> _instructionMulticastList = new ArrayList<>();
 
-    public Processor(IDecoder decoder, IPcRegister pcRegister, IOpCodeRegister opCodeRegister, IRegister register, IMemory instructionMemory, IMemory dataMemory, List<IProcessUnit> instructionMulticastList)
-    {
+    public Processor(IDecoder decoder, IPcRegister pcRegister, IOpCodeRegister opCodeRegister,
+                     IRegister register, IMemory instructionMemory, IMemory dataMemory,
+                     List<IProcessUnit> instructionMulticastList) {
         this._decoder = decoder;
         this._pcRegister = pcRegister;
         this._opCodeRegister = opCodeRegister;
@@ -42,105 +42,83 @@ public class Processor implements IProcessor
         this._dataMemory = dataMemory;
         this._instructionMulticastList = instructionMulticastList;
 
-        for (IProcessUnit IProcessUnit : this._instructionMulticastList)
-        {
+        for (IProcessUnit IProcessUnit : this._instructionMulticastList) {
             IProcessUnit.attachSocket(this);
         }
     }
 
     @Override
-    public void compute()
-    {
+    public void compute() {
         //int nextInstructionPointer;
         int instructionPointer = this._pcRegister.get();
         int[] instruction = this._instructionMemory.get(instructionPointer / this._instructionMemory.cellPerUnit(), instructionPointer % this._instructionMemory.cellPerUnit());
         //this._opCodeRegister.put(this._decoder.decode(instruction));
         Command[] decodedCommands = this.decode(instruction);
         boolean changeNextPointer = false;
-        for (Command command : decodedCommands)
-        {
-            for (IProcessUnit IProcessUnit : this._instructionMulticastList)
-            {
-                try
-                {
+        for (Command command : decodedCommands) {
+            for (IProcessUnit IProcessUnit : this._instructionMulticastList) {
+                try {
                     changeNextPointer = changeNextPointer || IProcessUnit.process(command);
-                }
-                catch (InstanceNotFoundException e)
-                {
+                } catch (InstanceNotFoundException e) {
                     e.printStackTrace();
                 }
             }
         }
-        if (!changeNextPointer)
-        {
+        if (!changeNextPointer) {
             this._pcRegister.put(instructionPointer + 1);
         }
         //return Bootstrap.innerConfig.finishSignal();
     }
 
     @Override
-    public Command[] decode(int[] instruction)
-    {
-        if (this._decoder != null)
-        {
+    public Command[] decode(int[] instruction) {
+        if (this._decoder != null) {
             return this._decoder.decode(instruction);
         }
         return null;
     }
 
     @Override
-    public void registerProcessorUnit(IProcessUnit IProcessUnit)
-    {
-        if (IProcessUnit != null && !this._instructionMulticastList.contains(IProcessUnit))
-        {
-            IProcessUnit.attachSocket(this);
-            this._instructionMulticastList.add(IProcessUnit);
+    public void registerProcessorUnit(IProcessUnit processUnit) {
+        if (processUnit != null && !this._instructionMulticastList.contains(processUnit)) {
+            processUnit.attachSocket(this);
+            this._instructionMulticastList.add(processUnit);
         }
     }
 
     @Override
-    public void registerDecoder(IDecoder decoder)
-    {
-        if (decoder != null)
-        {
+    public void registerDecoder(IDecoder decoder) {
+        if (decoder != null) {
             this._decoder = decoder;
         }
     }
 
 
-
-    public IDecoder decoder()
-    {
+    public IDecoder decoder() {
         return this._decoder;
     }
 
-    public IPcRegister pcRegister()
-    {
+    public IPcRegister pcRegister() {
         return this._pcRegister;
     }
 
-    public IOpCodeRegister opCodeRegister()
-    {
+    public IOpCodeRegister opCodeRegister() {
         return _opCodeRegister;
     }
 
-    public IRegister register()
-    {
+    public IRegister register() {
         return _register;
     }
 
-    public IMemory instructionMemory()
-    {
+    public IMemory instructionMemory() {
         return _instructionMemory;
     }
 
-    public IMemory dataMemory()
-    {
+    public IMemory dataMemory() {
         return _dataMemory;
     }
 
-    public List<IProcessUnit> instructionMulticastList()
-    {
+    public List<IProcessUnit> instructionMulticastList() {
         return _instructionMulticastList;
     }
 }

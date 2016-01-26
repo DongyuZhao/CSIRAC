@@ -11,8 +11,7 @@ import project.emulator.framework.cpu.register.IPcRegister;
 /**
  * Created by Dy.Zhao on 2016/1/21 0021.
  */
-public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
-{
+public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit {
     private IProcessor _processorSocket;
 
     private IPcRegister _pcRegister;
@@ -29,16 +28,15 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
 
     private boolean _stopSingnal = false;
 
-    public ControlUnit(String id, IProcessor processorSocket, IPcRegister pcRegister, IOpCodeRegister opCodeRegister)
-    {
+    public ControlUnit(String id, IProcessor processorSocket, IPcRegister pcRegister, IOpCodeRegister opCodeRegister) {
         super(id);
         this._processorSocket = processorSocket;
         this._pcRegister = pcRegister;
         this._opCodeRegister = opCodeRegister;
     }
 
-    public static IControlUnit createInstance(String id, IProcessor processor, IPcRegister pcRegister, IOpCodeRegister opCodeRegister, IMonitor monitor, IDebugger debugger)
-    {
+    public static IControlUnit createInstance(String id, IProcessor processor, IPcRegister pcRegister,
+                                              IOpCodeRegister opCodeRegister, IMonitor monitor, IDebugger debugger) {
         ControlUnit controlUnit = new ControlUnit(id, processor, pcRegister, opCodeRegister);
         controlUnit.attachMonitor(monitor);
         controlUnit.attachDebugger(debugger);
@@ -46,22 +44,17 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
     }
 
 
-    private void reset()
-    {
+    private void reset() {
         this._started = false;
         this._paused = false;
         this._pcRegister.put(0);
         this._opCodeRegister.put(0);
     }
 
-    public synchronized void run()
-    {
-        if (!this.isRunning())
-        {
-            try
-            {
-                while (this._locked)
-                {
+    public synchronized void run() {
+        if (!this.isRunning()) {
+            try {
+                while (this._locked) {
                     wait();
 
                 }
@@ -72,14 +65,11 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
                 this._locked = false;
                 notifyAll();
                 this.onStart();
-                while (true)
-                {
-                    if (this._stopSingnal)
-                    {
+                while (true) {
+                    if (this._stopSingnal) {
                         break;
                     }
-                    while (this._paused)
-                    {
+                    while (this._paused) {
                         wait();
                     }
                     System.out.println("Run");
@@ -88,56 +78,45 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
                     Thread.sleep((int) (1000 / this.getClock()));
                 }
 
-            }
-            catch (InterruptedException e)
-            {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
     @Override
-    public void start()
-    {
+    public void start() {
         System.out.println("Click Run");
-        Thread thread= new Thread(new ControlThread(this));
+        Thread thread = new Thread(new ControlThread(this));
         thread.start();
     }
 
-    void onStart()
-    {
+    void onStart() {
         this.onStart(this);
     }
 
     @Override
-    public void pause() throws InterruptedException
-    {
+    public void pause() throws InterruptedException {
         System.out.println("Press Pause");
-        if (this._started && !this._paused)
-        {
+        if (this._started && !this._paused) {
             this._paused = true;
             this.onPause(this);
         }
     }
 
     @Override
-    public void next() throws InterruptedException
-    {
+    public void next() throws InterruptedException {
         this.next(false);
     }
 
     @Override
-    public synchronized void next(boolean ignorePause) throws InterruptedException
-    {
-        if (this._started && (ignorePause || !this._paused))
-        {
+    public synchronized void next(boolean ignorePause) throws InterruptedException {
+        if (this._started && (ignorePause || !this._paused)) {
             System.out.println("Next");
             int instructionPointer = this._pcRegister.get();
-            if (instructionPointer < Bootstrap.innerConfig.unitCount() * Bootstrap.innerConfig.cellPerUnit() && instructionPointer >= 0)
-            {
+            if (instructionPointer < Bootstrap.innerConfig.unitCount() * Bootstrap.innerConfig.cellPerUnit() && instructionPointer >= 0) {
                 this._processorSocket.compute();
-                if (this._pcRegister.get() < 0)
-                {
+                if (this._pcRegister.get() < 0) {
                     this.stop();
                 }
             }
@@ -145,10 +124,8 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
     }
 
     @Override
-    public synchronized void go() throws InterruptedException
-    {
-        if (this._started && this._paused)
-        {
+    public synchronized void go() throws InterruptedException {
+        if (this._started && this._paused) {
             System.out.println("Continue");
             this._paused = false;
             notifyAll();
@@ -156,25 +133,19 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
         }
     }
 
-    public void forceStop()
-    {
-        try
-        {
+    public void forceStop() {
+        try {
             this.pause();
             this.stop();
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         //this.stop();
     }
 
     @Override
-    public synchronized void stop() throws InterruptedException
-    {
-        if (this._started)
-        {
+    public synchronized void stop() throws InterruptedException {
+        if (this._started) {
             System.out.println("Stop");
             this._stopSingnal = true;
             this._pcRegister.put(-1);
@@ -185,65 +156,54 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
     }
 
     @Override
-    public float getClock()
-    {
+    public float getClock() {
         return this._frequency;
     }
 
     @Override
-    public void setClock(float frequency)
-    {
+    public void setClock(float frequency) {
         this._frequency = frequency;
         this._debugger.onFrequencyChange(this._frequency, this);
     }
 
     @Override
-    public int getPcRegister()
-    {
+    public synchronized int getPcRegister() {
         return this._pcRegister.get();
     }
 
     @Override
-    public synchronized void setPcRegister(int address) throws InterruptedException
-    {
-        if (this._paused)
-        {
+    public synchronized void setPcRegister(int address) throws InterruptedException {
+        if (this._paused) {
             this._pcRegister.put(address);
             notifyAll();
         }
     }
 
     @Override
-    public int getOpCode()
-    {
+    public synchronized int getOpCode() {
         return this._opCodeRegister.get();
     }
 
     @Override
-    public synchronized void setOpCode(int code) throws InterruptedException
-    {
-        if (this._paused)
-        {
+    public synchronized void setOpCode(int code) throws InterruptedException {
+        if (this._paused) {
             this._opCodeRegister.put(code);
             notifyAll();
         }
     }
 
     @Override
-    public boolean isRunning()
-    {
+    public boolean isRunning() {
         return this._started;
     }
 
     @Override
-    public boolean isPause()
-    {
+    public boolean isPause() {
         return this._paused;
     }
 
     @Override
-    public boolean isRequireStop()
-    {
+    public boolean isRequireStop() {
         return this._stopSingnal;
     }
 }

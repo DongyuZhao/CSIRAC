@@ -7,53 +7,44 @@ import java.util.Date;
  */
 
 
-public class Document
-{
+public class Document {
     private String title;
 
     private String body;
 
     private Date date;
 
-    public Document()
-    {
+    public Document() {
 
     }
 
-    public Document(String title, String body, Date date)
-    {
+    public Document(String title, String body, Date date) {
         this.title = title;
         this.body = body;
         this.date = date;
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title)
-    {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getBody()
-    {
+    public String getBody() {
         return body;
     }
 
-    public void setBody(String body)
-    {
+    public void setBody(String body) {
         this.body = body;
     }
 
-    public Date getDate()
-    {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Date date)
-    {
+    public void setDate(Date date) {
         this.date = date;
     }
 }

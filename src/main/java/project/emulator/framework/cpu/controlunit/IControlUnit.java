@@ -3,8 +3,7 @@ package project.emulator.framework.cpu.controlunit;
 /**
  * Created by Dy.Zhao on 2016/1/21 0021.
  */
-public interface IControlUnit
-{
+public interface IControlUnit {
     void start();
 
     void pause() throws InterruptedException;

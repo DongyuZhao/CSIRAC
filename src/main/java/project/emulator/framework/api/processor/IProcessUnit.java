@@ -17,5 +17,5 @@ public interface IProcessUnit
 
     void  attachSocket(IProcessor _processorSocket);
 
-    public boolean process(Command command) throws InstanceNotFoundException;
+    boolean process(Command command) throws InstanceNotFoundException;
 }

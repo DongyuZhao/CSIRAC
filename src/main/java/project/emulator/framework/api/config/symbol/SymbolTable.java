@@ -10,48 +10,37 @@ import java.util.regex.Pattern;
 /**
  * Created by Dy.Zhao on 2016/1/22 0022.
  */
-public class SymbolTable implements ISymbolTranslator
-{
+public class SymbolTable implements ISymbolTranslator {
     private Map<String, Integer> _symbolTable = new HashMap<>();
 
     @Override
-    public void registerSymbol(String symbol, int code)
-    {
+    public void registerSymbol(String symbol, int code) {
         this._symbolTable.put(symbol, code);
     }
 
     @Override
-    public int translateToCode(String symbol)
-    {
-        if (this._symbolTable.keySet().contains(symbol))
-        {
+    public int translateToCode(String symbol) {
+        if (this._symbolTable.keySet().contains(symbol)) {
             return this._symbolTable.get(symbol);
         }
         return Bootstrap.innerConfig.defaultCellContent();
     }
 
     @Override
-    public String translateToSymbol(int code)
-    {
-        if (this._symbolTable.values().contains(code))
-        {
+    public String translateToSymbol(int code) {
+        if (this._symbolTable.values().contains(code)) {
             String result = "";
-            for (Map.Entry<String, Integer> entry : this._symbolTable.entrySet())
-            {
+            for (Map.Entry<String, Integer> entry : this._symbolTable.entrySet()) {
                 int value = entry.getValue();
-                if (value == code)
-                {
-                    result = result + entry.getKey() + "/";
+                if (value == code) {
+                    result = result.concat(entry.getKey()).concat("/");
                 }
             }
             char[] rc = result.toCharArray();
-            if (rc.length > 0)
-            {
-                if (rc[rc.length - 1] == '/')
-                {
+            if (rc.length > 0) {
+                if (rc[rc.length - 1] == '/') {
                     String newResult = "";
-                    for (int i = 0; i < rc.length - 1; i++)
-                    {
+                    for (int i = 0; i < rc.length - 1; i++) {
                         newResult += rc[i];
                     }
                     return newResult;
@@ -63,20 +52,16 @@ public class SymbolTable implements ISymbolTranslator
     }
 
     @Override
-    public int[] translateInput(String input)
-    {
+    public int[] translateInput(String input) {
         Pattern p = Bootstrap.innerConfig.inputFilterPattern();
         Matcher m = p.matcher(input);
-        if (m.matches())
-        {
+        if (m.matches()) {
             String[] split = input.split("[\\s]*[,]*\\s|[\\s]*,[\\s]*");
             int[] result = new int[Bootstrap.innerConfig.mainDataSectionCount()];
             int j = 0;
-            for (int i = 0; i < split.length; i++)
-            {
-                if (!split[i].equals(""))
-                {
-                    result[j] = this.translateToCode(split[i]);
+            for (String aSplit : split) {
+                if (!aSplit.equals("")) {
+                    result[j] = this.translateToCode(aSplit);
                     j++;
                 }
             }
@@ -86,40 +71,29 @@ public class SymbolTable implements ISymbolTranslator
     }
 
     @Override
-    public String translateOutput(int[] data)
-    {
+    public String translateOutput(int[] data) {
         String result = "";
-        if (data.length == Bootstrap.innerConfig.mainDataSectionCount())
-        {
-            for (int i = 0; i < data.length; i++)
-            {
-                result += data[i];
+        if (data.length == Bootstrap.innerConfig.mainDataSectionCount()) {
+            for (int aData : data) {
+                result.concat("" + aData);
             }
         }
         return result;
     }
 
     @Override
-    public int[] trimData(int[] data)
-    {
-        if (data.length != Bootstrap.innerConfig.mainDataSectionCount())
-        {
+    public int[] trimData(int[] data) {
+        if (data.length != Bootstrap.innerConfig.mainDataSectionCount()) {
             int[] result = new int[Bootstrap.innerConfig.mainDataSectionCount()];
-            for (int i = 0; i < data.length; i++)
-            {
-                if (Bootstrap.innerConfig.alignLeft())
-                {
-                    if (i < result.length)
-                    {
+            for (int i = 0; i < data.length; i++) {
+                if (Bootstrap.innerConfig.alignLeft()) {
+                    if (i < result.length) {
                         result[i] = data[i];
                     }
-                }
-                else
-                {
+                } else {
                     int index = Bootstrap.innerConfig.mainDataSectionCount() - data.length + i;
-                    if (index >= 0)
-                    {
-                        result[index]=data[i];
+                    if (index >= 0) {
+                        result[index] = data[i];
                     }
                 }
             }

@@ -6,9 +6,14 @@ package project.emulator.framework.api.config.symbol;
 public interface ISymbolTranslator
 {
     void registerSymbol(String symbol, int code);
+
     int translateToCode(String symbol);
+
     String translateToSymbol(int code);
+
     int[] translateInput(String input);
+
     String translateOutput(int[] date);
+
     int[] trimData(int[] data);
 }

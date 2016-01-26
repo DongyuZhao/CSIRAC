@@ -13,13 +13,12 @@ import java.util.List;
 /**
  * Created by Dy.Zhao on 2016/1/21 0021.
  */
-public interface IProcessor
-{
+public interface IProcessor {
     void compute();
 
     Command[] decode(int[] instruction);
 
-    void registerProcessorUnit(IProcessUnit IProcessUnit);
+    void registerProcessorUnit(IProcessUnit processUnit);
 
     void registerDecoder(IDecoder decoder);
 

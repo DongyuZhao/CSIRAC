@@ -16,17 +16,14 @@ import java.util.List;
 /**
  * Created by Dy.Zhao on 2016/1/23 0023.
  */
-public class Bootstrap extends project.emulator.framework.Bootstrap
-{
-//    @Override
+public class CsiracBootstrap extends project.emulator.framework.Bootstrap {
+    //    @Override
 //    public static EmulatorInstance createEmulator(String _id)
 //    {
 //
 //    }
-    public static void registerCsiracSymbolTable()
-    {
-        for (int i = 0; i < 32; i++)
-        {
+    public static void registerCsiracSymbolTable() {
+        for (int i = 0; i < 32; i++) {
             registerSymbol(i + "", i);
         }
 
@@ -38,23 +35,20 @@ public class Bootstrap extends project.emulator.framework.Bootstrap
         registerSymbol("Temp", -1024);
     }
 
-    private static List<IDecodeUnit> registerDecoders()
-    {
+    private static List<IDecodeUnit> registerDecoders() {
         List<IDecodeUnit> IDecodeUnits = new ArrayList<>();
         IDecodeUnits.add(new SCommandDecoder());
         IDecodeUnits.add(new DCommandDecoder());
         return IDecodeUnits;
     }
 
-    private static List<IProcessUnit> registerProcessors()
-    {
+    private static List<IProcessUnit> registerProcessors() {
         List<IProcessUnit> IProcessUnits = new ArrayList<>();
         IProcessUnits.add(new MoveProcessor());
         return IProcessUnits;
     }
 
-    public static void createEmulator(String id, IMonitor monitor, IDebugger debugger)
-    {
+    public static void createEmulator(String id, IMonitor monitor, IDebugger debugger) {
         IRegister register = Register.create(id, debugger);
 
         List<IProcessUnit> IProcessUnits = registerProcessors();

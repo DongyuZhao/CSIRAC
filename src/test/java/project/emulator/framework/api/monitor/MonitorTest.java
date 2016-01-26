@@ -2,7 +2,7 @@ package project.emulator.framework.api.monitor;
 
 import org.junit.Assert;
 import org.junit.Test;
-import project.csirac.core.Bootstrap;
+import project.csirac.core.CsiracBootstrap;
 import project.emulator.framework.api.debugger.Debugger;
 
 import static org.junit.Assert.*;
@@ -142,27 +142,27 @@ public class MonitorTest
     @Test
     public void testLoadData() throws Exception
     {
-        Bootstrap.registerCsiracSymbolTable();
+        CsiracBootstrap.registerCsiracSymbolTable();
         Monitor monitor = new Monitor();
-        Bootstrap.createEmulator("test", monitor, new Debugger());
+        CsiracBootstrap.createEmulator("test", monitor, new Debugger());
         monitor.loadData("test", new String[] {"1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1"});
     }
 
     @Test
     public void testLoadProgram() throws Exception
     {
-        Bootstrap.registerCsiracSymbolTable();
+        CsiracBootstrap.registerCsiracSymbolTable();
         Monitor monitor = new Monitor();
-        Bootstrap.createEmulator("test", monitor, new Debugger());
+        CsiracBootstrap.createEmulator("test", monitor, new Debugger());
         monitor.loadData("test", new String[] {"0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A"});
     }
 
     @Test
     public void testStart() throws Exception
     {
-        Bootstrap.registerCsiracSymbolTable();
+        CsiracBootstrap.registerCsiracSymbolTable();
         Monitor monitor = new Monitor();
-        Bootstrap.createEmulator("test", monitor, new Debugger());
+        CsiracBootstrap.createEmulator("test", monitor, new Debugger());
         monitor.loadProgram("test", new String[] {"0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A"});
         monitor.loadData("test", new String[] {"1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1"});
         monitor.start("test");
@@ -171,9 +171,9 @@ public class MonitorTest
     @Test
     public void testPause() throws Exception
     {
-        Bootstrap.registerCsiracSymbolTable();
+        CsiracBootstrap.registerCsiracSymbolTable();
         Monitor monitor = new Monitor();
-        Bootstrap.createEmulator("test", monitor, new Debugger());
+        CsiracBootstrap.createEmulator("test", monitor, new Debugger());
         monitor.loadProgram("test", new String[] {"0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A"});
         monitor.loadData("test", new String[] {"1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1"});
         monitor.start("test");
@@ -183,9 +183,9 @@ public class MonitorTest
     @Test
     public void testNext() throws Exception
     {
-        Bootstrap.registerCsiracSymbolTable();
+        CsiracBootstrap.registerCsiracSymbolTable();
         Monitor monitor = new Monitor();
-        Bootstrap.createEmulator("test", monitor, new Debugger());
+        CsiracBootstrap.createEmulator("test", monitor, new Debugger());
         monitor.loadProgram("test", new String[] {"0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A"});
         monitor.loadData("test", new String[] {"1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1"});
         monitor.start("test");
@@ -196,9 +196,9 @@ public class MonitorTest
     @Test
     public void testGo() throws Exception
     {
-        Bootstrap.registerCsiracSymbolTable();
+        CsiracBootstrap.registerCsiracSymbolTable();
         Monitor monitor = new Monitor();
-        Bootstrap.createEmulator("test", monitor, new Debugger());
+        CsiracBootstrap.createEmulator("test", monitor, new Debugger());
         monitor.loadProgram("test", new String[] {"0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A"});
         monitor.loadData("test", new String[] {"1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1"});
         monitor.start("test");
@@ -209,9 +209,9 @@ public class MonitorTest
     @Test
     public void testStop() throws Exception
     {
-        Bootstrap.registerCsiracSymbolTable();
+        CsiracBootstrap.registerCsiracSymbolTable();
         Monitor monitor = new Monitor();
-        Bootstrap.createEmulator("test", monitor, new Debugger());
+        CsiracBootstrap.createEmulator("test", monitor, new Debugger());
         monitor.loadProgram("test", new String[] {"0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A","0 0 M A"});
         monitor.loadData("test", new String[] {"1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1","1 1 1 1"});
         monitor.start("test");
@@ -240,7 +240,7 @@ public class MonitorTest
     public void testAddNewSession() throws Exception
     {
         Monitor monitor = new Monitor();
-        Bootstrap.createEmulator("test", monitor, new Debugger());
+        CsiracBootstrap.createEmulator("test", monitor, new Debugger());
         Assert.assertTrue(monitor.sessionExists("test"));
     }
 
@@ -248,7 +248,7 @@ public class MonitorTest
     public void testSessionExists() throws Exception
     {
         Monitor monitor = new Monitor();
-        Bootstrap.createEmulator("test", monitor, new Debugger());
+        CsiracBootstrap.createEmulator("test", monitor, new Debugger());
         Assert.assertTrue(monitor.sessionExists("test"));
     }
 
@@ -256,7 +256,7 @@ public class MonitorTest
     public void testRemoveSession() throws Exception
     {
         Monitor monitor = new Monitor();
-        Bootstrap.createEmulator("test", monitor, new Debugger());
+        CsiracBootstrap.createEmulator("test", monitor, new Debugger());
         monitor.removeSession("test");
         Assert.assertFalse(monitor.sessionExists("test"));
     }

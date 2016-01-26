@@ -76,6 +76,9 @@ export class HandshakeClient implements OnDestroy, SessionEnabledClient {
         config.subscribe("/emulator_response/handshake/{{client_id}}", (response:Message) => {
             this.onResponse(response)
         });
+        config.subscribe("/emulator_response/handshake/error/{{client_id}}", (response:Message) => {
+            this.onError(response)
+        });
         console.log(config.subscribeMap);
         return config;
     }
