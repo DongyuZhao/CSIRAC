@@ -34,7 +34,7 @@ public class Bootstrap
         symbolTranslator.registerSymbol(symbol, code);
     }
 
-    public static void createEmulatorInstance(String id, List<IDecodeUnit> IDecodeUnits, List<IProcessUnit> IProcessUnits, IRegister register, IDebugger debugger, IMonitor monitor)
+    public static void createEmulator(String id, List<IDecodeUnit> IDecodeUnits, List<IProcessUnit> IProcessUnits, IRegister register, IDebugger debugger, IMonitor monitor)
     {
         IDecoder decoder = Decoder.createInstance(IDecodeUnits);
 

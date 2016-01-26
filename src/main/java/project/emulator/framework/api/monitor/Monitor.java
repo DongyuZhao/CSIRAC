@@ -205,4 +205,16 @@ public class Monitor implements IMonitor
     {
         return this.sessionExists(sessionId) && this._emulatorInstances.get(sessionId).isReady();
     }
+
+    @Override
+    public boolean isRunning(String sessionId)
+    {
+        return this.sessionExists(sessionId) && this._emulatorInstances.get(sessionId).isRunning();
+    }
+
+    @Override
+    public boolean isPause(String sessionId)
+    {
+        return this.sessionExists(sessionId) && this._emulatorInstances.get(sessionId).isPause();
+    }
 }

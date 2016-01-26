@@ -22,9 +22,9 @@ export class DebuggerClient implements OnDestroy {
     public opCode = 0;
     public clock = 1;
 
-    public DataUpdateHistory = [];
-    public ProgramUpdateHistory = [];
-    public RegisterUpdateHistory = [];
+    public dataUpdateHistory = [];
+    public programUpdateHistory = [];
+    public registerUpdateHistory = [];
 
     public statusList:string[] = [];
 
@@ -51,17 +51,27 @@ export class DebuggerClient implements OnDestroy {
     };
 
     public onDataMemoryResponse(response:Message) {
-        //var result = JSON.parse(response.body);
-
-        this.DataUpdateHistory.push(JSON.parse(response.body));
+        if (this.dataUpdateHistory.length > 200)
+        {
+            this.dataUpdateHistory = [];
+        }
+        this.dataUpdateHistory.push(JSON.parse(response.body));
     };
 
     public onProgramMemoryResponse(response:Message) {
-        this.ProgramUpdateHistory.push(JSON.parse(response.body));
+        if (this.programUpdateHistory.length > 100)
+        {
+            this.programUpdateHistory = [];
+        }
+        this.programUpdateHistory.push(JSON.parse(response.body));
     };
 
     public onRegisterResponse(response:Message) {
-        this.RegisterUpdateHistory.push(JSON.parse(response.body));
+        if (this.registerUpdateHistory.length > 1000)
+        {
+            this.registerUpdateHistory = [];
+        }
+        this.registerUpdateHistory.push(JSON.parse(response.body));
     };
 
     public onPcRegResponse(response:Message) {

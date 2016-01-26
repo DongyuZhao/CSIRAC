@@ -41,8 +41,8 @@
          <div id = "M_status">
              <table class="table table-inverse">
                  <tbody>
-                 <tr *ngFor="#status_entry of statusList.reverse()">
-                     <!--<th scope="row">{{i}}</th>-->
+                 <tr *ngFor="#status_entry of statusList.reverse(); #i=index">
+                     <th scope="row">{{i}}</th>
                      <td>{{status_entry}}</td>
                  </tr>
                  </tbody>
@@ -53,23 +53,23 @@
          </div>
     </div>
 </div>
-<div class ="col-md-12">
-    <h3>Monitor Errors</h3>
-    <div data-spy="scroll" data-target="M_errors" data-offset ="50" class = "scroll-mid-high-list">
-        <div id = "M_errors">
-            <table class="table table-inverse">
-                <tbody>
-                <tr *ngFor="#error_entry of errorList.reverse()">
-                    <!--<th scope="row">{{i}}</th>-->
-                    <td>{{error_entry}}</td>
-                </tr>
-                </tbody>
-            </table>
-            <!--<ol>-->
-                <!--<li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>-->
-            <!--</ol>-->
-        </div>
-    </div>
-</div>
+<!--<div class ="col-md-12">-->
+    <!--<h3>Monitor Errors</h3>-->
+    <!--<div data-spy="scroll" data-target="M_errors" data-offset ="50" class = "scroll-list">-->
+        <!--<div id = "M_errors">-->
+            <!--<table class="table table-inverse">-->
+                <!--<tbody>-->
+                <!--<tr *ngFor="#error_entry of errorList.reverse()">-->
+                    <!--&lt;!&ndash;<th scope="row">{{i}}</th>&ndash;&gt;-->
+                    <!--<td>{{error_entry}}</td>-->
+                <!--</tr>-->
+                <!--</tbody>-->
+            <!--</table>-->
+            <!--&lt;!&ndash;<ol>&ndash;&gt;-->
+                <!--&lt;!&ndash;<li *ngFor="#error_entry of errorList.reverse()">{{error_entry}}</li>&ndash;&gt;-->
+            <!--&lt;!&ndash;</ol>&ndash;&gt;-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
 
 </div>

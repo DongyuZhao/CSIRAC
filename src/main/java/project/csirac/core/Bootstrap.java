@@ -38,18 +38,30 @@ public class Bootstrap extends project.emulator.framework.Bootstrap
         registerSymbol("Temp", -1024);
     }
 
+    private static List<IDecodeUnit> registerDecoders()
+    {
+        List<IDecodeUnit> IDecodeUnits = new ArrayList<>();
+        IDecodeUnits.add(new SCommandDecoder());
+        IDecodeUnits.add(new DCommandDecoder());
+        return IDecodeUnits;
+    }
+
+    private static List<IProcessUnit> registerProcessors()
+    {
+        List<IProcessUnit> IProcessUnits = new ArrayList<>();
+        IProcessUnits.add(new MoveProcessor());
+        return IProcessUnits;
+    }
+
     public static void createEmulator(String id, IMonitor monitor, IDebugger debugger)
     {
         IRegister register = Register.create(id, debugger);
 
-        List<IProcessUnit> IProcessUnits = new ArrayList<>();
-        IProcessUnits.add(new MoveProcessor());
+        List<IProcessUnit> IProcessUnits = registerProcessors();
 
-        List<IDecodeUnit> IDecodeUnits = new ArrayList<>();
-        IDecodeUnits.add(new SCommandDecoder());
-        IDecodeUnits.add(new DCommandDecoder());
+        List<IDecodeUnit> IDecodeUnits = registerDecoders();
 
-        createEmulatorInstance(id, IDecodeUnits, IProcessUnits, register, debugger, monitor);
-        //return createEmulatorInstance(id, IDecodeUnits, IProcessUnits, register, debugger, monitor);
+        createEmulator(id, IDecodeUnits, IProcessUnits, register, debugger, monitor);
+        //return createEmulator(id, IDecodeUnits, IProcessUnits, register, debugger, monitor);
     }
 }
