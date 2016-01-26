@@ -31,9 +31,9 @@ System.register(["angular2/core", "angular2/http", "../../services/socket.servic
                     this.pcRegister = 0;
                     this.opCode = 0;
                     this.clock = 1;
-                    this.DataUpdateHistory = [];
-                    this.ProgramUpdateHistory = [];
-                    this.RegisterUpdateHistory = [];
+                    this.dataUpdateHistory = [];
+                    this.programUpdateHistory = [];
+                    this.registerUpdateHistory = [];
                     this.statusList = [];
                     this.errorList = [];
                     this._sessionId = "";
@@ -60,16 +60,24 @@ System.register(["angular2/core", "angular2/http", "../../services/socket.servic
                 };
                 ;
                 DebuggerClient.prototype.onDataMemoryResponse = function (response) {
-                    //var result = JSON.parse(response.body);
-                    this.DataUpdateHistory.push(JSON.parse(response.body));
+                    if (this.dataUpdateHistory.length > 200) {
+                        this.dataUpdateHistory = [];
+                    }
+                    this.dataUpdateHistory.push(JSON.parse(response.body));
                 };
                 ;
                 DebuggerClient.prototype.onProgramMemoryResponse = function (response) {
-                    this.ProgramUpdateHistory.push(JSON.parse(response.body));
+                    if (this.programUpdateHistory.length > 100) {
+                        this.programUpdateHistory = [];
+                    }
+                    this.programUpdateHistory.push(JSON.parse(response.body));
                 };
                 ;
                 DebuggerClient.prototype.onRegisterResponse = function (response) {
-                    this.RegisterUpdateHistory.push(JSON.parse(response.body));
+                    if (this.registerUpdateHistory.length > 1000) {
+                        this.registerUpdateHistory = [];
+                    }
+                    this.registerUpdateHistory.push(JSON.parse(response.body));
                 };
                 ;
                 DebuggerClient.prototype.onPcRegResponse = function (response) {
