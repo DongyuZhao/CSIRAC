@@ -38,12 +38,12 @@ public class Config implements IConfig {
 
     @Override
     public Pattern inputFilterPattern() {
-        return Pattern.compile("[\\s]*\\w[,|\\s]+\\w[,|\\s]+\\w[,|\\s]+\\w[,|\\s]*");
+        return Pattern.compile("[\\s]*[\\w]+[,|\\s]+[\\w]+[,|\\s]+[\\w]+[,|\\s]+[\\w]+[,|\\s]*");
     }
 
     @Override
     public Pattern simplifiedFilterPattern() {
-        return Pattern.compile("[\\s]*\\w[\\s]+\\w[\\s]*");
+        return Pattern.compile("[\\s]*[\\w]+[\\s]+[\\w]+[\\s]*");
     }
 
     @Override
@@ -78,6 +78,11 @@ public class Config implements IConfig {
 
     @Override
     public int opCodeUpperbound() {
+        return 32;
+    }
+
+    @Override
+    public int maximumPerSection() {
         return 32;
     }
 }

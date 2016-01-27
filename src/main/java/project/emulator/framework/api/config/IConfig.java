@@ -35,4 +35,6 @@ public interface IConfig {
     public int defaultPcRegGrowth();
 
     public int opCodeUpperbound();
+
+    int maximumPerSection();
 }
