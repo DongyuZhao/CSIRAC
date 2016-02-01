@@ -7,13 +7,13 @@ import project.emulator.framework.Bootstrap;
  */
 public class DataTranslator {
     public static int translateToNumber(int[] input) {
-        if (input != null && input.length == Bootstrap.innerConfig.mainDataSectionCount()) {
+        if (input != null && input.length == Bootstrap.getInnerConfig().normalDataSectionCount()) {
             int result = 0;
             for (int i = 0; i < input.length; i++) {
                 if (input[i] < 0) {
-                    return Bootstrap.innerConfig.finishSignal();
+                    return Bootstrap.getInnerConfig().finishSignal();
                 }
-                result = result * Bootstrap.innerConfig.maximumPerSection() + input[i];
+                result = result * Bootstrap.getInnerConfig().maximumPerSection() + input[i];
             }
             return result;
         }
@@ -21,7 +21,7 @@ public class DataTranslator {
     }
 
     public static int[] translateToData(int input) {
-        int[] result = new int[Bootstrap.innerConfig.mainDataSectionCount()];
+        int[] result = new int[Bootstrap.getInnerConfig().normalDataSectionCount()];
         if (input >= 0) {
             for (int i = 0; i < result.length; i++) {
 
@@ -32,7 +32,7 @@ public class DataTranslator {
 
     public boolean verifyNumber(int[] input) {
         for (int anInput : input) {
-            if (anInput >= Bootstrap.innerConfig.maximumPerSection()) {
+            if (anInput >= Bootstrap.getInnerConfig().maximumPerSection()) {
                 return false;
             }
         }

@@ -1,4 +1,6 @@
-package project.emulator.framework.api.config;
+package project.csirac.core.config;
+
+import project.emulator.framework.api.config.IConfig;
 
 import java.util.regex.Pattern;
 
@@ -27,7 +29,7 @@ public class Config implements IConfig {
     }
 
     @Override
-    public int mainDataSectionCount() {
+    public int normalDataSectionCount() {
         return 4;
     }
 
@@ -73,7 +75,7 @@ public class Config implements IConfig {
 
     @Override
     public int defaultPcRegGrowth() {
-        return -1;
+        return 1;
     }
 
     @Override

@@ -22,6 +22,12 @@ public class EmulatorMonitorSocketController implements IMonitorObserver {
 
     private IMonitor _monitor;
 
+    /**
+     * send object in JSON format to the destination url
+     *
+     * @param ret         the object
+     * @param destination the destination url
+     */
     private void setResults(Object result, String destination) {
         _template.convertAndSend("/emulator_response/monitor/" + destination, result);
     }
@@ -34,6 +40,12 @@ public class EmulatorMonitorSocketController implements IMonitorObserver {
         }
     }
 
+
+    /**
+     * load the submitted program into the emulator
+     *
+     * @param model the program view model
+     */
     @MessageMapping("/monitor/input/program")
     public void uploadProgram(ProgramViewModel model) {
         if (model != null) {
@@ -44,6 +56,11 @@ public class EmulatorMonitorSocketController implements IMonitorObserver {
         }
     }
 
+    /**
+     * load the submitted data into the emulator
+     *
+     * @param model the data view model
+     */
     @MessageMapping("/monitor/input/data")
     public void uploadData(DataViewModel model) {
         if (model != null) {
@@ -54,6 +71,11 @@ public class EmulatorMonitorSocketController implements IMonitorObserver {
         }
     }
 
+    /**
+     * perform the action specified by the socket signal
+     *
+     * @param model the control view model
+     */
     @MessageMapping("/monitor/control")
     public void control(ControlViewModel model) {
         String sessionId = model.getSessionId();
@@ -154,6 +176,11 @@ public class EmulatorMonitorSocketController implements IMonitorObserver {
         }
     }
 
+    /**
+     * send ready signal to the client
+     *
+     * @param sessionId the id of the receiver session
+     */
     public void pushReady(String sessionId) {
         if (CsiracApplication.sessionExists(sessionId)) {
             this.pushStatus(sessionId, "Ready");
@@ -162,6 +189,12 @@ public class EmulatorMonitorSocketController implements IMonitorObserver {
         }
     }
 
+    /**
+     * send sttatus signal to the client
+     *
+     * @param sessionId the id of the receiver session
+     * @param status    the status
+     */
     public void pushStatus(String sessionId, String status) {
         if (CsiracApplication.sessionExists(sessionId)) {
             setResults(status, "control/status/" + sessionId);
@@ -170,6 +203,12 @@ public class EmulatorMonitorSocketController implements IMonitorObserver {
         }
     }
 
+    /**
+     * send error signal to the client
+     *
+     * @param sessionId the id of the receiver session
+     * @param error     the error message
+     */
     public void pushError(String sessionId, String error) {
         if (CsiracApplication.sessionExists(sessionId)) {
             setResults(error, "error/" + sessionId);

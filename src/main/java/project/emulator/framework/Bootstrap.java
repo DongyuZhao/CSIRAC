@@ -1,6 +1,5 @@
 package project.emulator.framework;
 
-import project.emulator.framework.api.config.Config;
 import project.emulator.framework.api.config.IConfig;
 import project.emulator.framework.api.config.symbol.ISymbolTranslator;
 import project.emulator.framework.api.config.symbol.SymbolTable;
@@ -26,15 +25,46 @@ import java.util.List;
 public class Bootstrap {
     public final static ISymbolTranslator symbolTranslator = new SymbolTable();
 
-    public final static IConfig innerConfig = new Config();
+    private static IConfig _innerConfig;
 
+    /**
+     * get the configuration the emulator is currently using
+     *
+     * @return the configuration
+     */
+    public static IConfig getInnerConfig() {
+        return _innerConfig;
+    }
+
+    /**
+     * set the inner configuration of the whole emulator
+     *
+     * @param config the configuration
+     */
+    public static void setInnerConfig(IConfig config) {
+        Bootstrap._innerConfig = config;
+    }
+
+    /**
+     * register a new map of symbol and code
+     *
+     * @param symbol the symbol
+     * @param code the code
+     */
     public static void registerSymbol(String symbol, int code) {
         symbolTranslator.registerSymbol(symbol, code);
     }
-/*
- * create the emulator.
- */
 
+    /**
+     * Create a new emulator instance with specified id, decode units, process units, register, debugger and monitor
+     *
+     * @param id the id
+     * @param decodeUnits the decode units
+     * @param processUnits the processor units
+     * @param register the register
+     * @param debugger the debugger
+     * @param monitor the monitor
+     */
     public static void createEmulator(String id, List<IDecodeUnit> decodeUnits, List<IProcessUnit> processUnits, IRegister register, IDebugger debugger, IMonitor monitor) {
         IDecoder decoder = Decoder.createInstance(decodeUnits);
 
@@ -55,8 +85,6 @@ public class Bootstrap {
         monitor.addNewSession(id, emulatorInstance);
 
         debugger.addNewSession(id, emulatorInstance);
-
-        //return emulatorInstance;
     }
 
 

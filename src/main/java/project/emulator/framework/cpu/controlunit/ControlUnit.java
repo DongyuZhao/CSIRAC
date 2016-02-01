@@ -120,18 +120,18 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
         if (this._started && (ignorePause || !this._paused)) {
             System.out.println("Next");
             int instructionPointer = this._pcRegister.get();
-            if (instructionPointer < Bootstrap.innerConfig.unitCount() * Bootstrap.innerConfig.cellPerUnit() && instructionPointer >= 0) {
+            if (instructionPointer < Bootstrap.getInnerConfig().unitCount() * Bootstrap.getInnerConfig().cellPerUnit() && instructionPointer >= 0) {
                 this._processorSocket.compute();
-                if (this._pcRegister.get() < 0) {
+                if (this._pcRegister.get() == Bootstrap.getInnerConfig().finishSignal()) {
                     this.stop();
                 }
             }
         }
     }
-    /*
-     * stop the executing.
-     */
 
+    /**
+     * Continue executing
+     */
     @Override
     public synchronized void go() throws InterruptedException {
         if (this._started && this._paused) {
@@ -149,7 +149,6 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //this.stop();
     }
 
     @Override

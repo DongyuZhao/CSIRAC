@@ -30,13 +30,13 @@ public class Decoder implements IDecoder {
      */
 
     @Override
-    public Command[] decode(int[] data) {
-        Command[] result = new Command[Bootstrap.innerConfig.commandType().length];
-        String[] decodePriority = Bootstrap.innerConfig.decodePriority();
+    public Command[] decode(int[] instruction) {
+        Command[] result = new Command[Bootstrap.getInnerConfig().commandType().length];
+        String[] decodePriority = Bootstrap.getInnerConfig().decodePriority();
         for (int i = 0; i < decodePriority.length; i++) {
             String type = decodePriority[i];
             IDecodeUnit IDecodeUnit = this._decoderList.get(type);
-            Command decoded = IDecodeUnit.decode(data);
+            Command decoded = IDecodeUnit.decode(instruction);
             if (decoded != null) {
                 result[i] = decoded;
             }

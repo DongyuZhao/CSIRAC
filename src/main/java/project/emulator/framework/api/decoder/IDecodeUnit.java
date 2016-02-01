@@ -8,7 +8,18 @@ import project.emulator.framework.cpu.decoder.Command;
  */
 public interface IDecodeUnit
 {
+    /**
+     * Decode the instruction into a Command Object for processor to process
+     *
+     * @param data the instruction
+     * @return the decoded command
+     */
     Command decode(int[] data);
 
+    /**
+     * The decoder's instruction type
+     *
+     * @return
+     */
     String getType();
 }

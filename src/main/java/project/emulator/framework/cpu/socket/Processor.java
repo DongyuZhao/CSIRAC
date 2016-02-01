@@ -1,5 +1,6 @@
 package project.emulator.framework.cpu.socket;
 
+import project.emulator.framework.Bootstrap;
 import project.emulator.framework.api.processor.IProcessUnit;
 import project.emulator.framework.cpu.register.IOpCodeRegister;
 import project.emulator.framework.cpu.register.IPcRegister;
@@ -49,10 +50,8 @@ public class Processor implements IProcessor {
 
     @Override
     public void compute() {
-        //int nextInstructionPointer;
         int instructionPointer = this._pcRegister.get();
         int[] instruction = this._instructionMemory.get(instructionPointer / this._instructionMemory.cellPerUnit(), instructionPointer % this._instructionMemory.cellPerUnit());
-        //this._opCodeRegister.put(this._decoder.decode(instruction));
         Command[] decodedCommands = this.decode(instruction);
         boolean changeNextPointer = false;
         for (Command command : decodedCommands) {
@@ -65,9 +64,8 @@ public class Processor implements IProcessor {
             }
         }
         if (!changeNextPointer) {
-            this._pcRegister.put(instructionPointer + 1);
+            this._pcRegister.put(instructionPointer + Bootstrap.getInnerConfig().defaultPcRegGrowth());
         }
-        //return Bootstrap.innerConfig.finishSignal();
     }
 
     @Override
@@ -118,7 +116,7 @@ public class Processor implements IProcessor {
         return _dataMemory;
     }
 
-    public List<IProcessUnit> instructionMulticastList() {
-        return _instructionMulticastList;
-    }
+//    public List<IProcessUnit> instructionMulticastList() {
+//        return _instructionMulticastList;
+//    }
 }

@@ -12,10 +12,14 @@ import javax.management.InstanceNotFoundException;
  */
 public interface IProcessUnit
 {
-
-    //private List<IProcessUnit> _postProcessorList = new ArrayList<>();
-
     void  attachSocket(IProcessor _processorSocket);
 
+    /**
+     * Process the Command
+     *
+     * @param command the command
+     * @return if the Pc Register has been changed by this Process Unit
+     * @throws InstanceNotFoundException throw when the process socket is not find
+     */
     boolean process(Command command) throws InstanceNotFoundException;
 }

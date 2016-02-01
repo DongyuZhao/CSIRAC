@@ -10,7 +10,7 @@ import project.emulator.framework.api.debugger.IDebugger;
 public class PcRegister extends DebuggerMessageSender implements IPcRegister {
     private int _value;
 
-    private int _upperBound = Bootstrap.innerConfig.unitCount() * Bootstrap.innerConfig.cellPerUnit();
+    private int _upperBound = Bootstrap.getInnerConfig().unitCount() * Bootstrap.getInnerConfig().cellPerUnit();
 
     public PcRegister(String _id) {
         super(_id);

@@ -89,7 +89,7 @@ public class Register extends DebuggerMessageSender implements IRegister
         int[] newResult = new int[4];
         for (int i = 0; i < 4; i++)
         {
-            newResult[i] = Bootstrap.innerConfig.finishSignal();
+            newResult[i] = Bootstrap.getInnerConfig().finishSignal();
         }
         return newResult;
     }

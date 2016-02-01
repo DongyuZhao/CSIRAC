@@ -15,6 +15,12 @@ import project.csirac.website.viewmodels.emulator.handshake.HandShakeViewModel;
 public class EmulatorHandShakeSocketController {
     private SimpMessagingTemplate template;
 
+    /**
+     * send object in JSON format to the destination url
+     *
+     * @param ret the object
+     * @param destination the destination url
+     */
     private void setResults(Object ret, String destination) {
         template.convertAndSend("/emulator_response/handshake/" + destination, ret);
     }
@@ -25,6 +31,11 @@ public class EmulatorHandShakeSocketController {
     }
 
 
+    /**
+     * receive the heart beat pulse and make sure the emulator status exists when we wish and destroy when we disconnect
+     *
+     * @param model the handshake view model
+     */
     @MessageMapping("/handshake")
     public void handshake(HandShakeViewModel model) {
         String sessionId = model.getSessionId();
@@ -55,6 +66,12 @@ public class EmulatorHandShakeSocketController {
         }
     }
 
+    /**
+     * send the response of the session status.
+     *
+     * @param sessionId
+     * @param stop
+     */
     private void pushSessionStatus(String sessionId, boolean stop) {
         if (!stop) {
             setResults("Session Working", sessionId);
@@ -63,6 +80,12 @@ public class EmulatorHandShakeSocketController {
         }
     }
 
+    /**
+     * when the wait time of the specified session has out of time
+     *
+     * @param sessionId the id of the session
+     * @return if it is removed
+     */
     private boolean waitTimeout(String sessionId) {
         while (true) {
             if (CsiracApplication.getSessionWaitSpan(sessionId) > 20000) {

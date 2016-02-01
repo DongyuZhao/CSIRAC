@@ -10,7 +10,7 @@ import project.emulator.framework.api.debugger.IDebugger;
 public class OpCodeRegister extends DebuggerMessageSender implements IOpCodeRegister {
     private int _value;
 
-    private int _upperBound = Bootstrap.innerConfig.opCodeUpperbound();
+    private int _upperBound = Bootstrap.getInnerConfig().opCodeUpperbound();
 
     public OpCodeRegister(String _id) {
         super(_id);

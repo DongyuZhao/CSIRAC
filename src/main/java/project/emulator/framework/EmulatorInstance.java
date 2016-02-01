@@ -76,6 +76,9 @@ public class EmulatorInstance {
         }
     }
 
+    /**
+     * @return if the data and program have been loaded
+     */
     public boolean isReady() {
         return this._dataUploaded && this._programUploaded;
     }

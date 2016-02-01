@@ -11,10 +11,12 @@ import java.util.regex.Pattern;
  * Created by Dy.Zhao on 2016/1/22 0022.
  */
 public class SymbolTable implements ISymbolTranslator {
-    private Map<String, Integer> _symbolTable = new HashMap<>();
-    /*
-     * register a mapping between a pair of symbol and code.
+
+    /**
+     * The symbol code map
      */
+    private Map<String, Integer> _symbolTable = new HashMap<>();
+
 
     @Override
     public void registerSymbol(String symbol, int code) {
@@ -28,7 +30,7 @@ public class SymbolTable implements ISymbolTranslator {
         if (this._symbolTable.keySet().contains(symbol)) {
             return this._symbolTable.get(symbol);
         }
-        return Bootstrap.innerConfig.defaultCellContent();
+        return Bootstrap.getInnerConfig().defaultCellContent();
     }
     
     /*
@@ -63,11 +65,11 @@ public class SymbolTable implements ISymbolTranslator {
      */
     @Override
     public int[] translateInput(String input) {
-        Pattern p = Bootstrap.innerConfig.inputFilterPattern();
+        Pattern p = Bootstrap.getInnerConfig().inputFilterPattern();
         Matcher m = p.matcher(input);
         if (m.matches()) {
             String[] split = input.split("[\\s]*[,]*\\s|[\\s]*,[\\s]*");
-            int[] result = new int[Bootstrap.innerConfig.mainDataSectionCount()];
+            int[] result = new int[Bootstrap.getInnerConfig().normalDataSectionCount()];
             int j = 0;
             for (String aSplit : split) {
                 if (!aSplit.equals("")) {
@@ -85,28 +87,31 @@ public class SymbolTable implements ISymbolTranslator {
 
     @Override
     public String translateOutput(int[] data) {
-        String result = "";
-        if (data.length == Bootstrap.innerConfig.mainDataSectionCount()) {
+        StringBuilder sb = new StringBuilder();
+        if (data.length == Bootstrap.getInnerConfig().normalDataSectionCount()) {
             for (int aData : data) {
-                result.concat("" + aData);
+                sb.append(this.translateToSymbol(aData));
             }
         }
-        return result;
+        return sb.toString();
     }
     /*
      * Trim the data according CPU inner length.
      */
     @Override
     public int[] trimData(int[] data) {
-        if (data.length != Bootstrap.innerConfig.mainDataSectionCount()) {
-            int[] result = new int[Bootstrap.innerConfig.mainDataSectionCount()];
+        if (data.length != Bootstrap.getInnerConfig().normalDataSectionCount()) {
+            int[] result = new int[Bootstrap.getInnerConfig().normalDataSectionCount()];
+            for (int i = 0; i < result.length; i++) {
+                result[i] = Bootstrap.getInnerConfig().trimCellContent();
+            }
             for (int i = 0; i < data.length; i++) {
-                if (Bootstrap.innerConfig.alignLeft()) {
+                if (Bootstrap.getInnerConfig().alignLeft()) {
                     if (i < result.length) {
                         result[i] = data[i];
                     }
                 } else {
-                    int index = Bootstrap.innerConfig.mainDataSectionCount() - data.length + i;
+                    int index = Bootstrap.getInnerConfig().normalDataSectionCount() - data.length + i;
                     if (index >= 0) {
                         result[index] = data[i];
                     }

@@ -18,6 +18,6 @@ public class RegisterTest
         register.put(45, new int[]{1, 1, 1, 1});
         register.put(7, new int[]{1, 1, 1, 1});
         Assert.assertArrayEquals(null, new int[]{1, 1, 1, 1}, register.get(45));
-        Assert.assertArrayEquals(null, new int[]{-32,-32,-32,-32}, register.get(7));
+        Assert.assertArrayEquals(null, new int[]{-32,-32,-32,-32}, register.get(1));
     }
 }

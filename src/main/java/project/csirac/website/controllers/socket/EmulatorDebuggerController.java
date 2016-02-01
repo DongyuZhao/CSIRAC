@@ -18,6 +18,13 @@ public class EmulatorDebuggerController implements IDebuggerObserver {
 
     private IDebugger _debugger;
 
+
+    /**
+     * send object in JSON format to the destination url
+     *
+     * @param ret the object
+     * @param destination the destination url
+     */
     private void setResults(Object ret, String destination) {
         _template.convertAndSend("/emulator_response/debugger/" + destination, ret);
     }
@@ -30,6 +37,11 @@ public class EmulatorDebuggerController implements IDebuggerObserver {
         }
     }
 
+    /**
+     * change the frequency the instructions should be executed
+     *
+     * @param model the clock setting view model
+     */
     @MessageMapping("/debugger/input/clock")
     public void changeClock(ClockViewModel model) {
         if (model != null) {
@@ -37,6 +49,11 @@ public class EmulatorDebuggerController implements IDebuggerObserver {
         }
     }
 
+    /**
+     * change the value of the PC Register
+     *
+     * @param model the PC Reg setting view model
+     */
     @MessageMapping("/debugger/input/pc_reg")
     public void updatePcRegister(PcRegisterViewModel model) {
         if (model != null) {

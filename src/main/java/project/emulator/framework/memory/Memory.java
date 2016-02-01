@@ -11,11 +11,11 @@ import project.emulator.framework.api.monitor.MemoryMonitorMessageSender;
  * Created by Dy.Zhao on 2016/1/22 0022.
  */
 public class Memory extends MemoryMonitorMessageSender implements IMemory {
-    private int _unitCount = Bootstrap.innerConfig.unitCount();
+    private int _unitCount = Bootstrap.getInnerConfig().unitCount();
 
-    private int _cellPerUnit = Bootstrap.innerConfig.cellPerUnit();
+    private int _cellPerUnit = Bootstrap.getInnerConfig().cellPerUnit();
 
-    private int[][] _memoryContainer = new int[_unitCount * _cellPerUnit][Bootstrap.innerConfig.mainDataSectionCount()];
+    private int[][] _memoryContainer = new int[_unitCount * _cellPerUnit][Bootstrap.getInnerConfig().normalDataSectionCount()];
 
     private boolean _isInstructionMemory = false;
 
@@ -57,9 +57,9 @@ public class Memory extends MemoryMonitorMessageSender implements IMemory {
     public int[] get(int unitAddress, int cellAddress) {
         int internalAddress = this.getInternalAddress(unitAddress, cellAddress);
         if (internalAddress < 0) {
-            int[] result = new int[Bootstrap.innerConfig.mainDataSectionCount()];
+            int[] result = new int[Bootstrap.getInnerConfig().normalDataSectionCount()];
             for (int i = 0; i < result.length; i++) {
-                result[i] = Bootstrap.innerConfig.finishSignal();
+                result[i] = Bootstrap.getInnerConfig().finishSignal();
             }
             return result;
         }
@@ -82,7 +82,7 @@ public class Memory extends MemoryMonitorMessageSender implements IMemory {
         for (int i = 0; i < input.length; i++) {
             String line = input[i];
             int[] parsedResult = Bootstrap.symbolTranslator.translateInput(line);
-            if (parsedResult != null && parsedResult.length == Bootstrap.innerConfig.mainDataSectionCount()) {
+            if (parsedResult != null && parsedResult.length == Bootstrap.getInnerConfig().normalDataSectionCount()) {
                 this._memoryContainer[i] = parsedResult;
                 this.onMemoryUpdate(new MemoryMessage(i / this._cellPerUnit, i % this._cellPerUnit, parsedResult), this);
             }

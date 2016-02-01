@@ -14,12 +14,31 @@ import java.util.List;
  * Created by Dy.Zhao on 2016/1/21 0021.
  */
 public interface IProcessor {
+    /**
+     * execute the program
+     */
     void compute();
 
+    /**
+     * decode the instruction to find all Commands it contains
+     *
+     * @param instruction the instruction
+     * @return Commands it contains in the priority order
+     */
     Command[] decode(int[] instruction);
 
+    /**
+     * register new process unit
+     *
+     * @param processUnit the new process unit
+     */
     void registerProcessorUnit(IProcessUnit processUnit);
 
+    /**
+     * register new decoder
+     *
+     * @param decoder the new decoder
+     */
     void registerDecoder(IDecoder decoder);
 
     IDecoder decoder();
@@ -33,6 +52,4 @@ public interface IProcessor {
     IMemory instructionMemory();
 
     IMemory dataMemory();
-
-    List<IProcessUnit> instructionMulticastList();
 }
