@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Dy.Zhao on 2016/1/22 0022.
  */
-public class SymbolTable implements ISymbolTranslator {
+public class SymbolTranslator implements ISymbolTranslator {
 
     /**
      * The symbol code map

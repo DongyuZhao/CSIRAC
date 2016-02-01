@@ -18,8 +18,7 @@ public interface IDecoder {
     /**
      * Add a new decode unit into the emulator
      *
-     * @param type
      * @param decodeUnit
      */
-    void registerDecodeUnit(String type, IDecodeUnit decodeUnit);
+    void registerDecodeUnit(IDecodeUnit decodeUnit);
 }

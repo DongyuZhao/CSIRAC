@@ -2,7 +2,7 @@ package project.emulator.framework;
 
 import project.emulator.framework.api.config.IConfig;
 import project.emulator.framework.api.config.symbol.ISymbolTranslator;
-import project.emulator.framework.api.config.symbol.SymbolTable;
+import project.emulator.framework.api.config.symbol.SymbolTranslator;
 import project.emulator.framework.api.debugger.IDebugger;
 import project.emulator.framework.api.decoder.IDecodeUnit;
 import project.emulator.framework.api.monitor.IMonitor;
@@ -23,7 +23,7 @@ import java.util.List;
  * Created by Dy.Zhao on 2016/1/23 0023.
  */
 public class Bootstrap {
-    public final static ISymbolTranslator symbolTranslator = new SymbolTable();
+    private static ISymbolTranslator symbolTranslator = new SymbolTranslator();
 
     private static IConfig _innerConfig;
 
@@ -43,6 +43,24 @@ public class Bootstrap {
      */
     public static void setInnerConfig(IConfig config) {
         Bootstrap._innerConfig = config;
+    }
+
+    /**
+     * get the symbol translator
+     *
+     * @return the symbol translator
+     */
+    public static ISymbolTranslator getSymbolTranslator() {
+        return symbolTranslator;
+    }
+
+    /**
+     * set the symbol translator
+     *
+     * @param symbolTranslator the symbol translator
+     */
+    public static void setSymbolTranslator(ISymbolTranslator symbolTranslator) {
+        Bootstrap.symbolTranslator = symbolTranslator;
     }
 
     /**
@@ -86,6 +104,4 @@ public class Bootstrap {
 
         debugger.addNewSession(id, emulatorInstance);
     }
-
-
 }

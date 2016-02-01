@@ -20,8 +20,8 @@ public class Decoder implements IDecoder {
 
     public static IDecoder createInstance(List<IDecodeUnit> decodeUnites) {
         IDecoder decoder = new Decoder();
-        for (IDecodeUnit IDecodeUnit : decodeUnites) {
-            decoder.registerDecodeUnit(IDecodeUnit.getType(), IDecodeUnit);
+        for (IDecodeUnit decodeUnit : decodeUnites) {
+            decoder.registerDecodeUnit(decodeUnit);
         }
         return decoder;
     }
@@ -49,9 +49,9 @@ public class Decoder implements IDecoder {
      * @param type  two types here: source command and destination command.
      */
     @Override
-    public void registerDecodeUnit(String type, IDecodeUnit decodeUnit) {
+    public void registerDecodeUnit(IDecodeUnit decodeUnit) {
         if (decodeUnit != null) {
-            this._decoderList.put(type, decodeUnit);
+            this._decoderList.put(decodeUnit.getType(), decodeUnit);
         }
     }
 }
