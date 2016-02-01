@@ -1,6 +1,7 @@
 package project.emulator.framework.cpu.decoder;
 
 import project.emulator.framework.api.decoder.IDecodeUnit;
+import project.emulator.framework.cpu.models.Command;
 
 /**
  * Created by Dy.Zhao on 2016/1/22 0022.

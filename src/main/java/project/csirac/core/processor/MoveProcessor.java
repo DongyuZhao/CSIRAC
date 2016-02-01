@@ -2,7 +2,7 @@ package project.csirac.core.processor;
 
 import project.emulator.framework.Bootstrap;
 import project.emulator.framework.api.processor.IProcessUnit;
-import project.emulator.framework.cpu.decoder.Command;
+import project.emulator.framework.cpu.models.Command;
 import project.emulator.framework.cpu.socket.IProcessor;
 
 import javax.management.InstanceNotFoundException;

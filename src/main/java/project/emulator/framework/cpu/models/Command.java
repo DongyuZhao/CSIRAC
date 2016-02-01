@@ -1,4 +1,4 @@
-package project.emulator.framework.cpu.decoder;
+package project.emulator.framework.cpu.models;
 
 /**
  * Created by Dy.Zhao on 2016/1/23 0023.

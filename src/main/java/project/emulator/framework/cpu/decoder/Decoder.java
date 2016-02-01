@@ -2,6 +2,7 @@ package project.emulator.framework.cpu.decoder;
 
 import project.emulator.framework.Bootstrap;
 import project.emulator.framework.api.decoder.IDecodeUnit;
+import project.emulator.framework.cpu.models.Command;
 
 import java.util.HashMap;
 import java.util.List;

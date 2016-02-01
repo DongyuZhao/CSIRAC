@@ -3,9 +3,7 @@ package project.csirac.core.decoder;
 import org.junit.Assert;
 import org.junit.Test;
 import project.csirac.core.CsiracBootstrap;
-import project.emulator.framework.cpu.decoder.Command;
-
-import static org.junit.Assert.*;
+import project.emulator.framework.cpu.models.Command;
 
 /**
  * Created by Dy.Zhao on 2016/1/25 0025.
