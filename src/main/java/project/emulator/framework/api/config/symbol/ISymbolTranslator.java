@@ -46,5 +46,11 @@ public interface ISymbolTranslator
      */
     String translateOutput(int[] date);
 
+    /**
+     * trim the data to default length
+     *
+     * @param data the data
+     * @return the trimmed data
+     */
     int[] trimData(int[] data);
 }

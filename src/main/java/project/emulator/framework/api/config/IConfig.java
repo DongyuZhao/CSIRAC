@@ -99,9 +99,9 @@ public interface IConfig {
     int cellPerUnit();
 
     /**
-     * the step in each automatically growth of the emulator
+     * the step in each automatically growth of the pc reg in the emulator
      *
-     * @return
+     * @return the default pc reg growth
      */
     int defaultPcRegGrowth();
 
@@ -115,7 +115,7 @@ public interface IConfig {
     /**
      * The maximum content for each section
      *
-     * @return
+     * @return the maximum content
      */
     int maximumPerSection();
 }

@@ -18,7 +18,7 @@ public interface IDecodeUnit
     /**
      * The decoder's instruction type
      *
-     * @return
+     * @return the type
      */
     String getType();
 }

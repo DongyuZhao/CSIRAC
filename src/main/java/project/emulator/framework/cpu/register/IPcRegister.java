@@ -11,5 +11,10 @@ public interface IPcRegister {
      */
     boolean put(int data);
 
+    /**
+     * get the data
+     *
+     * @return the data
+     */
     int get();
 }

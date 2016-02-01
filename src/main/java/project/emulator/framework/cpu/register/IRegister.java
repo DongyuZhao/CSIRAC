@@ -13,5 +13,11 @@ public interface IRegister {
      */
     boolean put(int address, int[] data);
 
+    /**
+     * get the data on the address
+     *
+     * @param address the address
+     * @return the data
+     */
     int[] get(int address);
 }
