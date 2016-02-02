@@ -16,19 +16,19 @@ public class DCommandDecoderTest
     {
         CsiracBootstrap.registerCsiracSymbolTable();
         DCommandDecoder dcoder = new DCommandDecoder();
-        Command actual = dcoder.decode(new int[]{0,1,CsiracBootstrap.symbolTranslator.translateToCode("M"),CsiracBootstrap.symbolTranslator.translateToCode("A")});
+        Command actual = dcoder.decode(new int[]{0,1,CsiracBootstrap.getSymbolTranslator().translateToCode("M"),CsiracBootstrap.getSymbolTranslator().translateToCode("A")});
         Command expected = new Command();
-        expected.opCode = CsiracBootstrap.symbolTranslator.translateToCode("A");
-        expected.source = CsiracBootstrap.symbolTranslator.translateToCode("Temp");
+        expected.opCode = CsiracBootstrap.getSymbolTranslator().translateToCode("A");
+        expected.source = CsiracBootstrap.getSymbolTranslator().translateToCode("Temp");
         expected.target = expected.opCode;
         Assert.assertEquals(null, actual.opCode,expected.opCode);
         Assert.assertEquals(null, actual.source,expected.source);
         Assert.assertEquals(null, actual.target,expected.target);
 
-        actual = dcoder.decode(new int[]{0,1,CsiracBootstrap.symbolTranslator.translateToCode("A"),CsiracBootstrap.symbolTranslator.translateToCode("M")});
+        actual = dcoder.decode(new int[]{0,1,CsiracBootstrap.getSymbolTranslator().translateToCode("A"),CsiracBootstrap.getSymbolTranslator().translateToCode("M")});
         expected = new Command();
-        expected.opCode = CsiracBootstrap.symbolTranslator.translateToCode("M");
-        expected.source = CsiracBootstrap.symbolTranslator.translateToCode("Temp");
+        expected.opCode = CsiracBootstrap.getSymbolTranslator().translateToCode("M");
+        expected.source = CsiracBootstrap.getSymbolTranslator().translateToCode("Temp");
         expected.target = 1;
         Assert.assertEquals(null, actual.opCode,expected.opCode);
         Assert.assertEquals(null, actual.source,expected.source);

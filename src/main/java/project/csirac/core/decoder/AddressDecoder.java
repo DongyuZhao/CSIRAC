@@ -18,11 +18,11 @@ public class AddressDecoder {
      */
     static int determineAddress(int opCode, int section0, int section1) {
         int address = -1;
-        if (opCode == CsiracBootstrap.symbolTranslator.translateToCode("M")) {
+        if (opCode == CsiracBootstrap.getSymbolTranslator().translateToCode("M")) {
             address = section0 * CsiracBootstrap.getInnerConfig().cellPerUnit() + section1;
-        } else if (opCode == CsiracBootstrap.symbolTranslator.translateToCode("D")) {
+        } else if (opCode == CsiracBootstrap.getSymbolTranslator().translateToCode("D")) {
             address = section1 % 16;
-        } else if (opCode == CsiracBootstrap.symbolTranslator.translateToCode("A") || opCode == CsiracBootstrap.symbolTranslator.translateToCode("B") || opCode == CsiracBootstrap.symbolTranslator.translateToCode("C")) {
+        } else if (opCode == CsiracBootstrap.getSymbolTranslator().translateToCode("A") || opCode == CsiracBootstrap.getSymbolTranslator().translateToCode("B") || opCode == CsiracBootstrap.getSymbolTranslator().translateToCode("C")) {
             address = opCode;
         }
         // TODO:: Add for further instructions

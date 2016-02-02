@@ -23,9 +23,9 @@ public class AddProcessor implements IProcessUnit {
     @Override
     public boolean process(Command command) throws InstanceNotFoundException {
         if (this._processSocket != null) {
-            if (command.opCode == Bootstrap.symbolTranslator.translateToCode("PA")
-                    || command.opCode == Bootstrap.symbolTranslator.translateToCode("PB")
-                    || command.opCode == Bootstrap.symbolTranslator.translateToCode("PC")) {
+            if (command.opCode == Bootstrap.getSymbolTranslator().translateToCode("PA")
+                    || command.opCode == Bootstrap.getSymbolTranslator().translateToCode("PB")
+                    || command.opCode == Bootstrap.getSymbolTranslator().translateToCode("PC")) {
                 int[] temp = this._processSocket.register().get(command.source);
                 int[] addee = this._processSocket.register().get(command.target);
                 int inner = DataTranslator.translateToNumber(temp) + DataTranslator.translateToNumber(addee);

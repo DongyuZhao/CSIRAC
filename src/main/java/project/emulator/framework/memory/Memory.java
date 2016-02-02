@@ -39,7 +39,7 @@ public class Memory extends MemoryMonitorMessageSender implements IMemory {
     @Override
     public boolean put(int unitAddress, int cellAddress, int[] data) {
         if (addressValid(unitAddress, cellAddress)) {
-            int[] trimmedData = Bootstrap.symbolTranslator.trimData(data);
+            int[] trimmedData = Bootstrap.getSymbolTranslator().trimData(data);
             int actualAddress = this.getInternalAddress(unitAddress, cellAddress);
             if (actualAddress >= 0) {
                 this._memoryContainer[actualAddress] = trimmedData;
@@ -81,7 +81,7 @@ public class Memory extends MemoryMonitorMessageSender implements IMemory {
     public boolean load(String[] input) {
         for (int i = 0; i < input.length; i++) {
             String line = input[i];
-            int[] parsedResult = Bootstrap.symbolTranslator.translateInput(line);
+            int[] parsedResult = Bootstrap.getSymbolTranslator().translateInput(line);
             if (parsedResult != null && parsedResult.length == Bootstrap.getInnerConfig().normalDataSectionCount()) {
                 this._memoryContainer[i] = parsedResult;
                 this.onMemoryUpdate(new MemoryMessage(i / this._cellPerUnit, i % this._cellPerUnit, parsedResult), this);

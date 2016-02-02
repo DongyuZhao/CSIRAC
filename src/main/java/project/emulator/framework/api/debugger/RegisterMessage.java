@@ -11,8 +11,8 @@ public class RegisterMessage {
     protected String _newValue = "";
 
     public RegisterMessage(int address, int[] data) {
-        this._address = Bootstrap.symbolTranslator.translateToSymbol(address);
-        int[] trimmedData = Bootstrap.symbolTranslator.trimData(data);
+        this._address = Bootstrap.getSymbolTranslator().translateToSymbol(address);
+        int[] trimmedData = Bootstrap.getSymbolTranslator().trimData(data);
         for (int i = 0; i < trimmedData.length; i++) {
             this._newValue += trimmedData[i];
             if (i != trimmedData.length - 1) {
@@ -23,7 +23,7 @@ public class RegisterMessage {
 
     public RegisterMessage(String address, int[] data) {
         this._address = address;
-        int[] trimmedData = Bootstrap.symbolTranslator.trimData(data);
+        int[] trimmedData = Bootstrap.getSymbolTranslator().trimData(data);
         for (int i = 0; i < trimmedData.length; i++) {
             this._newValue += trimmedData[i];
             if (i != trimmedData.length - 1) {

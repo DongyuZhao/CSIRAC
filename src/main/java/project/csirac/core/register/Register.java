@@ -49,7 +49,7 @@ public class Register extends DebuggerMessageSender implements IRegister
                 return true;
             }
         }
-        String regName = Bootstrap.symbolTranslator.translateToSymbol(address);
+        String regName = Bootstrap.getSymbolTranslator().translateToSymbol(address);
         if (regName != null)
         {
             int[] trimmedData = data.clone();
@@ -81,7 +81,7 @@ public class Register extends DebuggerMessageSender implements IRegister
             int dAddress = address - 32;
             return this._dRegister[dAddress];
         }
-        String regName = Bootstrap.symbolTranslator.translateToSymbol(address);
+        String regName = Bootstrap.getSymbolTranslator().translateToSymbol(address);
         if (regName != null)
         {
             return this._regContainer.get(regName);

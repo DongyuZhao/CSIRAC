@@ -14,7 +14,7 @@ public class MemoryMessage {
 
 
     public MemoryMessage(int unitAddress, int cellAddress, int[] data) {
-        int[] trimmedData = Bootstrap.symbolTranslator.trimData(data);
+        int[] trimmedData = Bootstrap.getSymbolTranslator().trimData(data);
         this._unitAddress = unitAddress;
         this._cellAddress = cellAddress;
         for (int i = 0; i < trimmedData.length; i++) {

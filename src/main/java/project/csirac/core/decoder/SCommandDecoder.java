@@ -11,11 +11,11 @@ public class SCommandDecoder implements IDecodeUnit {
 
     @Override
     public Command decode(int[] data) {
-        int[] trimmedData = CsiracBootstrap.symbolTranslator.trimData(data);
+        int[] trimmedData = CsiracBootstrap.getSymbolTranslator().trimData(data);
         Command result = new Command();
         result.opCode = trimmedData[2];
         result.source = AddressDecoder.determineAddress(result.opCode, trimmedData[0], trimmedData[1]);
-        result.target = CsiracBootstrap.symbolTranslator.translateToCode("Temp");
+        result.target = CsiracBootstrap.getSymbolTranslator().translateToCode("Temp");
         result.commandType = "S";
         return result;
     }

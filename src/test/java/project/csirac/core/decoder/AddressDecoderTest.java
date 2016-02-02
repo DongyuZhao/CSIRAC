@@ -16,7 +16,7 @@ public class AddressDecoderTest
     public void testDetermineAddress() throws Exception
     {
         CsiracBootstrap.registerCsiracSymbolTable();
-        Assert.assertEquals(null,AddressDecoder.determineAddress(CsiracBootstrap.symbolTranslator.translateToCode("M"), 1, 1),33);
-        Assert.assertEquals(null,AddressDecoder.determineAddress(CsiracBootstrap.symbolTranslator.translateToCode("A"), 255,255), CsiracBootstrap.symbolTranslator.translateToCode("A"));
+        Assert.assertEquals(null,AddressDecoder.determineAddress(CsiracBootstrap.getSymbolTranslator().translateToCode("M"), 1, 1),33);
+        Assert.assertEquals(null,AddressDecoder.determineAddress(CsiracBootstrap.getSymbolTranslator().translateToCode("A"), 255,255), CsiracBootstrap.getSymbolTranslator().translateToCode("A"));
     }
 }

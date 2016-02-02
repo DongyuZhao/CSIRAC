@@ -31,32 +31,32 @@ public class MoveProcessor implements IProcessUnit {
             if (command != null) {
                 this._processSocket.opCodeRegister().put(command.opCode);
                 if (command.commandType.equals("S")) {
-                    if (command.opCode == Bootstrap.symbolTranslator.translateToCode("M")) {
+                    if (command.opCode == Bootstrap.getSymbolTranslator().translateToCode("M")) {
                         int[] temp = this._processSocket.dataMemory().get(
                                 command.source / Bootstrap.getInnerConfig().cellPerUnit(),
                                 command.source % Bootstrap.getInnerConfig().cellPerUnit()
                         );
                         this._processSocket.register().put(command.target, temp);
                         return false;
-                    } else if (command.opCode == Bootstrap.symbolTranslator.translateToCode("A")
-                            || command.opCode == Bootstrap.symbolTranslator.translateToCode("B")
-                            || command.opCode == Bootstrap.symbolTranslator.translateToCode("C")) {
+                    } else if (command.opCode == Bootstrap.getSymbolTranslator().translateToCode("A")
+                            || command.opCode == Bootstrap.getSymbolTranslator().translateToCode("B")
+                            || command.opCode == Bootstrap.getSymbolTranslator().translateToCode("C")) {
                         int[] temp = this._processSocket.register().get(command.source);
                         this._processSocket.register().put(command.target, temp);
                         return false;
                     }
                 }
                 if (command.commandType.equals("D")) {
-                    if (command.opCode == Bootstrap.symbolTranslator.translateToCode("M")) {
+                    if (command.opCode == Bootstrap.getSymbolTranslator().translateToCode("M")) {
                         int[] temp = this._processSocket.register().get(command.source);
                         this._processSocket.dataMemory().put(
                                 command.target / Bootstrap.getInnerConfig().cellPerUnit(),
                                 command.target % Bootstrap.getInnerConfig().cellPerUnit(), temp
                         );
                         return false;
-                    } else if (command.opCode == Bootstrap.symbolTranslator.translateToCode("A")
-                            || command.opCode == Bootstrap.symbolTranslator.translateToCode("B")
-                            || command.opCode == Bootstrap.symbolTranslator.translateToCode("C")) {
+                    } else if (command.opCode == Bootstrap.getSymbolTranslator().translateToCode("A")
+                            || command.opCode == Bootstrap.getSymbolTranslator().translateToCode("B")
+                            || command.opCode == Bootstrap.getSymbolTranslator().translateToCode("C")) {
                         int[] temp = this._processSocket.register().get(command.source);
                         this._processSocket.register().put(command.target, temp);
                         return false;
