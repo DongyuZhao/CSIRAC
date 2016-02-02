@@ -53,18 +53,20 @@ public class Processor implements IProcessor {
         int instructionPointer = this._pcRegister.get();
         int[] instruction = this._instructionMemory.get(instructionPointer / this._instructionMemory.cellPerUnit(), instructionPointer % this._instructionMemory.cellPerUnit());
         Command[] decodedCommands = this.decode(instruction);
-        boolean changeNextPointer = false;
-        for (Command command : decodedCommands) {
-            for (IProcessUnit IProcessUnit : this._instructionMulticastList) {
-                try {
-                    changeNextPointer = changeNextPointer || IProcessUnit.process(command);
-                } catch (InstanceNotFoundException e) {
-                    e.printStackTrace();
+        if (decodedCommands != null) {
+            boolean changeNextPointer = false;
+            for (Command command : decodedCommands) {
+                for (IProcessUnit IProcessUnit : this._instructionMulticastList) {
+                    try {
+                        changeNextPointer = changeNextPointer || IProcessUnit.process(command);
+                    } catch (InstanceNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-        }
-        if (!changeNextPointer) {
-            this._pcRegister.put(instructionPointer + Bootstrap.getInnerConfig().defaultPcRegGrowth());
+            if (!changeNextPointer) {
+                this._pcRegister.put(instructionPointer + Bootstrap.getInnerConfig().defaultPcRegGrowth());
+            }
         }
     }
 
