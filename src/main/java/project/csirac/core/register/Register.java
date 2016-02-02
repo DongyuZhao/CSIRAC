@@ -1,7 +1,6 @@
 package project.csirac.core.register;
 
-
-import project.emulator.framework.Bootstrap;
+import project.csirac.core.CsiracBootstrap;
 import project.emulator.framework.api.debugger.DebuggerMessageSender;
 import project.emulator.framework.api.debugger.IDebugger;
 import project.emulator.framework.api.debugger.RegisterMessage;
@@ -49,20 +48,10 @@ public class Register extends DebuggerMessageSender implements IRegister
                 return true;
             }
         }
-        String regName = Bootstrap.getSymbolTranslator().translateToSymbol(address);
+        String regName = CsiracBootstrap.getSymbolTranslator().translateToSymbol(address);
         if (regName != null)
         {
-            int[] trimmedData = data.clone();
-            if (regName.contains("H"))
-            {
-                regName = "H";
-                if (data.length == 2)
-                {
-                    trimmedData = new int[4];
-                    trimmedData[2] = data[0];
-                    trimmedData[3] = data[1];
-                }
-            }
+            int[] trimmedData = CsiracBootstrap.getSymbolTranslator().trimData(data);
             if (data.length == 4)
             {
                 this._regContainer.put(regName, trimmedData);
@@ -81,7 +70,7 @@ public class Register extends DebuggerMessageSender implements IRegister
             int dAddress = address - 32;
             return this._dRegister[dAddress];
         }
-        String regName = Bootstrap.getSymbolTranslator().translateToSymbol(address);
+        String regName = CsiracBootstrap.getSymbolTranslator().translateToSymbol(address);
         if (regName != null)
         {
             return this._regContainer.get(regName);
@@ -89,7 +78,7 @@ public class Register extends DebuggerMessageSender implements IRegister
         int[] newResult = new int[4];
         for (int i = 0; i < 4; i++)
         {
-            newResult[i] = Bootstrap.getInnerConfig().finishSignal();
+            newResult[i] = CsiracBootstrap.getInnerConfig().finishSignal();
         }
         return newResult;
     }
