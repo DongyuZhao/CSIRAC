@@ -69,11 +69,10 @@ public class CsiracBootstrap extends project.emulator.framework.Bootstrap {
      */
     private static List<IProcessUnit> registerProcessors() {
         List<IProcessUnit> processUnits = new ArrayList<>();
-        processUnits.add(new MoveProcessor());
-//        IProcessUnits.add(new SMProcessor());
-//        IProcessUnits.add(new SAProcessor());
-//        IProcessUnits.add(new DMProcessor());
-//        IProcessUnits.add(new DAProcessor());
+        processUnits.add(new SMProcessor());
+        processUnits.add(new SAProcessor());
+        processUnits.add(new DMProcessor());
+        processUnits.add(new DAProcessor());
 
         // For those who wish to add new instructions de-comment and modify the following line.
         // IProcessUnits.add(new IProcessUnit());
