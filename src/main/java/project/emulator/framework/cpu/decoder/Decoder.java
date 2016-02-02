@@ -12,16 +12,16 @@ import java.util.Map;
  * Created by Dy.Zhao on 2016/1/23 0023.
  */
 public class Decoder implements IDecoder {
-    private Map<String, IDecodeUnit> _decoderList = new HashMap<>();
+    private Map<String, List<IDecodeUnit>> _decoderList = new HashMap<>();
 
     public Decoder() {
 
     }
 
-    public static IDecoder createInstance(List<IDecodeUnit> decodeUnites) {
+    public static IDecoder createInstance(Map<String, List<IDecodeUnit>> decodeUnits) {
         IDecoder decoder = new Decoder();
-        for (IDecodeUnit decodeUnit : decodeUnites) {
-            decoder.registerDecodeUnit(decodeUnit);
+        for (String type : decodeUnits.keySet()) {
+            decoder.registerDecodeUnits(type, decodeUnits.get(type));
         }
         return decoder;
     }
@@ -33,13 +33,17 @@ public class Decoder implements IDecoder {
     @Override
     public Command[] decode(int[] instruction) {
         Command[] result = new Command[Bootstrap.getInnerConfig().commandType().length];
-        String[] decodePriority = Bootstrap.getInnerConfig().decodePriority();
-        for (int i = 0; i < decodePriority.length; i++) {
-            String type = decodePriority[i];
-            IDecodeUnit IDecodeUnit = this._decoderList.get(type);
-            Command decoded = IDecodeUnit.decode(instruction);
-            if (decoded != null) {
-                result[i] = decoded;
+        if (this._decoderList != null) {
+            String[] decodePriority = Bootstrap.getInnerConfig().decodePriority();
+            for (int i = 0; i < decodePriority.length; i++) {
+                String type = decodePriority[i];
+                List<IDecodeUnit> decodeUnits = this._decoderList.get(type);
+                for (IDecodeUnit decodeUnit : decodeUnits) {
+                    Command decoded = decodeUnit.decode(instruction);
+                    if (decoded != null) {
+                        result[i] = decoded;
+                    }
+                }
             }
         }
         return result;
@@ -49,9 +53,9 @@ public class Decoder implements IDecoder {
      * @param type  two types here: source command and destination command.
      */
     @Override
-    public void registerDecodeUnit(IDecodeUnit decodeUnit) {
-        if (decodeUnit != null) {
-            this._decoderList.put(decodeUnit.getType(), decodeUnit);
+    public void registerDecodeUnits(String type, List<IDecodeUnit> decodeUnits) {
+        if (decodeUnits != null) {
+            this._decoderList.put(type, decodeUnits);
         }
     }
 }

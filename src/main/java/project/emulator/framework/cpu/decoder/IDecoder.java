@@ -3,6 +3,8 @@ package project.emulator.framework.cpu.decoder;
 import project.emulator.framework.api.decoder.IDecodeUnit;
 import project.emulator.framework.cpu.models.Command;
 
+import java.util.List;
+
 /**
  * Created by Dy.Zhao on 2016/1/22 0022.
  */
@@ -18,7 +20,7 @@ public interface IDecoder {
     /**
      * Add a new decode unit into the emulator
      *
-     * @param decodeUnit
+     * @param decodeUnits
      */
-    void registerDecodeUnit(IDecodeUnit decodeUnit);
+    void registerDecodeUnits(String type, List<IDecodeUnit> decodeUnits);
 }

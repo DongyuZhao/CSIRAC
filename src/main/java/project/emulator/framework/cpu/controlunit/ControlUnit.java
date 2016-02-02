@@ -72,8 +72,6 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
                     while (this._paused) {
                         wait();
                     }
-                    System.out.println("Run");
-                    System.out.println(this._stopSingnal);
                     this.next();
                     Thread.sleep((int) (1000 / this.getClock()));
                 }
@@ -88,7 +86,6 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
      */
     @Override
     public void start() {
-        System.out.println("Click Run");
         Thread thread = new Thread(new ControlThread(this));
         thread.start();
     }
@@ -101,7 +98,6 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
      */
     @Override
     public void pause() throws InterruptedException {
-        System.out.println("Press Pause");
         if (this._started && !this._paused) {
             this._paused = true;
             this.onPause(this);
@@ -118,7 +114,6 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
     @Override
     public synchronized void next(boolean ignorePause) throws InterruptedException {
         if (this._started && (ignorePause || !this._paused)) {
-            System.out.println("Next");
             int instructionPointer = this._pcRegister.get();
             if (instructionPointer < Bootstrap.getInnerConfig().unitCount() * Bootstrap.getInnerConfig().cellPerUnit() && instructionPointer >= 0) {
                 this._processorSocket.compute();
@@ -135,7 +130,6 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
     @Override
     public synchronized void go() throws InterruptedException {
         if (this._started && this._paused) {
-            System.out.println("Continue");
             this._paused = false;
             notifyAll();
             this.onContinue(this);
@@ -154,7 +148,6 @@ public class ControlUnit extends CpuMonitorMessageSender implements IControlUnit
     @Override
     public synchronized void stop() throws InterruptedException {
         if (this._started) {
-            System.out.println("Stop");
             this._stopSingnal = true;
             this._pcRegister.put(-1);
             notifyAll();

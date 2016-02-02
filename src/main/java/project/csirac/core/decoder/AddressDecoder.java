@@ -17,6 +17,9 @@ public class AddressDecoder {
      * @return the decoded address
      */
     static int determineAddress(int opCode, int section0, int section1) {
+        if (section0 < 0 || section1 < 0 || section0 >= CsiracBootstrap.getInnerConfig().unitCount() || section1 >= CsiracBootstrap.getInnerConfig().cellPerUnit()) {
+            return -1;
+        }
         int address = -1;
         if (opCode == CsiracBootstrap.getSymbolTranslator().translateToCode("M")) {
             address = section0 * CsiracBootstrap.getInnerConfig().cellPerUnit() + section1;

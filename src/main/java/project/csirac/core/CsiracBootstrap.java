@@ -3,7 +3,7 @@ package project.csirac.core;
 import project.csirac.core.config.Config;
 import project.csirac.core.decoder.DCommandDecoder;
 import project.csirac.core.decoder.SCommandDecoder;
-import project.csirac.core.processor.MoveProcessor;
+import project.csirac.core.processor.*;
 import project.csirac.core.register.Register;
 import project.emulator.framework.Bootstrap;
 import project.emulator.framework.api.debugger.IDebugger;
@@ -13,7 +13,9 @@ import project.emulator.framework.api.processor.IProcessUnit;
 import project.emulator.framework.cpu.register.IRegister;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Dy.Zhao on 2016/1/23 0023.
@@ -45,15 +47,19 @@ public class CsiracBootstrap extends project.emulator.framework.Bootstrap {
      *
      * @return the CSIRAC Decoder List
      */
-    private static List<IDecodeUnit> registerDecoders() {
-        List<IDecodeUnit> IDecodeUnits = new ArrayList<>();
-        IDecodeUnits.add(new SCommandDecoder());
-        IDecodeUnits.add(new DCommandDecoder());
+    private static Map<String, List<IDecodeUnit>> registerDecoders() {
+        Map<String, List<IDecodeUnit>> decoders = new HashMap<>();
+        List<IDecodeUnit> dCommandDecoders = new ArrayList<>();
+        dCommandDecoders.add(new DCommandDecoder());
+        decoders.put("D", dCommandDecoders);
+        List<IDecodeUnit> sCommandDecoders = new ArrayList<>();
+        sCommandDecoders.add(new SCommandDecoder());
+        decoders.put("S", sCommandDecoders);
 
         // For those who wish to add new instructions de-comment and modify the following line.
         // IDecodeUnits.add(new IDecodeUnit());
 
-        return IDecodeUnits;
+        return decoders;
     }
 
     /**
@@ -62,13 +68,17 @@ public class CsiracBootstrap extends project.emulator.framework.Bootstrap {
      * @return the CSIRAC Processor List
      */
     private static List<IProcessUnit> registerProcessors() {
-        List<IProcessUnit> IProcessUnits = new ArrayList<>();
-        IProcessUnits.add(new MoveProcessor());
+        List<IProcessUnit> processUnits = new ArrayList<>();
+        processUnits.add(new MoveProcessor());
+//        IProcessUnits.add(new SMProcessor());
+//        IProcessUnits.add(new SAProcessor());
+//        IProcessUnits.add(new DMProcessor());
+//        IProcessUnits.add(new DAProcessor());
 
         // For those who wish to add new instructions de-comment and modify the following line.
         // IProcessUnits.add(new IProcessUnit());
 
-        return IProcessUnits;
+        return processUnits;
     }
 
     /**
@@ -83,7 +93,7 @@ public class CsiracBootstrap extends project.emulator.framework.Bootstrap {
 
         List<IProcessUnit> IProcessUnits = registerProcessors();
 
-        List<IDecodeUnit> IDecodeUnits = registerDecoders();
+        Map<String,List<IDecodeUnit>> IDecodeUnits = registerDecoders();
 
         createEmulator(id, IDecodeUnits, IProcessUnits, register, debugger, monitor);
     }

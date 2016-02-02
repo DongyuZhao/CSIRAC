@@ -26,7 +26,6 @@ public class PcRegister extends DebuggerMessageSender implements IPcRegister {
     public boolean put(int data) {
         if (data < this._upperBound) {
             this._value = data;
-            System.out.println("Pc:" + data);
             this.onPcRegisterUpdate(data, this);
             return true;
         }

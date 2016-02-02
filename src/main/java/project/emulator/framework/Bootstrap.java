@@ -18,6 +18,7 @@ import project.emulator.framework.memory.IMemory;
 import project.emulator.framework.memory.Memory;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Dy.Zhao on 2016/1/23 0023.
@@ -83,7 +84,7 @@ public class Bootstrap {
      * @param debugger the debugger
      * @param monitor the monitor
      */
-    public static void createEmulator(String id, List<IDecodeUnit> decodeUnits, List<IProcessUnit> processUnits, IRegister register, IDebugger debugger, IMonitor monitor) {
+    public static void createEmulator(String id, Map<String,List<IDecodeUnit>> decodeUnits, List<IProcessUnit> processUnits, IRegister register, IDebugger debugger, IMonitor monitor) {
         IDecoder decoder = Decoder.createInstance(decodeUnits);
 
         IPcRegister pcRegister = PcRegister.createInstance(id, debugger);

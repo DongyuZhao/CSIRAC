@@ -79,7 +79,8 @@ public class Memory extends MemoryMonitorMessageSender implements IMemory {
 
     @Override
     public boolean load(String[] input) {
-        for (int i = 0; i < input.length; i++) {
+        int length = Math.min(input.length, this.cellPerUnit() * this.unitCount());
+        for (int i = 0; i < length; i++) {
             String line = input[i];
             int[] parsedResult = Bootstrap.getSymbolTranslator().translateInput(line);
             if (parsedResult != null && parsedResult.length == Bootstrap.getInnerConfig().normalDataSectionCount()) {
