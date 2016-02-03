@@ -56,9 +56,9 @@ public class Processor implements IProcessor {
         if (decodedCommands != null) {
             boolean changeNextPointer = false;
             for (Command command : decodedCommands) {
-                for (IProcessUnit IProcessUnit : this._instructionMulticastList) {
+                for (IProcessUnit processUnit : this._instructionMulticastList) {
                     try {
-                        changeNextPointer = changeNextPointer || IProcessUnit.process(command);
+                        changeNextPointer = changeNextPointer || processUnit.process(command);
                     } catch (InstanceNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -117,8 +117,4 @@ public class Processor implements IProcessor {
     public IMemory dataMemory() {
         return _dataMemory;
     }
-
-//    public List<IProcessUnit> instructionMulticastList() {
-//        return _instructionMulticastList;
-//    }
 }
